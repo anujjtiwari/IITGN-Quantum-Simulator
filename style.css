@@ -1,0 +1,322 @@
+/* === GLOBAL STYLES === */
+:root {
+    --bg-dark: #0a0f2d;       /* Deep space blue */
+    --bg-medium: #1a1f3c;    /* Lighter blue-gray */
+    --bg-light: #2a2f4c;     /* Card background */
+    --text-primary: #f0f0f0; /* Off-white */
+    --text-secondary: #a0a0c0;/* Muted purple-gray */
+    --accent-blue: #00bfff;   /* Deep sky blue */
+    --accent-purple: #8a2be2; /* Blue-violet */
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-medium);
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+a {
+    color: var(--accent-blue);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+h1, h2, h3 {
+    margin-top: 0;
+    font-weight: 600;
+}
+
+img {
+    max-width: 100%;
+}
+
+/* === NAVBAR === */
+.navbar {
+    background-color: var(--bg-dark);
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--bg-light);
+}
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.navbar .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.navbar .logo a {
+    color: var(--text-primary);
+    text-decoration: none;
+}
+.navbar nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+.navbar nav li {
+    margin-left: 20px;
+}
+.navbar nav a {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+.navbar nav a:hover {
+    color: var(--accent-blue);
+    text-decoration: none;
+}
+
+/* === HOMEPAGE: HERO === */
+.hero-section {
+    background: linear-gradient(rgba(10, 15, 45, 0.8), rgba(10, 15, 45, 0.8)), url('hero-bg.jpg'); /* Add a subtle quantum-like bg image */
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 6rem 0;
+    text-align: center;
+}
+.hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+}
+.hero-content .subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+.hero-content p {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+}
+.cta-button {
+    background-color: var(--accent-blue);
+    color: var(--bg-dark);
+    padding: 1rem 2.5rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.cta-button:hover {
+    background-color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 191, 255, 0.3);
+}
+
+/* === HOMEPAGE: FEATURES === */
+.features-section {
+    padding: 4rem 0;
+    background-color: var(--bg-medium);
+    text-align: center;
+}
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+.feature-card {
+    background-color: var(--bg-light);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+    /* You'd replace this with real icon colors */
+    filter: invert(70%) sepia(80%) saturate(5000%) hue-rotate(170deg);
+}
+
+/* === HOMEPAGE: ABOUT & FOOTER === */
+.about-section {
+    padding: 4rem 0;
+    background-color: var(--bg-dark);
+    text-align: center;
+}
+.about-section p {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+.footer {
+    padding: 2rem 0;
+    background-color: #05081a;
+    text-align: center;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--bg-light);
+}
+
+/* === SIMULATOR PAGE LAYOUT === */
+body.simulator-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden; /* Prevents whole page from scrolling */
+}
+.simulator-container {
+    display: flex;
+    flex-grow: 1; /* Makes container fill remaining height */
+    overflow: hidden;
+}
+
+/* COLUMN 1: GATE PALETTE */
+.gate-palette {
+    flex: 0 0 220px; /* Width 220px, don't grow, don't shrink */
+    background-color: var(--bg-dark);
+    padding: 1.5rem;
+    overflow-y: auto;
+    border-right: 1px solid var(--bg-light);
+}
+.gate-group {
+    margin-bottom: 1.5rem;
+}
+.gate-group h4 {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--bg-light);
+    padding-bottom: 5px;
+}
+.gate {
+    background-color: var(--accent-blue);
+    color: var(--bg-dark);
+    font-family: 'Source Code Pro', monospace;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    text-align: center;
+    cursor: grab;
+    transition: all 0.2s ease;
+}
+.gate:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 191, 255, 0.3);
+}
+.gate-measure {
+    background-color: var(--accent-purple);
+}
+
+/* COLUMN 2: CIRCUIT EDITOR */
+.circuit-editor {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.circuit-controls {
+    background-color: var(--bg-dark);
+    padding: 1rem;
+    border-bottom: 1px solid var(--bg-light);
+    display: flex;
+    gap: 10px;
+}
+.circuit-controls button {
+    background-color: var(--bg-light);
+    color: var(--text-primary);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.circuit-controls button:hover {
+    background-color: var(--accent-blue);
+    color: var(--bg-dark);
+}
+.circuit-canvas-wrapper {
+    flex-grow: 1;
+    padding: 1.5rem;
+    overflow: auto; /* Allow scrolling of the circuit */
+}
+.qubit-line {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--bg-light);
+}
+.qubit-label {
+    font-family: 'Source Code Pro', monospace;
+    color: var(--text-secondary);
+    padding-right: 1rem;
+}
+.gate-drop-zone {
+    width: 50px;
+    height: 50px;
+    border-right: 1px dashed var(--bg-light);
+    /* This will be the drop target for JS */
+}
+
+/* COLUMN 3: RESULTS PANEL */
+.results-panel {
+    flex: 0 0 300px; /* Width 300px */
+    background-color: var(--bg-dark);
+    padding: 1.5rem;
+    overflow-y: auto;
+    border-left: 1px solid var(--bg-light);
+}
+.results-widget {
+    background-color: var(--bg-medium);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+#prob-chart {
+    font-family: 'Source Code Pro', monospace;
+}
+.prob-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+.state-label {
+    width: 40px;
+    color: var(--text-secondary);
+}
+.bar-wrapper {
+    flex-grow: 1;
+    height: 20px;
+    background-color: var(--bg-light);
+    border-radius: 4px;
+    margin: 0 10px;
+    overflow: hidden;
+}
+.bar {
+    height: 100%;
+    background-color: var(--accent-blue);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+.prob-value {
+    width: 40px;
+    text-align: right;
+    color: var(--text-primary);
+}
+#bloch-sphere {
+    height: 250px;
+    background-color: #000;
+    border-radius: 5px;
+    display: grid;
+    place-items: center;
+    color: #555;
+}

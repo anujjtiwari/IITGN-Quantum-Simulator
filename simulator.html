@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Simulator - IITGN QuantumLab</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body class="simulator-page">
+
+    <header class="navbar">
+        <div class="container">
+            <div class="logo"><a href="index.html">IITGN QuantumLab</a></div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="simulator.html">Simulator</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="simulator-container">
+        
+        <aside class="gate-palette">
+            <h3>Quantum Gates</h3>
+            <div class="gate-group">
+                <h4>Pauli Gates</h4>
+                <div class="gate" draggable="true" data-gate="X">X</div>
+                <div class="gate" draggable="true" data-gate="Y">Y</div>
+                <div class="gate" draggable="true" data-gate="Z">Z</div>
+            </div>
+            <div class="gate-group">
+                <h4>Clifford Gates</h4>
+                <div class="gate" draggable="true" data-gate="H">H</div>
+                <div class="gate" draggable="true" data-gate="S">S</div>
+                <div class="gate" draggable="true" data-gate="Sdg">S†</div>
+                <div class="gate" draggable="true" data-gate="T">T</div>
+                <div class="gate" draggable="true" data-gate="Tdg">T†</div>
+            </div>
+            <div class="gate-group">
+                <h4>Multi-Qubit</h4>
+                <div class="gate" draggable="true" data-gate="CNOT">CX</div>
+                <div class="gate" draggable="true" data-gate="SWAP">SWAP</div>
+                <div class="gate" draggable="true" data-gate="Toffoli">CCX</div>
+            </div>
+            <div class="gate-group">
+                <h4>Other</h4>
+                <div class="gate gate-measure" draggable="true" data-gate="Measure">M</div>
+            </div>
+        </aside>
+
+        <main class="circuit-editor">
+            <div class="circuit-controls">
+                <button id="add-qubit-btn">+ Add Qubit</button>
+                <button id="run-btn">▶ Run Circuit</button>
+                <button id="clear-btn">Clear</button>
+            </div>
+            <div class="circuit-canvas-wrapper">
+                <div id="circuit-canvas">
+                    <div class="qubit-line">
+                        <span class="qubit-label">q[0]: |0></span>
+                        <div class="gate-drop-zone"></div>
+                        <div class="gate-drop-zone"></div>
+                        <div class="gate-drop-zone"></div>
+                        <div class="gate-drop-zone"></div>
+                        <div class="gate-drop-zone"></div>
+                    </div>
+                    <div class="qubit-line">
+                        <span class="qubit-label">q[1]: |0></span>
+                        <div class="gate-drop-zone"></div>
+                        <div class="gate-drop-zone"></div>
+                        <div class="gate-drop-zone"></div>
+                        <div class="gate-drop-zone"></div>
+                        <div class="gate-drop-zone"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <aside class="results-panel">
+            <h3>Results</h3>
+            <div class="results-widget">
+                <h4>Probability Distribution</h4>
+                <div id="prob-chart">
+                    <div class="prob-bar">
+                        <span class="state-label">|00⟩</span>
+                        <div class="bar-wrapper"><div class="bar" style="width: 100%;"></div></div>
+                        <span class="prob-value">100%</span>
+                    </div>
+                    <div class="prob-bar">
+                        <span class="state-label">|01⟩</span>
+                        <div class="bar-wrapper"><div class="bar" style="width: 0%;"></div></div>
+                        <span class="prob-value">0%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="results-widget">
+                <h4>Bloch Sphere (q[0])</h4>
+                <div id="bloch-sphere">
+                    
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+</body>
+</html>
