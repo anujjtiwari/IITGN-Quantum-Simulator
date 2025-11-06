@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>IITGN QuantumLab - Interactive Simulator</title>
+    <link rel="icon" type="image/png" href="images\iitgn-logo.png">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- jsqubits (Quantum Simulator) CDN (kept but not required) -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqubits@1.7.0/dist/jsqubits.min.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --bg-dark:#0a0f2d; --bg-medium:#111827; --text-primary:#f3f4f6; --accent-blue:#00bfff; --accent-purple:#8a2be2;
+        }
+        body{ font-family:'Inter',sans-serif; background-color:var(--bg-medium); color:var(--text-primary); }
+        #interactive-bg-canvas{ position:fixed; top:0; left:0; width:100%; height:100%; z-index:1; }
+        #cursor-orb{ position:fixed; top:0; left:0; width:400px; height:400px; background: radial-gradient(circle, rgba(0,191,255,0.15) 0%, rgba(0,191,255,0) 60%); border-radius:50%; pointer-events:none; transform:translate(-50%,-50%); transition:transform 0.1s ease-out; z-index:5; opacity:0; animation:fadeIn 1s forwards; }
+        @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+        header, main, footer{ position:relative; z-index:10; }
+        header{ z-index:50; }
+        .font-code{ font-family:'Source Code Pro', monospace; }
+        .text-glow{ text-shadow:0 0 8px var(--accent-blue); }
+        .perspective-card{ transform-style:preserve-3d; transition:transform 0.4s ease-out; }
+        .perspective-card:hover{ transform:perspective(1000px) rotateX(5deg) rotateY(-8deg) scale(1.05); }
+        .gate{ font-family:'Source Code Pro', monospace; background-color:var(--accent-blue); color:var(--bg-dark); border:1px solid var(--accent-blue); transition:all 0.2s ease; }
+        .gate:hover{ transform:scale(1.1); box-shadow:0 0 15px var(--accent-blue); }
+        .gate-measure{ background-color:var(--accent-purple); border-color:var(--accent-purple); }
+        .gate-measure:hover{ box-shadow:0 0 15px var(--accent-purple); }
+        .drop-zone{ width:50px; height:50px; border-right:1px dashed #4b5563; transition:background-color 0.2s ease; display:flex; align-items:center; justify-content:center; }
+        .drop-zone.drag-over{ background-color:rgba(0,191,255,0.12); }
+        .drop-zone.gate-placed{ font-family:'Source Code Pro', monospace; font-weight:700; color:var(--bg-dark); border:1px solid var(--accent-blue); }
+        .gate-cnot-control{ background-color:#f9a8d4 !important; border-color:#f472b6 !important; }
+        .gate-cnot-target{ background-color:#f9a8d4 !important; border-color:#f472b6 !important; }
+        .prob-bar-inner{ transition:width 0.5s cubic-bezier(0.25,0.1,0.25,1); }
+        .iitgn-logo-hero{ filter:drop-shadow(0 0 15px var(--accent-blue)) drop-shadow(0 0 5px var(--accent-blue)); }
+    </style>
+</head>
+<body class="relative overflow-x-hidden">
+
+<canvas id="interactive-bg-canvas"></canvas>
+<div id="cursor-orb"></div>
+
+<header class="sticky top-0 z-50 w-full bg-gray-900/70 backdrop-blur-md border-b border-gray-700">
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <img src="images\iitgn-logo.png" alt="IITGN Logo" class="h-10 w-10 rounded-full">
+            <div class="text-2xl font-bold text-white text-glow">IITGN QuantumLab</div>
+        </div>
+        <div class="space-x-6">
+            <a href="#home" class="text-gray-300 hover:text-white transition-colors">Home</a>
+            <a href="#simulator" class="text-gray-300 hover:text-white transition-colors">Simulator</a>
+            <a href="#about" class="text-gray-300 hover:text-white transition-colors">About</a>
+        </div>
+    </nav>
+</header>
+
+<main>
+<section id="home" class="min-h-screen flex items-center justify-center py-20 relative overflow-hidden">
+    <div class="container mx-auto px-6 text-center relative z-20">
+        <img src="images\iitgn-logo.png" alt="IITGN Large Logo" class="iitgn-logo-hero h-32 w-32 md:h-40 md:w-40 mx-auto mb-8 rounded-full">
+        <h1 class="text-5xl md:text-7xl font-bold text-white mb-4">Explore the <span class="text-glow text-cyan-400">Quantum Realm</span></h1>
+        <p class="text-xl md:text-2xl text-gray-300 mb-6">An initiative by <strong>Prof. Sameer G Kulkarni</strong>, IIT Gandhinagar.</p>
+        <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-10">Dive into the world of quantum computing and QML. Experiment with circuits, visualize probabilities, and build your understanding with our interactive simulator.</p>
+        <a href="#simulator" class="bg-cyan-500 text-gray-900 font-bold py-3 px-8 rounded-lg text-lg hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/30 transition-all duration-300 transform hover:scale-105">Launch Simulator</a>
+    </div>
+</section>
+
+<section id="features" class="py-24 bg-gray-900">
+    <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-bold text-center text-white mb-16">Key Features</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="perspective-card bg-gray-800 p-6 rounded-lg shadow-xl border border-gray-700">
+                <div class="flex items-center justify-center h-16 w-16 bg-gray-700 rounded-full mb-4 shadow-inner">
+                    <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-white mb-2">Interactive Simulator</h3>
+                <p class="text-gray-400">Build and test quantum circuits in real-time with an intuitive UI.</p>
+            </div>
+            <div class="perspective-card bg-gray-800 p-6 rounded-lg shadow-xl border border-gray-700">
+                <div class="flex items-center justify-center h-16 w-16 bg-gray-700 rounded-full mb-4 shadow-inner">
+                    <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/></svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-white mb-2">Real-time Results</h3>
+                <p class="text-gray-400">Instantly visualize state probabilities with dynamic charts.</p>
+            </div>
+            <div class="perspective-card bg-gray-800 p-6 rounded-lg shadow-xl border border-gray-700">
+                <div class="flex items-center justify-center h-16 w-16 bg-gray-700 rounded-full mb-4 shadow-inner">
+                    <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0"/></svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-white mb-2">Drag & Drop UI</h3>
+                <p class="text-gray-400">An intuitive interface inspired by IBM's Quantum Composer.</p>
+            </div>
+            <div class="perspective-card bg-gray-800 p-6 rounded-lg shadow-xl border border-gray-700">
+                <div class="flex items-center justify-center h-16 w-16 bg-gray-700 rounded-full mb-4 shadow-inner">
+                    <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0"/></svg>
+                </div>
+                <h3 class="text-2xl font-semibold text-white mb-2">Custom Qubits</h3>
+                <p class="text-gray-400">Add or remove qubits to match your specific experiment.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="simulator" class="min-h-screen py-20 bg-gray-900/50">
+    <div class="container mx-auto px-6 h-full">
+        <h2 class="text-4xl font-bold text-center text-white mb-10">Quantum Circuit Simulator</h2>
+
+        <div class="flex flex-col lg:flex-row gap-6 h-full max-w-7xl mx-auto bg-gray-800 rounded-lg shadow-2xl p-6 border border-gray-700">
+
+            <aside class="w-full lg:w-1/5 bg-gray-900 p-4 rounded-lg border border-gray-700">
+                <h3 class="text-xl font-semibold text-white mb-4">Gate Palette</h3>
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="text-sm font-code text-gray-400 mb-2 uppercase">Pauli Gates</h4>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div id="gate-x" data-gate="X" class="gate w-12 h-12 flex items-center justify-center rounded-md cursor-grab" draggable="true">X</div>
+                            <div id="gate-y" data-gate="Y" class="gate w-12 h-12 flex items-center justify-center rounded-md cursor-grab" draggable="true">Y</div>
+                            <div id="gate-z" data-gate="Z" class="gate w-12 h-12 flex items-center justify-center rounded-md cursor-grab" draggable="true">Z</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-code text-gray-400 mb-2 uppercase">Clifford Gates</h4>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div id="gate-h" data-gate="H" class="gate w-12 h-12 flex items-center justify-center rounded-md cursor-grab" draggable="true">H</div>
+                            <div id="gate-s" data-gate="S" class="gate w-12 h-12 flex items-center justify-center rounded-md cursor-grab" draggable="true">S</div>
+                            <div id="gate-t" data-gate="T" class="gate w-12 h-12 flex items-center justify-center rounded-md cursor-grab" draggable="true">T</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-code text-gray-400 mb-2 uppercase">Multi-Qubit</h4>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div id="gate-cnot" data-gate="CX" class="gate w-12 h-12 flex items-center justify-center rounded-md cursor-grab text-sm" draggable="true">CX</div>
+                            <div id="gate-swap" data-gate="SWAP" class="gate w-12 h-12 flex items-center justify-center rounded-md cursor-grab text-sm" draggable="true">SWAP</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-code text-gray-400 mb-2 uppercase">Other</h4>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div id="gate-measure" data-gate="M" class="gate gate-measure w-12 h-12 flex items-center justify-center rounded-md cursor-grab" draggable="true">M</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="w-full lg:w-3/5 bg-gray-900 p-4 rounded-lg border border-gray-700 overflow-hidden">
+                <div class="flex items-center gap-4 mb-4 pb-4 border-b border-gray-700">
+                    <button id="add-qubit-btn" class="bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">+ Add Qubit</button>
+                    <button id="run-btn" class="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-6 rounded-lg transition-colors">▶ RUN</button>
+                    <button id="clear-btn" class="bg-red-600 hover:bg-red-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Clear</button>
+                    <button id="undo-btn" class="bg-yellow-600 hover:bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Undo</button>
+                    <button id="redo-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Redo</button>
+                </div>
+                <div id="circuit-canvas" class="space-y-3 overflow-x-auto pb-4"></div>
+            </main>
+
+            <aside class="w-full lg:w-1/5 bg-gray-900 p-4 rounded-lg border border-gray-700">
+                <h3 class="text-xl font-semibold text-white mb-4">Results</h3>
+                <div class="bg-gray-800 p-4 rounded-lg shadow-inner">
+                    <h4 class="text-md font-semibold text-gray-200 mb-3">Probability Distribution</h4>
+                    <div id="prob-chart" class="space-y-2 font-code text-sm"></div>
+                </div>
+
+                <div class="bg-gray-800 p-4 rounded-lg shadow-inner mt-4">
+                    <h4 class="text-md font-semibold text-gray-200 mb-3">Bloch Sphere (q[0])</h4>
+                    <div class="flex justify-center items-center h-40">
+                        <svg class="w-32 h-32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="48" fill="none" stroke="#4b5563" stroke-width="2"/>
+                            <ellipse cx="50" cy="50" rx="48" ry="20" fill="none" stroke="#4b5563" stroke-width="1.5" stroke-dasharray="3 3"/>
+                            <line x1="50" y1="2" x2="50" y2="98" stroke="#6b7280" stroke-width="1.5"/>
+                            <text x="50" y="10" fill="#9ca3af" font-size="8" text-anchor="middle">|0⟩</text>
+                            <text x="50" y="95" fill="#9ca3af" font-size="8" text-anchor="middle">|1⟩</text>
+                            <line id="bloch-vector" x1="50" y1="50" x2="70" y2="40" stroke="#00bfff" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle id="bloch-head" cx="70" cy="40" r="3" fill="#00bfff"/>
+                        </svg>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+</section>
+
+<section id="quirk-simulator" class="py-20 bg-gray-800/50">
+    <div class="container mx-auto px-6 h-full">
+        <h2 class="text-4xl font-bold text-center text-white mb-10">Quantum Simulator</h2>
+        <div class="max-w-7xl mx-auto bg-gray-800 rounded-lg shadow-2xl p-6 border border-gray-700">
+            <iframe src="https://algassert.com/quirk" class="w-full h-[800px] rounded-lg border-2 border-gray-700"></iframe>
+        </div>
+    </div>
+</section>
+
+<section id="about" class="py-24 bg-gray-900">
+    <div class="container mx-auto px-6 max-w-3xl text-center">
+        <h2 class="text-4xl font-bold text-white mb-6">About This Initiative</h2>
+        <p class="text-lg text-gray-300 leading-relaxed">
+            IITGN QuantumLab is a dedicated platform, born from the vision of
+            <strong class="text-cyan-400">Prof. Sameer G Kulkarni</strong> at the Indian Institute of Technology Gandhinagar.
+        </p>
+    </div>
+</section>
+</main>
+
+<footer class="bg-gray-900 border-t border-gray-700 py-8">
+    <div class="container mx-auto px-6 text-center text-gray-500">
+        <p>&copy; 2025 IIT Gandhinagar. All rights reserved. An initiative by Prof. Sameer G Kulkarni.</p>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // cursor orb
+    const orb = document.getElementById('cursor-orb');
+    document.addEventListener('mousemove', (e) => { orb.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`; });
+
+    // DOM refs
+    const circuitCanvas = document.getElementById('circuit-canvas');
+    const addQubitBtn = document.getElementById('add-qubit-btn');
+    const runBtn = document.getElementById('run-btn');
+    const clearBtn = document.getElementById('clear-btn');
+    const undoBtn = document.getElementById('undo-btn');
+    const redoBtn = document.getElementById('redo-btn');
+    const probChart = document.getElementById('prob-chart');
+
+    // config
+    let qubitCount = 0;
+    const gateSlotsPerQubit = 15;
+    const HISTORY_LIMIT = 20;
+
+    // history stacks
+    let history = [];
+    let future = [];
+
+    // --- Complex helpers ---
+    function c(re, im=0){ return {re:re, im:im}; }
+    function cAdd(a,b){ return {re:a.re+b.re, im:a.im+b.im}; }
+    function cMul(a,b){ return { re: a.re*b.re - a.im*b.im, im: a.re*b.im + a.im*b.re }; }
+    function cScale(a,s){ return { re: a.re*s, im: a.im*s }; }
+    function cConj(a){ return { re: a.re, im: -a.im }; }
+    function cAbs2(a){ return a.re*a.re + a.im*a.im; }
+
+    // --- State helpers (simulator) ---
+    function zeroState(n){ const N = 1<<n; const s = Array(N).fill(null).map(()=>c(0,0)); s[0]=c(1,0); return s; }
+
+    function applySingleQubitGate(state, n, qb, matrix){
+        const N = state.length;
+        const out = Array(N).fill(null).map(()=>c(0,0));
+        const bit = n - 1 - qb;
+        for (let idx=0; idx<N; idx++){
+            const bitVal = (idx >> bit) & 1;
+            const amp = state[idx];
+            const idx1 = bitVal === 0 ? (idx | (1<<bit)) : (idx & ~(1<<bit));
+            const amp1 = state[idx1];
+            if (bitVal === 0){
+                // out[idx] += m00 * amp + m01 * amp1
+                out[idx] = cAdd(out[idx], cAdd(cMul(matrix[0][0], amp), cMul(matrix[0][1], amp1)));
+                // out[idx1] += m10*amp + m11*amp1
+                out[idx1] = cAdd(out[idx1], cAdd(cMul(matrix[1][0], amp), cMul(matrix[1][1], amp1)));
+            }
+        }
+        return out;
+    }
+
+    function applyCNOT(state, n, qb_c, qb_t){
+        const N = state.length;
+        const out = Array(N).fill(null).map(()=>c(0,0));
+        const bitC = n - 1 - qb_c;
+        const bitT = n - 1 - qb_t;
+        for (let idx=0; idx<N; idx++){
+            const control = (idx >> bitC) & 1;
+            if (control === 1){
+                const flipped = idx ^ (1<<bitT);
+                out[flipped] = cAdd(out[flipped], state[idx]);
+            } else {
+                out[idx] = cAdd(out[idx], state[idx]);
+            }
+        }
+        return out;
+    }
+
+    function applySWAP(state, n, qb1, qb2){
+        const N = state.length;
+        const out = Array(N);
+        const bit1 = n - 1 - qb1;
+        const bit2 = n - 1 - qb2;
+        for (let idx=0; idx<N; idx++){
+            const b1 = (idx >> bit1) & 1;
+            const b2 = (idx >> bit2) & 1;
+            if (b1 === b2) out[idx] = state[idx];
+            else {
+                const swapped = idx ^ ((1<<bit1) | (1<<bit2));
+                out[swapped] = state[idx];
+            }
+        }
+        for (let i=0;i<N;i++) if (!out[i]) out[i] = c(0,0);
+        return out;
+    }
+
+    function measureQubit(state, n, qb){
+        const N = state.length; const bit = n - 1 - qb;
+        let p0=0, p1=0;
+        for (let i=0;i<N;i++){ const b = (i>>bit)&1; const prob=cAbs2(state[i]); if (b===0) p0+=prob; else p1+=prob; }
+        const r = Math.random(); const measured = (r < p0) ? 0 : 1;
+        const out = Array(N).fill(null).map(()=>c(0,0));
+        let norm = 0;
+        for (let i=0;i<N;i++){ const b=(i>>bit)&1; if (b===measured){ out[i]=state[i]; norm+=cAbs2(state[i]); } }
+        const inv = norm>0 ? 1/Math.sqrt(norm) : 0;
+        for (let i=0;i<N;i++) out[i] = cScale(out[i], inv);
+        return {state: out, bit: measured};
+    }
+
+    function normalizeState(state){
+        let norm=0; for (let i=0;i<state.length;i++) norm+=cAbs2(state[i]);
+        if (norm<=0) return state;
+        const inv = 1/Math.sqrt(norm);
+        for (let i=0;i<state.length;i++) state[i] = cScale(state[i], inv);
+        return state;
+    }
+
+    function reducedDensityQubit0(state, n){
+        const N = state.length; const bit = n - 1 - 0;
+        let rho00 = c(0,0), rho11 = c(0,0), rho01 = c(0,0);
+        for (let idx=0; idx<N; idx++){
+            const b = (idx>>bit)&1;
+            if (b===0){
+                const partner = idx | (1<<bit);
+                rho00 = cAdd(rho00, cMul(state[idx], cConj(state[idx])));
+                rho01 = cAdd(rho01, cMul(state[idx], cConj(state[partner])));
+            } else {
+                rho11 = cAdd(rho11, cMul(state[idx], cConj(state[idx])));
+            }
+        }
+        return [[rho00, rho01],[cConj(rho01), rho11]];
+    }
+
+    function blochFromRho(rho){
+        const a=rho[0][0], b=rho[0][1], d=rho[1][1];
+        const x = 2 * b.re;
+        const y = -2 * b.im;
+        const z = a.re - d.re;
+        return {x, y, z};
+    }
+
+    function showProbabilities(state, n){
+        probChart.innerHTML = '';
+        const N = state.length;
+        const probs = [];
+        for (let i=0;i<N;i++) probs.push({state: i.toString(2).padStart(n,'0'), prob: cAbs2(state[i])});
+        for (let i=0;i<probs.length;i++){
+            const percent = probs[i].prob * 100;
+            const barHTML = `
+                <div class="flex items-center space-x-2">
+                    <span class="text-gray-400 w-16">|${probs[i].state}⟩</span>
+                    <div class="w-full bg-gray-700 rounded-full h-4 overflow-hidden shadow-inner">
+                        <div class="prob-bar-inner bg-cyan-500 h-4 rounded-full" style="width: 0%;"></div>
+                    </div>
+                    <span class="text-white w-12 text-right">${percent.toFixed(1)}%</span>
+                </div>
+            `;
+            probChart.insertAdjacentHTML('beforeend', barHTML);
+        }
+        setTimeout(()=>{ document.querySelectorAll('.prob-bar-inner').forEach((bar,i)=>{ bar.style.width = `${(probs[i].prob*100).toFixed(3)}%`; }); }, 80);
+    }
+
+    function updateBloch(state, n){
+        if (n === 0) return;
+        const rho = reducedDensityQubit0(state, n);
+        const bloch = blochFromRho(rho);
+        const x = 50 + bloch.x * 20;
+        const y = 50 - bloch.z * 20;
+        const vector = document.getElementById('bloch-vector');
+        const head = document.getElementById('bloch-head');
+        if (vector && head){ vector.setAttribute('x2', x); vector.setAttribute('y2', y); head.setAttribute('cx', x); head.setAttribute('cy', y); }
+    }
+
+    // --- Circuit UI & drag/drop ---
+    function createQubitLine(index){
+        const line = document.createElement('div');
+        line.className = 'qubit-line flex items-center bg-gray-800 rounded-md p-2 shadow-inner';
+        const label = document.createElement('span'); label.className='font-code text-gray-400 w-20'; label.textContent = `q[${index}]: |0⟩`;
+        line.appendChild(label);
+        const slots = document.createElement('div'); slots.className = 'flex flex-nowrap';
+        for (let i=0;i<gateSlotsPerQubit;i++){
+            const zone = document.createElement('div');
+            zone.className = 'drop-zone w-12 h-12 rounded-sm';
+            zone.dataset.q = index; zone.dataset.s = i;
+            zone.addEventListener('dragover', allowDrop);
+            zone.addEventListener('dragenter', dragEnter);
+            zone.addEventListener('dragleave', dragLeave);
+            zone.addEventListener('drop', drop);
+            // right-click to remove gate quickly
+            zone.addEventListener('contextmenu', (ev)=>{ ev.preventDefault(); if (zone.textContent.trim()){ zone.textContent=''; zone.className='drop-zone w-12 h-12 rounded-sm'; pushHistory(); } });
+            slots.appendChild(zone);
+        }
+        line.appendChild(slots);
+        return line;
+    }
+
+    function addQubit(){
+        const newLine = createQubitLine(qubitCount);
+        circuitCanvas.appendChild(newLine);
+        qubitCount++;
+        updateProbChart(true);
+        pushHistory();
+    }
+
+    function clearCircuit(){
+        document.querySelectorAll('.drop-zone').forEach(zone=>{
+            zone.textContent = '';
+            zone.className = 'drop-zone w-12 h-12 rounded-sm';
+        });
+        updateProbChart(true);
+        pushHistory();
+    }
+
+    function allowDrop(ev){ ev.preventDefault(); }
+    function dragEnter(ev){ ev.target.classList.add('drag-over'); }
+    function dragLeave(ev){ ev.target.classList.remove('drag-over'); }
+
+    function drop(ev){
+        ev.preventDefault();
+        ev.target.classList.remove('drag-over');
+        const gateId = ev.dataTransfer.getData("text");
+        const gateElement = document.getElementById(gateId);
+        if (!gateElement) return;
+        const gateType = gateElement.dataset.gate;
+        ev.target.innerHTML = '';
+        if (gateId === 'gate-cnot'){
+            const step = ev.target.dataset.s;
+            const controlExists = document.querySelector(`.drop-zone[data-s="${step}"].gate-cnot-control`);
+            if (!controlExists){
+                ev.target.textContent = 'C';
+                ev.target.className = 'drop-zone gate-placed gate-cnot-control';
+            } else {
+                ev.target.textContent = 'X';
+                ev.target.className = 'drop-zone gate-placed gate-cnot-target';
+            }
+        } else if (gateId === 'gate-measure'){
+            ev.target.textContent = gateType;
+            ev.target.className = 'drop-zone gate-placed bg-purple-500 border-purple-400';
+        } else if (gateId === 'gate-swap'){
+            ev.target.textContent = 'SWAP';
+            ev.target.className = 'drop-zone gate-placed bg-yellow-300 border-yellow-400';
+        } else {
+            ev.target.textContent = gateType;
+            ev.target.className = 'drop-zone gate-placed bg-cyan-500 border-cyan-400';
+        }
+        pushHistory();
+    }
+
+    document.querySelectorAll('.gate').forEach(gate => {
+        gate.addEventListener('dragstart', (ev)=>{ ev.dataTransfer.setData("text", ev.target.id); });
+    });
+
+    // --- History (undo/redo) ---
+    function getCircuitState(){
+        // store qubitCount and a lightweight grid of strings + classes
+        const grid = [];
+        for (let q=0;q<qubitCount;q++){
+            const row = [];
+            for (let s=0;s<gateSlotsPerQubit;s++){
+                const zone = document.querySelector(`.drop-zone[data-q="${q}"][data-s="${s}"]`);
+                if (!zone) row.push({text:'', cls:'drop-zone w-12 h-12 rounded-sm'});
+                else row.push({ text: zone.textContent || '', cls: zone.className || '' });
+            }
+            grid.push(row);
+        }
+        return { qubitCount, grid };
+    }
+
+    function setCircuitState(state){
+        // rebuild UI to match state
+        // clear canvas
+        circuitCanvas.innerHTML = '';
+        qubitCount = 0;
+        // create qubit lines as many as state.qubitCount
+        for (let q=0;q<state.qubitCount;q++){
+            const line = createQubitLine(q);
+            circuitCanvas.appendChild(line);
+            qubitCount++;
+        }
+        // apply saved cell contents
+        for (let q=0;q<state.grid.length;q++){
+            for (let s=0;s<state.grid[q].length;s++){
+                const zone = document.querySelector(`.drop-zone[data-q="${q}"][data-s="${s}"]`);
+                if (!zone) continue;
+                const cell = state.grid[q][s];
+                zone.textContent = cell.text || '';
+                zone.className = cell.cls || zone.className;
+            }
+        }
+        updateProbChart(true);
+    }
+
+    function pushHistory(){
+        // push current state onto history stack, clear future
+        const snap = getCircuitState();
+        history.push(JSON.parse(JSON.stringify(snap))); // deep copy
+        // cap history
+        if (history.length > HISTORY_LIMIT) history.shift();
+        future = [];
+        refreshUndoRedoButtons();
+    }
+
+    function undo(){
+        if (history.length === 0) return;
+        // pop last state into future, then apply previous
+        const current = getCircuitState();
+        future.unshift(JSON.parse(JSON.stringify(current)));
+        const prev = history.pop();
+        if (prev) setCircuitState(prev);
+        refreshUndoRedoButtons();
+    }
+
+    function redo(){
+        if (future.length === 0) return;
+        const next = future.shift();
+        // push current to history
+        const current = getCircuitState();
+        history.push(JSON.parse(JSON.stringify(current)));
+        setCircuitState(next);
+        refreshUndoRedoButtons();
+    }
+
+    function refreshUndoRedoButtons(){
+        undoBtn.disabled = history.length === 0;
+        redoBtn.disabled = future.length === 0;
+        undoBtn.classList.toggle('opacity-40', history.length === 0);
+        redoBtn.classList.toggle('opacity-40', future.length === 0);
+    }
+
+    // --- Simulation engine (state-vector) ---
+    function runSimulation(){
+        if (qubitCount === 0){
+            probChart.innerHTML = '<p class="text-gray-400 text-sm">Add qubits to run.</p>'; return;
+        }
+        let state = zeroState(qubitCount);
+        const sqrt1_2 = 1/Math.sqrt(2);
+        const I = [[c(1,0), c(0,0)], [c(0,0), c(1,0)]];
+        const X = [[c(0,0), c(1,0)],[c(1,0), c(0,0)]];
+        const Y = [[c(0,0), c(0,-1)],[c(0,1), c(0,0)]];
+        const Z = [[c(1,0), c(0,0)],[c(0,0), c(-1,0)]];
+        const H = [[c(sqrt1_2,0), c(sqrt1_2,0)],[c(sqrt1_2,0), c(-sqrt1_2,0)]];
+        const S = [[c(1,0), c(0,0)],[c(0,0), c(0,1)]];
+        const T = [[c(1,0), c(0,0)],[c(0,0), c(Math.cos(Math.PI/4), Math.sin(Math.PI/4))]];
+
+        for (let s=0;s<gateSlotsPerQubit;s++){
+            const singleQubitGates = [];
+            const cnotControls = []; const cnotTargets = [];
+            const swapPositions = []; const measurePositions = [];
+
+            for (let q=0;q<qubitCount;q++){
+                const zone = document.querySelector(`.drop-zone[data-q="${q}"][data-s="${s}"]`);
+                if (!zone) continue;
+                const txt = zone.textContent.trim();
+                if (!txt) continue;
+                if (txt === 'C') cnotControls.push(q);
+                else if (txt === 'X' && zone.classList.contains('gate-cnot-target')) cnotTargets.push(q);
+                else if (txt === 'X') singleQubitGates.push({type:'X', qubit:q});
+                else if (txt === 'SWAP') swapPositions.push(q);
+                else if (txt === 'M') measurePositions.push(q);
+                else singleQubitGates.push({type: txt, qubit: q});
+            }
+
+            // single-qubit gates
+            for (const g of singleQubitGates){
+                try {
+                    switch (g.type){
+                        case 'H': state = applySingleQubitGate(state, qubitCount, g.qubit, H); break;
+                        case 'X': state = applySingleQubitGate(state, qubitCount, g.qubit, X); break;
+                        case 'Y': state = applySingleQubitGate(state, qubitCount, g.qubit, Y); break;
+                        case 'Z': state = applySingleQubitGate(state, qubitCount, g.qubit, Z); break;
+                        case 'S': state = applySingleQubitGate(state, qubitCount, g.qubit, S); break;
+                        case 'T': state = applySingleQubitGate(state, qubitCount, g.qubit, T); break;
+                        default: console.warn('Unknown single-qubit gate', g.type);
+                    }
+                    state = normalizeState(state);
+                } catch(e){ console.error('Error single gate', e); }
+            }
+
+            // CNOT pairing
+            const cn = Math.min(cnotControls.length, cnotTargets.length);
+            for (let i=0;i<cn;i++){
+                try { state = applyCNOT(state, qubitCount, cnotControls[i], cnotTargets[i]); state = normalizeState(state); }
+                catch(e){ console.error('Error CNOT', e); }
+            }
+
+            // SWAP pairing
+            for (let i=0;i+1<swapPositions.length;i+=2){
+                const a = swapPositions[i], b = swapPositions[i+1];
+                try { state = applySWAP(state, qubitCount, a, b); state = normalizeState(state); }
+                catch(e){ console.error('Error SWAP', e); }
+            }
+
+            // measurements (collapse immediately, sequentially)
+            for (const mq of measurePositions){
+                try {
+                    const res = measureQubit(state, qubitCount, mq);
+                    state = res.state;
+                    // optionally show measurement on label - skipped to keep clean; a right-click removal exists
+                } catch(e){ console.error('Measure error', e); }
+            }
+        }
+
+        showProbabilities(state, qubitCount);
+        updateBloch(state, qubitCount);
+    }
+
+    function updateProbChart(reset=false){
+        probChart.innerHTML = '';
+        if (qubitCount === 0){ probChart.innerHTML = '<p class="text-gray-400 text-sm">Add qubits to start.</p>'; return; }
+        const numStates = Math.pow(2, qubitCount);
+        for (let i=0;i<numStates;i++){
+            const state = i.toString(2).padStart(qubitCount, '0');
+            const prob = (i===0 && reset) ? 100 : 0;
+            const barHTML = `
+                <div class="flex items-center space-x-2">
+                    <span class="text-gray-400 w-16">|${state}⟩</span>
+                    <div class="w-full bg-gray-700 rounded-full h-4 overflow-hidden shadow-inner">
+                        <div class="prob-bar-inner bg-cyan-500 h-4 rounded-full" style="width: ${prob}%;"></div>
+                    </div>
+                    <span class="text-white w-12 text-right">${prob.toFixed(1)}%</span>
+                </div>
+            `;
+            probChart.insertAdjacentHTML('beforeend', barHTML);
+        }
+    }
+
+    // --- Attach event handlers ---
+    addQubitBtn.addEventListener('click', addQubit);
+    runBtn.addEventListener('click', runSimulation);
+    clearBtn.addEventListener('click', clearCircuit);
+    undoBtn.addEventListener('click', undo);
+    redoBtn.addEventListener('click', redo);
+
+    // keyboard shortcuts: Ctrl+Z / Ctrl+Y
+    document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z'){ e.preventDefault(); undo(); }
+        if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === 'y' || (e.shiftKey && e.key.toLowerCase() === 'z'))){ e.preventDefault(); redo(); }
+    });
+
+    // initial setup (2 qubits like before)
+    addQubit(); addQubit();
+
+    // push initial state so Undo has something meaningful
+    // Clear history and then push
+    history = []; future = []; pushHistory(); // initial snapshot
+    refreshUndoRedoButtons();
+
+    // --- interactive canvas background (same as before) ---
+    const canvas = document.getElementById('interactive-bg-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    let mouse = { x: null, y: null, radius: 150 };
+    window.addEventListener('mousemove', (event) => { mouse.x = event.x; mouse.y = event.y; });
+    window.addEventListener('mouseout', () => { mouse.x = undefined; mouse.y = undefined; });
+    let particlesArray = [];
+    class Particle {
+        constructor(x,y,dX,dY,size,color){ this.x=x; this.y=y; this.directionX=dX; this.directionY=dY; this.size=size; this.color=color; }
+        draw(){ ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2,false); ctx.fillStyle='rgba(0,191,255,0.5)'; ctx.fill(); }
+        update(){ if (this.x>canvas.width||this.x<0) this.directionX=-this.directionX; if (this.y>canvas.height||this.y<0) this.directionY=-this.directionY; this.x+=this.directionX; this.y+=this.directionY; this.draw(); }
+    }
+    function initParticles(){ particlesArray=[]; let particleCount=(canvas.height*canvas.width)/9000; for (let i=0;i<particleCount;i++){ let size=(Math.random()*2)+1; let x=(Math.random()*((innerWidth-size*2)-(size*2))+size*2); let y=(Math.random()*((innerHeight-size*2)-(size*2))+size*2); let dX=(Math.random()*.4)-.2; let dY=(Math.random()*.4)-.2; particlesArray.push(new Particle(x,y,dX,dY,size,'rgba(0,191,255,0.5)')); } }
+    function connectParticles(){
+        let opacityValue=1;
+        for (let a=0;a<particlesArray.length;a++){
+            for (let b=a;b<particlesArray.length;b++){
+                let distance = ((particlesArray[a].x-particlesArray[b].x)*(particlesArray[a].x-particlesArray[b].x)) + ((particlesArray[a].y-particlesArray[b].y)*(particlesArray[a].y-particlesArray[b].y));
+                if (distance < (canvas.width/7)*(canvas.height/7)){
+                    opacityValue = 1 - (distance/20000);
+                    ctx.strokeStyle = 'rgba(0,191,255,' + opacityValue + ')';
+                    ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(particlesArray[a].x, particlesArray[a].y); ctx.lineTo(particlesArray[b].x, particlesArray[b].y); ctx.stroke();
+                }
+            }
+            if (mouse.x && mouse.y){
+                let mouseDistance = ((particlesArray[a].x-mouse.x)*(particlesArray[a].x-mouse.x)) + ((particlesArray[a].y-mouse.y)*(particlesArray[a].y-mouse.y));
+                if (mouseDistance < (mouse.radius*mouse.radius)){
+                    opacityValue = 1 - (mouseDistance/(mouse.radius*mouse.radius));
+                    ctx.strokeStyle = 'rgba(138,43,226,' + opacityValue + ')';
+                    ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(particlesArray[a].x, particlesArray[a].y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+                }
+            }
+        }
+    }
+    function animateCanvas(){ requestAnimationFrame(animateCanvas); ctx.clearRect(0,0,innerWidth,innerHeight); for (let i=0;i<particlesArray.length;i++) particlesArray[i].update(); connectParticles(); }
+    window.addEventListener('resize', ()=>{ canvas.width=innerWidth; canvas.height=innerHeight; mouse.radius = 150; initParticles(); });
+    initParticles(); animateCanvas();
+
+});
+</script>
+
+</body>
+</html>
