@@ -56,7 +56,7 @@
                 const inspectorMenu = document.getElementById("circuit-inspector-menu");
                 const inspectorButtons = document.querySelectorAll("#circuit-inspector button");
 
-                let btns = [uiSettingsButton, downloadOptionsButton, importButton, exportButton, clearAllButton, clearCircuitButton, undoButton, redoButton, gateForgeButton, aboutButton, guideButton, circuitsButton, exportJpgButton, exportPngButton, exportWebpButton, exportSvgButton, exportPdfButton, inspectorButton, ...inspectorButtons];
+                let btns = [uiSettingsButton, downloadOptionsButton, importButton, exportButton, clearAllButton, clearCircuitButton, undoButton, redoButton, gateForgeButton, aboutButton, guideButton, circuitsButton, exportJpgButton, exportPngButton, exportWebpButton, exportSvgButton, exportPdfButton, inspectorButton, ...inspectorButtons].filter(b => b !== null);
                 let menus = [uiSettingsMenu, downloadOptionsMenu, inspectorMenu];
                 
                 downloadOptionsButton.addEventListener('click', () => {
@@ -214,21 +214,21 @@
                 &nbsp;
                 &nbsp;
                 <div style="position: relative; top: 2px;">
-                    <a href="https://quirk-e.dev/about" target="_blank">
+                    <a href="./guide.html" target="_self">
                         <!-- TODO: Change workaround for "logo_16x16-blue.svg" to automated replace during build -->
                         <img id="logo-button" src="iitgn-logo.png"
                         style="height:45px; width:auto; margin-right:10px; border-radius:6px;">
                     </a>
                 </div>
                 &nbsp;
-                <button id="about-button" style="min-width: 50px; min-height: 30px; border-radius: 10px;" onclick="window.open('https://quirk-e.dev/about', '_blank');">
+                <!-- <button id="about-button" style="min-width: 50px; min-height: 30px; border-radius: 10px;" onclick="window.open('./guide.html', '_self');">
                     <div style="padding: 2px;">
                         <i class="fa-solid fa-circle-info"></i>
                         About
                     </div>
-                </button>
+                </button> -->
                 &nbsp;
-                <button id="guide-button" style="min-width: 50px; min-height: 30px; border-radius: 10px;" onclick="window.open('https://quirk-e.dev/guide', '_blank');">
+                <button id="guide-button" style="min-width: 50px; min-height: 30px; border-radius: 10px;" onclick="window.open('./guide.html', '_self');">
                     <div style="padding: 2px;">
                         <i class="fa-solid fa-book-open"></i>
                         User Guide
