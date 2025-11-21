@@ -1,906 +1,745 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IITGN QuantumLab - Full Website</title>
-    <!-- Favicon (using a placeholder, replace with your 'images/iitgn-logo.png') -->
-    <link rel="icon" type="image/png" href="images\iitgn-logo.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IITGN QuantumLab | Cybersecurity Use Case</title>
     
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- jsqubits (Quantum Simulator) CDN (kept but not required) -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/jsqubits@1.7.0/dist/jsqubits.min.js"></script> --> <!-- Removed as it's no longer needed -->
-    
-    <!-- Google Fonts -->
+    <!-- Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- MathJax for Matrix Rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Three.js for 3D Bloch Spheres -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
     <style>
-        :root {
-            --bg-dark: #0a0f2d;
-            --bg-medium: #111827; /* gray-900 */
-            --text-primary: #f3f4f6; /* gray-100 */
-            --accent-blue: #00bfff; /* deepskyblue */
-            --accent-purple: #8a2be2; /* blueviolet */
-        }
+        /* Global Styles */
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: #f8fafc;
             overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.15) 0%, transparent 25%);
         }
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.6;
+
+        /* Typography for Code */
+        code {
+            font-family: 'JetBrains Mono', monospace;
         }
-        /* Ensure content is above the canvas */
-        nav, main, footer {
-            position: relative;
-            z-index: 10;
+
+        /* Glassmorphism Utilities */
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        /* Custom styles from original file */
-        .font-code { font-family: 'Source Code Pro', monospace; }
-        .text-accent-blue { color: var(--accent-blue); }
-        .text-accent-purple { color: var(--accent-purple); }
-        .bg-accent-blue { background-color: var(--accent-blue); }
-        .bg-accent-purple { background-color: var(--accent-purple); }
-        .border-accent-blue { border-color: var(--accent-blue); }
-        .border-accent-purple { border-color: var(--accent-purple); }
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-        .btn-blue {
-            background-color: var(--accent-blue);
-            color: var(--bg-dark);
-        }
-        .btn-blue:hover {
-            background-color: #00a8e0;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
-        }
-        .btn-purple {
-            background-color: var(--accent-purple);
-            color: var(--text-primary);
-        }
-        .btn-purple:hover {
-            background-color: #7a1de0;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
-        }
+
         .glass-card {
-            background: rgba(17, 24, 39, 0.6); /* gray-900 with 60% opacity */
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(55, 65, 81, 0.3); /* gray-700 with 30% opacity */
-            border-radius: 0.75rem; /* rounded-xl */
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* QirK Simulator specific styles from original file */
-        .qirk-gate {
-            font-family: 'Source Code Pro', monospace;
-            border: 2px solid var(--accent-blue);
-            background-color: var(--bg-medium);
-            color: var(--text-primary);
-            border-radius: 0.5rem;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.1rem;
-            cursor: grab;
-            user-select: none;
-            transition: all 0.2s ease;
+        .glass-card:hover {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
         }
-        .qirk-gate:hover {
-            border-color: var(--accent-purple);
-            box-shadow: 0 0 10px var(--accent-purple);
+
+        /* Glowing Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.3;
         }
-        #circuit-container {
-            background-color: var(--bg-medium);
-            border: 2px dashed var(--accent-blue);
-            border-radius: 0.5rem;
-            padding: 1rem;
-            overflow-x: auto;
+        .orb-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #4f46e5; }
+        .orb-2 { bottom: -10%; right: -10%; width: 40vw; height: 40vw; background: #ec4899; }
+
+        /* Simulator Frame */
+        .sim-frame {
+            width: 100%;
+            height: 80vh;
+            border: none;
+            background: #fff;
+            border-radius: 8px;
         }
-        .qubit-wire {
-            height: 50px;
-            border-bottom: 2px solid #4b5563; /* gray-600 */
+
+        /* Code Block Styling */
+        .code-block {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+        }
+
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Bloch Sphere Containers */
+        .bloch-container {
             position: relative;
-            display: flex;
-            align-items: center;
+            cursor: move; /* Indicates interactivity */
         }
-        .gate-slot {
-            width: 50px;
-            height: 50px;
-            border: 1px dashed #374151; /* gray-700 */
-            margin-right: 1rem;
-            border-radius: 0.25rem;
-            display: inline-block;
-            flex-shrink: 0;
-        }
-        .qirk-gate.placed {
-            cursor: default;
-            position: relative; /* Ensure it stays in flow */
-        }
-        .qubit-label {
-            font-family: 'Source Code Pro', monospace;
-            color: var(--accent-blue);
-            margin-right: 1rem;
-            font-weight: bold;
-        }
-        #results-container {
-            font-family: 'Source Code Pro', monospace;
-            background-color: #000;
-            color: #0f0;
-            border: 1px solid #0f0;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            min-height: 100px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        .probability-bar {
-            background-color: #374151; /* gray-700 */
-            border-radius: 0.25rem;
-            overflow: hidden;
-            height: 1.5rem;
-            margin-top: 0.25rem;
-        }
-        .probability-fill {
-            background-color: var(--accent-blue);
-            height: 100%;
-            text-align: right;
-            padding-right: 0.5rem;
-            color: var(--bg-dark);
-            font-weight: bold;
-            font-size: 0.9rem;
-            line-height: 1.5rem;
-            transition: width 0.5s ease-in-out;
-        }
-
-        /* Page transition helper */
-        .page-section {
-            min-height: calc(100vh - 200px); /* Full height minus nav/footer approx */
-            padding-top: 6rem; /* Offset for fixed nav */
-            padding-bottom: 4rem;
+        .bloch-label {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 0.7rem;
+            background: rgba(0,0,0,0.6);
+            padding: 2px 6px;
+            border-radius: 4px;
+            pointer-events: none;
         }
     </style>
 </head>
-<body class="bg-bg-dark text-text-primary">
+<body class="antialiased min-h-screen flex flex-col">
 
-    <!-- Particle Canvas Background -->
-    <canvas id="particle-canvas"></canvas>
+    <!-- Background Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
 
-    <!-- Header / Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-bg-dark/80 backdrop-blur-md border-b border-gray-700/50">
+    <!-- Navigation -->
+    <nav class="glass-nav fixed w-full z-50 top-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
-                <a href="#home" class="flex items-center space-x-2">
-                    <!-- Placeholder Logo -->
-                    <img src="images\iitgn-logo.png" alt="Logo" class="h-10 w-10 border-2 border-accent-blue rounded-full">
-                    <span class="text-2xl font-bold text-white">IITGN <span class="text-accent-blue">Quantum</span>Lab</span>
-                </a>
-
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden">
-                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none focus:text-white">
-                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                        </svg>
-                    </button>
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo (Small for Nav) -->
+                <div class="flex items-center gap-3 cursor-pointer group" onclick="navigateTo('home')">
+                    <div class="relative w-10 h-10 flex items-center justify-center bg-white rounded-lg p-1">
+                        <!-- Small Logo in Nav -->
+                        <img src="images\iitgn-logo.png" alt="IITGN Logo" class="w-full h-full object-contain">
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-white">Quantum<span class="text-blue-400">Sec</span></span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-1">
+                    <button onclick="navigateTo('home')" id="nav-home" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-gray-300 hover:text-white hover:bg-white/5">Home</button>
+                    <button onclick="navigateTo('gates')" id="nav-gates" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-gray-300 hover:text-white hover:bg-white/5">Gate Library</button>
+                    <button onclick="navigateTo('simulator')" id="nav-simulator" class="nav-btn ml-4 px-5 py-2 rounded-lg text-sm font-medium bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/25 transition-all">Simulator</button>
                 </div>
 
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex md:items-center md:space-x-4">
-                    <a href="#home" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">Home</a>
-                    <div class="relative group">
-                        <button class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700 flex items-center">
-                            Learn
-                            <svg class="ml-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                        <div class="absolute z-10 -left-10 mt-2 w-48 rounded-md shadow-lg py-1 bg-bg-medium ring-1 ring-black ring-opacity-5 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300">
-                            <a href="#qubits" class="nav-link block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">Qubits</a>
-                            <a href="#superposition" class="nav-link block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">Superposition</a>
-                            <a href="#entanglement" class="nav-link block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">Entanglement</a>
-                            <a href="#gates" class="nav-link block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">Quantum Gates</a>
-                            <a href="#circuits" class="nav-link block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-700">Quantum Circuits</a>
-                        </div>
-                    </div>
-                    <a href="#qml" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">QML</a>
-                    <a href="#simulator" class="nav-link px-3 py-2 rounded-md text-sm font-medium bg-accent-blue text-bg-dark hover:bg-accent-blue/90">Simulator</a>
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="p-2 rounded-md text-gray-400 hover:text-white hover:bg-white/10">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="md:hidden hidden">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#home" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Home</a>
-                <a href="#qubits" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Qubits</a>
-                <a href="#superposition" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Superposition</a>
-                <a href="#entanglement" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Entanglement</a>
-                <a href="#gates" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Quantum Gates</a>
-                <a href="#circuits" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Quantum Circuits</a>
-                <a href="#qml" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">QML</a>
-                <a href="#simulator" class="nav-link block px-3 py-2 rounded-md text-base font-medium bg-accent-blue text-bg-dark hover:bg-accent-blue/90">Simulator</a>
+        <!-- Mobile Menu Panel -->
+        <div class="md:hidden hidden glass-nav absolute w-full border-t border-white/5" id="mobile-menu">
+            <div class="px-4 pt-2 pb-4 space-y-2">
+                <button onclick="navigateTo('home')" class="block w-full text-left px-4 py-3 rounded-md text-base font-medium text-gray-300 hover:bg-white/5">Home</button>
+                <button onclick="navigateTo('gates')" class="block w-full text-left px-4 py-3 rounded-md text-base font-medium text-gray-300 hover:bg-white/5">Gate Library</button>
+                <button onclick="navigateTo('simulator')" class="block w-full text-left px-4 py-3 rounded-md text-base font-medium text-blue-400 hover:bg-white/5">Launch Simulator</button>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content Area -->
-    <main id="page-content">
-
-        <!-- ============================================= -->
-        <!-- HOME PAGE -->
-        <!-- ============================================= -->
-        <div id="home" class="page-section px-4">
-            <!-- Hero Section (from original file) -->
-            <section class="min-h-[calc(100vh-80px)] flex items-center justify-center text-center pt-10 pb-20">
-                <div class="max-w-4xl mx-auto">
-                  <img src="images\iitgn-logo.png" alt="IITGN Large Logo" class="iitgn-logo-hero h-32 w-32 md:h-40 md:w-40 mx-auto mb-8 rounded-full">
-        <h1 class="text-5xl md:text-7xl font-bold text-white mb-4">Explore the <span class="text-glow text-cyan-400">Quantum Realm</span></h1>
-        <p class="text-xl md:text-2xl text-gray-300 mb-6">An initiative by <strong>Prof. Sameer G Kulkarni</strong>, IIT Gandhinagar.</p>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-10">Dive into the world of quantum computing and QML. Experiment with circuits, visualize probabilities, and build your understanding with our interactive simulator.</p>
-                    <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
-                        <a href="#simulator" class="btn btn-blue text-lg w-full sm:w-auto">Start Simulating</a>
-                        <a href="#qubits" class="btn btn-purple text-lg w-full sm:w-auto">Learn the Basics</a>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Features Section -->
-            <section class="py-20 px-4">
-                <div class="max-w-6xl mx-auto">
-                    <h2 class="text-4xl font-bold text-center mb-12">Why Quantum?</h2>
-                    <div class="grid md:grid-cols-3 gap-8">
-                        <!-- Feature 1 -->
-                        <div class="glass-card p-6 text-center">
-                            <h3 class="text-2xl font-semibold mb-3 text-accent-blue">Superposition</h3>
-                            <p class="text-gray-300">
-                                Qubits can exist in multiple states at once, allowing for massive parallel computation.
-                            </p>
-                            <a href="#superposition" class="text-accent-blue hover:underline mt-4 inline-block">Learn More &rarr;</a>
-                        </div>
-                        <!-- Feature 2 -->
-                        <div class="glass-card p-6 text-center">
-                            <h3 class="text-2xl font-semibold mb-3 text-accent-purple">Entanglement</h3>
-                            <p class="text-gray-300">
-                                'Spooky action at a distance.' Qubits can be linked, their fates intertwined regardless of distance.
-                            </p>
-                             <a href="#entanglement" class="text-accent-purple hover:underline mt-4 inline-block">Learn More &rarr;</a>
-                        </div>
-                        <!-- Feature 3 -->
-                        <div class="glass-card p-6 text-center">
-                            <h3 class="text-2xl font-semibold mb-3 text-white">Quantum ML</h3>
-                            <p class="text-gray-300">
-                                Combining quantum computing with machine learning to solve complex problems in AI, chemistry, and more.
-                            </p>
-                             <a href="#qml" class="text-gray-400 hover:underline mt-4 inline-block">Learn More &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- ============================================= -->
-        <!-- QUBITS PAGE -->
-        <!-- ============================================= -->
-        <div id="qubits" class="page-section hidden px-4">
-            <div class="max-w-4xl mx-auto">
-                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-center">
-                    Understanding <span class="text-accent-blue">Qubits</span>
-                </h1>
-                <p class="text-xl text-gray-300 text-center mb-10">The fundamental building block of quantum computers.</p>
-
-                <div class="glass-card p-8 space-y-6">
-                    <h2 class="text-3xl font-semibold text-accent-purple">What is a Qubit?</h2>
-                    <p class="text-lg">
-                        In classical computing, the basic unit of information is a "bit," which can be in one of two states: a <strong>0</strong> or a <strong>1</strong>.
-                    </p>
-                    <p class="text-lg">
-                        A <strong>qubit</strong> (or quantum bit) is the quantum-mechanical analogue. Like a bit, a qubit's measurement result will always be either a 0 or a 1. However, before it's measured, a qubit can exist in a state of <strong>superposition</strong>—a combination of both 0 and 1 simultaneously.
-                    </p>
-
-                    <h2 class="text-3xl font-semibold text-accent-purple mt-8">Representing a Qubit</h2>
-                    <p class="text-lg">
-                        We can describe the state of a qubit (written as `|ψ⟩`, pronounced "ket-psi") as a linear combination of its two basis states, `|0⟩` and `|1⟩`:
-                    </p>
-                    <div class="bg-bg-medium p-4 rounded-lg font-code text-center text-xl">
-                        |ψ⟩ = α|0⟩ + β|1⟩
-                    </div>
-                    <p class="text-lg">
-                        Here, `α` (alpha) and `β` (beta) are complex numbers called "probability amplitudes."
-                    </p>
-                    <ul class="list-disc list-inside text-lg space-y-2">
-                        <li>The probability of measuring the qubit in the `|0⟩` state is `|α|²`.</li>
-                        <li>The probability of measuring the qubit in the `|1⟩` state is `|β|²`.</li>
-                    </ul>
-                    <p class="text-lg">
-                        Because the probabilities must add up to 100%, the following must always be true:
-                    </p>
-                    <div class="bg-bg-medium p-4 rounded-lg font-code text-center text-xl">
-                        |α|² + |β|² = 1
-                    </div>
-                    
-                    <h2 class="text-3xl font-semibold text-accent-purple mt-8">The Bloch Sphere</h2>
-                    <p class="text-lg">
-                        A single qubit's state can be visualized as a point on the surface of a 3D sphere called the <strong>Bloch sphere</strong>.
-                    </p>
-                    <ul class="list-disc list-inside text-lg space-y-2">
-                        <li>The <strong>North Pole</strong> typically represents the state `|0⟩`.</li>
-                        <li>The <strong>South Pole</strong> typically represents the state `|1⟩`.</li>
-                        <li>Any other point on the sphere's surface represents a superposition state.</li>
-                    </ul>
-                    <p class="text-lg mt-4">
-                        Quantum gates (which you can learn about next) act as rotations on the Bloch sphere, changing the qubit's state.
-                    </p>
-                </div>
-                <div class="text-center mt-12">
-                    <a href="#superposition" class="btn btn-blue text-lg">Next: Learn about Superposition</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================= -->
-        <!-- SUPERPOSITION PAGE -->
-        <!-- ============================================= -->
-        <div id="superposition" class="page-section hidden px-4">
-            <div class="max-w-4xl mx-auto">
-                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-center">
-                    Quantum <span class="text-accent-blue">Superposition</span>
-                </h1>
-                <p class="text-xl text-gray-300 text-center mb-10">The power of being in multiple states at once.</p>
-
-                <div class="glass-card p-8 space-y-6">
-                    <h2 class="text-3xl font-semibold text-accent-purple">What is Superposition?</h2>
-                    <p class="text-lg">
-                        Superposition is one of the most fundamental principles of quantum mechanics. It states that, much like waves in classical physics, a quantum system (like a qubit) can be in a combination of all its possible states at the same time, as long as it's not being measured or observed.
-                    </p>
-                    <p class="text-lg">
-                        Think of a spinning coin. While it's in the air, it's neither heads nor tails. It's in a dynamic state that has the potential to be either. A qubit in superposition is similar—it's not a 0 and it's not a 1. It's in a weighted combination of both.
-                    </p>
-
-                    <h2 class="text-3xl font-semibold text-accent-purple mt-8">The Role of Measurement</h2>
-                    <p class="text-lg">
-                        This "both states at once" property only lasts until the qubit is measured. When we measure a qubit, its superposition "collapses" into one of the two classical states, `|0⟩` or `|1⟩`.
-                    </p>
-                    <p class="text-lg">
-                        The probabilities of collapsing to `|0⟩` or `|1⟩` are determined by the qubit's probability amplitudes (`α` and `β`). For example, a qubit in the state:
-                    </p>
-                    <div class="bg-bg-medium p-4 rounded-lg font-code text-center text-xl">
-                        |ψ⟩ = (1/√2)|0⟩ + (1/√2)|1⟩
-                    </div>
-                    <p class="text-lg">
-                        ...has a `(1/√2)² = 50%` chance of collapsing to `|0⟩` and a `(1/√2)² = 50%` chance of collapsing to `|1⟩`. This specific state is created by applying a <strong>Hadamard gate</strong> to a qubit in the `|0⟩` state.
-                    </p>
-                    
-                    <h2 class="text-3xl font-semibold text-accent-purple mt-8">Why is this useful?</h2>
-                    <p class="text-lg">
-                        Superposition allows quantum computers to perform many calculations at once. A register of 3 classical bits can store only one of 8 possible numbers (e.g., 101). A register of 3 qubits in superposition can represent <strong>all 8 numbers simultaneously</strong>.
-                    </p>
-                     <p class="text-lg">
-                        This enables a massive parallel processing power that grows exponentially with the number of qubits.
-                    </p>
-                </div>
-                <div class="text-center mt-12">
-                    <a href="#entanglement" class="btn btn-blue text-lg">Next: Learn about Entanglement</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================= -->
-        <!-- ENTANGLEMENT PAGE -->
-        <!-- ============================================= -->
-        <div id="entanglement" class="page-section hidden px-4">
-            <div class="max-w-4xl mx-auto">
-                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-center">
-                    Quantum <span class="text-accent-purple">Entanglement</span>
-                </h1>
-                <p class="text-xl text-gray-300 text-center mb-10">"Spooky action at a distance." - Albert Einstein</p>
-
-                <div class="glass-card p-8 space-y-6">
-                    <h2 class="text-3xl font-semibold text-accent-blue">What is Entanglement?</h2>
-                    <p class="text-lg">
-                        Quantum entanglement is a phenomenon where two or more quantum particles (like qubits) become linked in such a way that their fates are intertwined, no matter how far apart they are separated.
-                    </p>
-                    <p class="text-lg">
-                        When particles are entangled, their individual states are no longer independent. Instead, they are described by a single, shared quantum state. Measuring a property of one particle instantly influences the properties of the other(s), regardless of the distance between them.
-                    </p>
-
-                    <h2 class="text-3xl font-semibold text-accent-blue mt-8">A Classic Example: The Bell State</h2>
-                    <p class="text-lg">
-                        One of the simplest entangled states involves two qubits, known as a Bell state. A common Bell state is:
-                    </p>
-                    <div class="bg-bg-medium p-4 rounded-lg font-code text-center text-xl">
-                        |Φ+⟩ = (1/√2)(|00⟩ + |11⟩)
-                    </div>
-                    <p class="text-lg">
-                        This state describes a two-qubit system that is in a superposition of both qubits being `|0⟩` and both qubits being `|1⟩`.
-                    </p>
-                    <p class="text-lg">
-                        Here's the "spooky" part:
-                    </p>
-                    <ul class="list-disc list-inside text-lg space-y-2">
-                        <li>If you measure the first qubit and it collapses to `|0⟩`, you instantly know the second qubit will also be `|0⟩`.</li>
-                        <li>If you measure the first qubit and it collapses to `|1⟩`, you instantly know the second qubit will also be `|1⟩`.</li>
-                    </ul>
-                    <p class="text-lg">
-                        This correlation is perfect and instantaneous, even if one qubit is on Earth and the other is on Mars. This doesn't allow for faster-than-light communication (as you can't control the outcome of your measurement), but it's a powerful resource for quantum computing and cryptography.
-                    </p>
-                    
-                    <h2 class="text-3xl font-semibold text-accent-blue mt-8">Creating Entanglement</h2>
-                    <p class="text-lg">
-                        Entanglement doesn't just happen. It has to be created. In a quantum circuit, the most common way to entangle two qubits is by using:
-                    </p>
-                    <ol class="list-decimal list-inside text-lg space-y-2">
-                        <li>A <strong>Hadamard gate</strong> on the first qubit (to put it in superposition).</li>
-                        <li>A <strong>Controlled-NOT (CNOT) gate</strong>, using the first qubit as the control and the second qubit as the target.</li>
-                    </ol>
-                    <p class="text-lg">
-                        You can try this exact operation in our <a href="#simulator" class="text-accent-purple hover:underline">simulator</a>!
-                    </p>
-                </div>
-                <div class="text-center mt-12">
-                    <a href="#gates" class="btn btn-purple text-lg">Next: Learn about Quantum Gates</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================= -->
-        <!-- GATES PAGE -->
-        <!-- ============================================= -->
-        <div id="gates" class="page-section hidden px-4">
-            <div class="max-w-4xl mx-auto">
-                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-center">
-                    Quantum <span class="text-accent-blue">Gates</span>
-                </h1>
-                <p class="text-xl text-gray-300 text-center mb-10">The operations that power quantum algorithms.</p>
-
-                <div class="glass-card p-8 space-y-6">
-                    <h2 class="text-3xl font-semibold text-accent-purple">What are Quantum Gates?</h2>
-                    <p class="text-lg">
-                        Just as classical computers use logic gates (like AND, OR, NOT) to manipulate bits, quantum computers use <strong>quantum gates</strong> to manipulate qubits.
-                    </p>
-                    <p class="text-lg">
-                        Quantum gates are the building blocks of quantum circuits. Mathematically, they are represented by matrices that operate on the qubit's state vector. Visually, as seen on the Bloch sphere, single-qubit gates are <strong>rotations</strong>.
-                    </p>
-                    <p class="text-lg">
-                        A key property of quantum gates is that they must be <strong>reversible</strong>. This means you can always undo a quantum operation, which is a direct consequence of quantum mechanics.
-                    </p>
-
-                    <h2 class="text-3xl font-semibold text-accent-purple mt-8">Common Single-Qubit Gates</h2>
-                    
-                    <h3 class="text-2xl font-semibold text-white">Pauli-X Gate (NOT Gate)</h3>
-                    <p class="text-lg">
-                        The X gate is the quantum equivalent of the classical NOT gate. It flips the state of a qubit.
-                    </p>
-                    <ul class="list-disc list-inside text-lg font-code">
-                        <li>X|0⟩ = |1⟩</li>
-                        <li>X|1⟩ = |0⟩</li>
-                    </ul>
-                    <p class="text-lg">On the Bloch sphere, this is a 180° rotation around the X-axis.</p>
-
-                    <h3 class="text-2xl font-semibold text-white mt-4">Hadamard Gate (H Gate)</h3>
-                    <p class="text-lg">
-                        The Hadamard gate is one of the most important gates. It's the gate that creates <strong>superposition</strong>.
-                    </p>
-                    <ul class="list-disc list-inside text-lg font-code">
-                        <li>H|0⟩ = (1/√2)(|0⟩ + |1⟩)  (a 50/50 superposition)</li>
-                        <li>H|1⟩ = (1/√2)(|0⟩ - |1⟩)</li>
-                    </ul>
-                    <p class="text-lg">Applying H twice in a row (HH) is the same as doing nothing (an Identity operation).</p>
-                    
-                    <h3 class="text-2xl font-semibold text-white mt-4">Pauli-Z Gate</h3>
-                    <p class="text-lg">
-                        The Z gate leaves the `|0⟩` state alone but adds a "phase shift" to the `|1⟩` state (flips its sign).
-                    </p>
-                    <ul class="list-disc list-inside text-lg font-code">
-                        <li>Z|0⟩ = |0⟩</li>
-                        <li>Z|1⟩ = -|1⟩</li>
-                    </ul>
-                     <p class="text-lg">This may not seem like much, but changing the phase is crucial for many quantum algorithms.</p>
-
-                    <h2 class="text-3xl font-semibold text-accent-purple mt-8">Common Multi-Qubit Gates</h2>
-                    <h3 class="text-2xl font-semibold text-white">Controlled-NOT (CNOT) Gate</h3>
-                    <p class="text-lg">
-                        The CNOT gate is a two-qubit gate and is essential for creating <strong>entanglement</strong>.
-                    </p>
-                    <ul class="list-disc list-inside text-lg">
-                        <li>It has two inputs: a <strong>control</strong> qubit and a <strong>target</strong> qubit.</li>
-                        <li>If the control qubit is `|0⟩`, it does nothing to the target qubit.</li>
-                        <li>If the control qubit is `|1⟩`, it applies an X gate (a NOT flip) to the target qubit.</li>
-                    </ul>
-                     <p class="text-lg font-code">
-                        CNOT|00⟩ = |00⟩<br>
-                        CNOT|01⟩ = |01⟩<br>
-                        CNOT|10⟩ = |11⟩<br>
-                        CNOT|11⟩ = |10⟩
-                    </p>
-                </div>
-                <div class="text-center mt-12">
-                    <a href="#circuits" class="btn btn-blue text-lg">Next: Learn about Quantum Circuits</a>
-                </div>
-            </div>
-        </div>
+    <!-- Main Content -->
+    <main class="flex-grow pt-20 relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
         
-        <!-- ============================================= -->
-        <!-- CIRCUITS PAGE -->
-        <!-- ============================================= -->
-        <div id="circuits" class="page-section hidden px-4">
-            <div class="max-w-4xl mx-auto">
-                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-center">
-                    Quantum <span class="text-accent-blue">Circuits</span>
+        <!-- ==================== HOME PAGE ==================== -->
+        <section id="home" class="page-section min-h-[calc(100vh-80px)] flex flex-col justify-center items-center text-center fade-in pb-20">
+            
+           <div class="flex justify-center mb-8">
+    <div class="p-2 rounded-full bg-white/10 backdrop-blur-md inline-flex">
+        <img 
+            src="images/iitgn-logo.png" 
+            alt="IIT Gandhinagar Logo" 
+            class="h-24 md:h-32 w-24 md:w-32 rounded-full object-cover"
+        >
+    </div>
+</div>
+
+
+                <!-- PROJECT TITLE BADGE -->
+                <div class="inline-block mb-6">
+                    <span class="px-4 py-2 rounded-full border border-blue-400/30 bg-blue-900/30 backdrop-blur-md text-blue-200 text-sm font-semibold tracking-wide uppercase shadow-inner">
+                        Quantum Machine Learning for Cyber Security Use Case
+                    </span>
+                </div>
+
+                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight leading-tight">
+                    Next-Gen Security via <br/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 animate-gradient">Quantum Computing</span>
                 </h1>
-                <p class="text-xl text-gray-300 text-center mb-10">The "sheet music" for quantum algorithms.</p>
+                
+                <p class="text-lg text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    An interactive platform by IIT Gandhinagar to visualize quantum gates and understand their application in strengthening cybersecurity protocols.
+                </p>
 
-                <div class="glass-card p-8 space-y-6">
-                    <h2 class="text-3xl font-semibold text-accent-purple">What is a Quantum Circuit?</h2>
-                    <p class="text-lg">
-                        A quantum circuit is a model for quantum computation, much like a classical circuit is for classical computation. It's a diagram that shows how quantum gates are applied to qubits over time to perform a calculation.
-                    </p>
-                    <p class="text-lg">
-                        Circuits are read from <strong>left to right</strong>.
-                    </p>
+                <!-- CTA BUTTONS -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <button onclick="navigateTo('gates')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-lg shadow-blue-600/30 transition-all hover:-translate-y-1 flex items-center justify-center gap-2">
+                        Start Learning <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                    
+                    <button onclick="navigateTo('simulator')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white/5 border border-white/10 text-white font-semibold backdrop-blur-md hover:bg-white/10 transition-all hover:-translate-y-1">
+                        Open Simulator
+                    </button>
 
-                    <h2 class="text-3xl font-semibold text-accent-purple mt-8">Reading a Circuit Diagram</h2>
-                    <p class="text-lg">
-                        Quantum circuit diagrams have a few simple components:
-                    </p>
-                    <ul class="list-disc list-inside text-lg space-y-4">
-                        <li>
-                            <strong>The Qubit Wires:</strong> Each horizontal line in the diagram represents a single qubit. It shows the "lifetime" of the qubit as it passes through the algorithm. The wire is typically labeled on the left, e.g., `q₀`, `q₁`.
-                        </li>
-                        <li>
-                            <strong>The Gates:</strong> The boxes (like `H`, `X`, `Z`) or symbols (like the CNOT) that sit on the wires are the quantum gates. They represent an operation being applied to that qubit.
-                        </li>
-                        <li>
-                            <strong>The Measurement:</strong> A special symbol (often a meter icon) at the end of a qubit wire indicates that the qubit is being measured. This collapses its superposition and gives a classical bit (0 or 1) as output.
-                        </li>
-                    </ul>
+                    <!-- GITHUB LINK BUTTON -->
+                    <a href="https://github.com/anujjtiwari/QuantumML" target="_blank" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-200 font-semibold transition-all hover:-translate-y-1 flex items-center justify-center gap-2">
+                        <i data-lucide="github" class="w-5 h-5"></i> Access Materials
+                    </a>
+                </div>
 
-                    <h2 class="text-3xl font-semibold text-accent-purple mt-8">Example: Creating a Bell State</h2>
-                    <p class="text-lg">
-                        Here is the circuit diagram for creating the Bell state `(1/√2)(|00⟩ + |11⟩)`:
-                    </p>
-                    <div class="bg-bg-medium p-6 rounded-lg font-code text-white">
-                        <pre>
-q₀: |0⟩ ---[ H ]---[ • ]---
-                   |
-q₁: |0⟩ ---[   ]---[ X ]---
-                        </pre>
+                <!-- Features -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-24 w-full text-left">
+                    <div class="glass-card p-6 rounded-2xl">
+                        <div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center mb-4 text-blue-400 border border-blue-500/20">
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Cyber Security</h3>
+                        <p class="text-gray-400 text-sm">Learn how quantum algorithms can both threaten and secure modern encryption standards.</p>
                     </div>
-                    <p class="text-lg">
-                        Let's break this down:
-                    </p>
-                    <ol class="list-decimal list-inside text-lg space-y-2">
-                        <li>Both qubits (`q₀` and `q₁`) start in the `|0⟩` state.</li>
-                        <li>A <strong>Hadamard (H) gate</strong> is applied to `q₀`. This puts `q₀` into the superposition state `(1/√2)(|0⟩ + |1⟩)`. The total system state is now `(1/√2)(|00⟩ + |10⟩)`.</li>
-                        <li>A <strong>CNOT gate</strong> is applied. `q₀` is the control (the `•`) and `q₁` is the target (the `X`).</li>
-                        <li>
-                            The CNOT acts on both parts of the superposition:
-                            <ul>
-                                <li>When `q₀` is `|0⟩` (from the `|00⟩` part), nothing happens to `q₁`.</li>
-                                <li>When `q₀` is `|1⟩` (from the `|10⟩` part), `q₁` is flipped from `|0⟩` to `|1⟩`.</li>
-                            </ul>
-                        </li>
-                        <li>The final state is `(1/√2)(|00⟩ + |11⟩)`—an entangled Bell state!</li>
-                    </ol>
+                    <div class="glass-card p-6 rounded-2xl">
+                        <div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mb-4 text-purple-400 border border-purple-500/20">
+                            <i data-lucide="database" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">QML Models</h3>
+                        <p class="text-gray-400 text-sm">Access Qiskit implementations for Quantum Support Vector Machines and Neural Networks.</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl">
+                        <div class="w-12 h-12 rounded-lg bg-pink-500/20 flex items-center justify-center mb-4 text-pink-400 border border-pink-500/20">
+                            <i data-lucide="globe" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Open Research</h3>
+                        <p class="text-gray-400 text-sm">Contribute to the "Quantum machine learning for cyber security use case" project on GitHub.</p>
+                    </div>
                 </div>
-                <div class="text-center mt-12">
-                    <a href="#simulator" class="btn btn-blue text-lg">Try building this circuit now!</a>
+
+                <!-- ==================== TEAM SECTION ==================== -->
+                <div class="mt-32 w-full border-t border-white/5 pt-16">
+                    <div class="inline-block mb-8 px-4 py-1 rounded-full bg-white/5 border border-white/10">
+                        <span class="text-gray-400 text-xs font-medium tracking-widest uppercase">Credits & Authors</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16">
+                        
+                        <!-- Supervisor Card -->
+                        <div class="glass-card p-8 rounded-2xl flex flex-col sm:flex-row items-center gap-6 text-left border-l-4 border-l-blue-500">
+                            <div class="relative flex-shrink-0">
+                                <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-br from-blue-500 to-purple-600">
+                                    <!-- REPLACE 'src' below with actual photo file, e.g., 'images/prof-kulkarni.jpg' -->
+                                    <img src="images/SameerSir.jpg" 
+                                         alt="Prof. Sameer Kulkarni" 
+                                         class="w-full h-full rounded-full object-cover border-2 border-slate-900">
+                                </div>
+                            </div>
+                            <div class="text-center sm:text-left">
+                                <p class="text-blue-400 text-xs font-bold uppercase tracking-wide mb-1">Project Supervision</p>
+                                <h3 class="text-xl font-bold text-white">Prof. Sameer Kulkarni</h3>
+                                <p class="text-gray-400 text-sm mt-1">Assistant Professor, CSE</p>
+                                <p class="text-gray-500 text-xs">IIT Gandhinagar</p>
+                            </div>
+                        </div>
+
+                        <!-- Developer Card -->
+                        <div class="glass-card p-8 rounded-2xl flex flex-col sm:flex-row items-center gap-6 text-left border-l-4 border-l-purple-500">
+                            <div class="relative flex-shrink-0">
+                                <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-br from-purple-500 to-pink-600">
+                                    <!-- REPLACE 'src' below with actual photo file, e.g., 'images/anuj-tiwari.jpg' -->
+                                    <img src="images\AnujTiwari.jpeg" 
+                                         alt="Anuj Tiwari" 
+                                         class="w-full h-full rounded-full object-cover border-2 border-slate-900">
+                                </div>
+                            </div>
+                            <div class="text-center sm:text-left">
+                                <p class="text-purple-400 text-xs font-bold uppercase tracking-wide mb-1">Lead Developer</p>
+                                <h3 class="text-xl font-bold text-white">Anuj Tiwari</h3>
+                                <p class="text-gray-400 text-sm mt-1">Researcher & Developer</p>
+                                <p class="text-gray-500 text-xs">IIT Gandhinagar</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contributors / Join Us Section -->
+                    <div class="max-w-2xl mx-auto">
+                        <h4 class="text-white font-semibold mb-6">Community Contributors</h4>
+                        <div class="glass-card p-6 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-6">
+                            <div class="flex -space-x-3 overflow-hidden">
+                                <!-- Placeholder slots for future photos -->
+                                <div class="w-10 h-10 rounded-full bg-white/5 border border-slate-800 flex items-center justify-center text-gray-600" title="Future Contributor">
+                                    <i data-lucide="user" class="w-5 h-5"></i>
+                                </div>
+                                <div class="w-10 h-10 rounded-full bg-white/5 border border-slate-800 flex items-center justify-center text-gray-600" title="Future Contributor">
+                                    <i data-lucide="user" class="w-5 h-5"></i>
+                                </div>
+                                <div class="w-10 h-10 rounded-full bg-white/5 border border-slate-800 flex items-center justify-center text-gray-600" title="Future Contributor">
+                                    <i data-lucide="user" class="w-5 h-5"></i>
+                                </div>
+                                <div class="w-10 h-10 rounded-full bg-blue-600/20 border border-slate-800 flex items-center justify-center text-blue-400 text-xs font-medium">
+                                    +
+                                </div>
+                            </div>
+                            <div class="text-center sm:text-right">
+                                <p class="text-gray-400 text-xs mb-2">Join the project and feature here.</p>
+                                <a href="https://github.com/topics/quantum-machine-learning" target="_blank" class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">
+                                    Contribute on GitHub <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
-        </div>
+        </section>
 
-        <!-- ============================================= -->
-        <!-- QML PAGE -->
-        <!-- ============================================= -->
-        <div id="qml" class="page-section hidden px-4">
-            <div class="max-w-4xl mx-auto">
-                <h1 class="text-4xl md:text-5xl font-bold mb-6 text-center">
-                    Quantum Machine Learning <span class="text-accent-purple">(QML)</span>
-                </h1>
-                <p class="text-xl text-gray-300 text-center mb-10">The intersection of two revolutionary fields.</p>
-
-                <div class="glass-card p-8 space-y-6">
-                    <h2 class="text-3xl font-semibold text-accent-blue">What is QML?</h2>
-                    <p class="text-lg">
-                        Quantum Machine Learning (QML) is an emerging field that explores the synergy between quantum computing and machine learning. The hope is that quantum computers can provide significant speedups for certain machine learning tasks, or that ML techniques can help us design better quantum algorithms.
-                    </p>
-                    
-                    <h2 class="text-3xl font-semibold text-accent-blue mt-8">Why use Quantum for ML?</h2>
-                    <p class="text-lg">
-                        Machine learning, especially deep learning, often involves processing vast amounts of data in high-dimensional spaces. This can be computationally expensive for classical computers.
-                    </p>
-                    <p class="text-lg">
-                        Quantum computers are naturally good at this:
-                    </p>
-                    <ul class="list-disc list-inside text-lg space-y-2">
-                        <li>
-                            <strong>High-Dimensional Data:</strong> A system of `N` qubits exists in a state space with `2^N` dimensions. This "quantum-native" high-dimensional space could be perfect for encoding and processing complex datasets.
-                        </li>
-                        <li>
-                            <strong>Linear Algebra Speedups:</strong> Many ML algorithms (like Support Vector Machines or Principal Component Analysis) are built on linear algebra. Quantum algorithms like HHL (Harrow-Hassidim-Lloyd) promise exponential speedups for solving systems of linear equations.
-                        </li>
-                    </ul>
-
-                    <h2 class="text-3xl font-semibold text-accent-blue mt-8">Key QML Algorithms</h2>
-                    
-                    <h3 class="text-2xl font-semibold text-white">Quantum Support Vector Machine (QSVM)</h3>
-                    <p class="text-lg">
-                        QSVMs aim to find the optimal hyperplane to separate data, just like classical SVMs. By mapping data into the quantum state space, QSVMs may be able to find separation patterns that are invisible to classical kernels.
-                    </p>
-
-                    <h3 class="text-2xl font-semibold text-white mt-4">Variational Quantum Eigensolvers (VQE)</h3>
-                    <p class="text-lg">
-                        VQE is a "hybrid" quantum-classical algorithm. It's often used in quantum chemistry but its structure is a cornerstone of modern QML.
-                    </p>
-                    <ul class="list-disc list-inside text-lg">
-                        <li>A quantum circuit with tunable parameters (gates) is run on a quantum computer.</li>
-                        <li>The output is measured and fed into a classical optimizer (like a standard ML optimizer).</li>
-                        <li>The classical optimizer "learns" the best parameters for the quantum circuit to solve the problem.</li>
-                    </ul>
-                    <p class="text-lg">This hybrid approach is central to <strong>Quantum Neural Networks (QNNs)</strong> and is a major focus of research for today's noisy, intermediate-scale quantum (NISQ) devices.</p>
-                </div>
+        <!-- ==================== GATES LIBRARY PAGE ==================== -->
+        <section id="gates" class="page-section hidden py-10 fade-in">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-white mb-4">Quantum Gate Library</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Gates are the building blocks of quantum circuits. Below, the <strong class="text-blue-400">Interactive Bloch Spheres</strong> show the state vector after applying the gate to the |0&rangle; state (or |+&rangle; for Z-gate). Drag to rotate 360°!
+                </p>
             </div>
-        </div>
 
-        <!-- ============================================= -->
-        <!-- SIMULATOR PAGE -->
-        <!-- ============================================= -->
-        <div id="simulator" class="page-section hidden px-4">
-            <!-- This section is now updated to embed Quirk -->
-            <section class="py-10">
-                <div class="max-w-7xl mx-auto">
-                    <h2 class="text-4xl font-bold text-center mb-10">
-                        Interactive Quantum Simulator!
-                    </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
+
+                <!-- Hadamard Gate -->
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center border border-blue-500/30">
+                                <span class="text-2xl font-bold text-blue-400">H</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white">Hadamard Gate</h3>
+                                <span class="text-xs text-blue-300 font-mono">superposition_creator</span>
+                            </div>
+                        </div>
+                        <a href="https://github.com/Qiskit/qiskit" target="_blank" class="text-gray-400 hover:text-white transition-colors" title="View Source">
+                            <i data-lucide="github" class="w-5 h-5"></i>
+                        </a>
+                    </div>
                     
-                    <p class="text-center text-lg text-gray-300 mb-8">
-                        Below is the full, interactive quantum circuit simulator.
-                        <br class="hidden sm:block">
-                        A Bell State circuit is already shown to you! Just edit it and make your own circuit here ✨
-                    </p>
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Visual/Description -->
+                        <div>
+                            <!-- 3D BLOCH SPHERE CONTAINER -->
+                            <div id="bloch-h" class="bloch-container h-48 bg-black/30 rounded-lg mb-4 border border-white/5 overflow-hidden">
+                                <span class="bloch-label">Output: |+&rangle;</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">
+                                Creates a superposition state. Maps basis state \(|0\rangle\) to \(\frac{|0\rangle + |1\rangle}{\sqrt{2}}\) (along +X axis).
+                            </p>
+                            <div class="bg-white/5 p-3 rounded-lg border border-white/10">
+                                <span class="text-xs text-gray-500 uppercase tracking-wider font-bold block mb-2">Matrix Logic</span>
+                                <div class="text-white text-sm font-mono flex justify-center">
+                                    $$ \frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix} $$
+                                </div>
+                            </div>
+                        </div>
 
-                    <!-- Quirk embed in a glass card -->
-                    <div class="glass-card p-2 md:p-4 overflow-hidden">
-                        <iframe 
-                        src="/new/index.html" 
-                        class="w-full h-[800px] rounded-lg border-2 border-gray-700"
-                    >
+                        <!-- Code -->
+                        <div class="flex flex-col h-full">
+                            <span class="text-xs text-gray-500 uppercase tracking-wider font-bold mb-2">Qiskit Implementation</span>
+                            <div class="code-block p-4 rounded-lg flex-grow overflow-x-auto text-xs text-blue-100">
+<pre><code>from qiskit import QuantumCircuit
+
+# Create circuit with 1 qubit
+qc = QuantumCircuit(1)
+
+# Apply Hadamard gate
+qc.h(0)
+
+# Draw circuit
+print(qc)</code></pre>
+                            </div>
+                            <button onclick="navigateTo('simulator')" class="mt-4 w-full py-2 rounded-lg bg-blue-600/20 hover:bg-blue-600/40 text-blue-300 border border-blue-500/30 text-sm font-medium transition-all flex items-center justify-center gap-2">
+                                <i data-lucide="play-circle" class="w-4 h-4"></i> Simulate H-Gate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pauli-X Gate -->
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center border border-green-500/30">
+                                <span class="text-2xl font-bold text-green-400">X</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white">Pauli-X Gate</h3>
+                                <span class="text-xs text-green-300 font-mono">bit_flip / NOT</span>
+                            </div>
+                        </div>
+                        <a href="https://github.com/Qiskit/qiskit" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-lucide="github" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <!-- 3D BLOCH SPHERE CONTAINER -->
+                            <div id="bloch-x" class="bloch-container h-48 bg-black/30 rounded-lg mb-4 border border-white/5 overflow-hidden">
+                                <span class="bloch-label">Output: |1&rangle;</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">
+                                The quantum NOT gate. Flips state \(|0\rangle\) (North Pole) to \(|1\rangle\) (South Pole). Rotation of \(\pi\) around X-axis.
+                            </p>
+                            <div class="bg-white/5 p-3 rounded-lg border border-white/10">
+                                <span class="text-xs text-gray-500 uppercase tracking-wider font-bold block mb-2">Matrix Logic</span>
+                                <div class="text-white text-sm font-mono flex justify-center">
+                                    $$ \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix} $$
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col h-full">
+                            <span class="text-xs text-gray-500 uppercase tracking-wider font-bold mb-2">Qiskit Implementation</span>
+                            <div class="code-block p-4 rounded-lg flex-grow overflow-x-auto text-xs text-green-100">
+<pre><code>from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(1)
+
+# Apply X gate (NOT)
+qc.x(0)
+
+print(qc)</code></pre>
+                            </div>
+                            <button onclick="navigateTo('simulator')" class="mt-4 w-full py-2 rounded-lg bg-green-600/20 hover:bg-green-600/40 text-green-300 border border-green-500/30 text-sm font-medium transition-all flex items-center justify-center gap-2">
+                                <i data-lucide="play-circle" class="w-4 h-4"></i> Simulate X-Gate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CNOT Gate -->
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center border border-purple-500/30">
+                                <span class="text-2xl font-bold text-purple-400">+</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white">CNOT Gate</h3>
+                                <span class="text-xs text-purple-300 font-mono">entanglement / CX</span>
+                            </div>
+                        </div>
+                        <a href="https://github.com/Qiskit/qiskit" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-lucide="github" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <!-- 3D BLOCH SPHERE CONTAINER -->
+                            <div id="bloch-cnot" class="bloch-container h-48 bg-black/30 rounded-lg mb-4 border border-white/5 overflow-hidden">
+                                <span class="bloch-label">Target Qubit (if Control=1)</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">
+                                Flips the target qubit (shown above) ONLY if the control qubit is \(|1\rangle\). Essential for entanglement.
+                            </p>
+                            <div class="bg-white/5 p-3 rounded-lg border border-white/10">
+                                <span class="text-xs text-gray-500 uppercase tracking-wider font-bold block mb-2">Matrix Logic</span>
+                                <div class="text-white text-sm font-mono flex justify-center">
+                                    $$ \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 1 & 0 \end{bmatrix} $$
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col h-full">
+                            <span class="text-xs text-gray-500 uppercase tracking-wider font-bold mb-2">Qiskit Implementation</span>
+                            <div class="code-block p-4 rounded-lg flex-grow overflow-x-auto text-xs text-purple-100">
+<pre><code>qc = QuantumCircuit(2)
+
+# Apply CNOT
+# control: qubit 0
+# target: qubit 1
+qc.cx(0, 1)
+
+print(qc)</code></pre>
+                            </div>
+                            <button onclick="navigateTo('simulator')" class="mt-4 w-full py-2 rounded-lg bg-purple-600/20 hover:bg-purple-600/40 text-purple-300 border border-purple-500/30 text-sm font-medium transition-all flex items-center justify-center gap-2">
+                                <i data-lucide="play-circle" class="w-4 h-4"></i> Simulate CX-Gate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pauli-Z Gate -->
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-pink-500/20 rounded-lg flex items-center justify-center border border-pink-500/30">
+                                <span class="text-2xl font-bold text-pink-400">Z</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white">Pauli-Z Gate</h3>
+                                <span class="text-xs text-pink-300 font-mono">phase_flip</span>
+                            </div>
+                        </div>
+                        <a href="https://github.com/Qiskit/qiskit" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-lucide="github" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <!-- 3D BLOCH SPHERE CONTAINER -->
+                            <div id="bloch-z" class="bloch-container h-48 bg-black/30 rounded-lg mb-4 border border-white/5 overflow-hidden">
+                                <span class="bloch-label">Input |+&rangle; -> Output |-&rangle;</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">
+                                Phase Flip. Leaves \(|0\rangle\) unchanged but maps \(|1\rangle\) to \(-|1\rangle\). Rotates around Z-axis.
+                            </p>
+                            <div class="bg-white/5 p-3 rounded-lg border border-white/10">
+                                <span class="text-xs text-gray-500 uppercase tracking-wider font-bold block mb-2">Matrix Logic</span>
+                                <div class="text-white text-sm font-mono flex justify-center">
+                                    $$ \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix} $$
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col h-full">
+                            <span class="text-xs text-gray-500 uppercase tracking-wider font-bold mb-2">Qiskit Implementation</span>
+                            <div class="code-block p-4 rounded-lg flex-grow overflow-x-auto text-xs text-pink-100">
+<pre><code>qc = QuantumCircuit(1)
+
+# Apply Z gate
+qc.z(0)
+
+print(qc)</code></pre>
+                            </div>
+                            <button onclick="navigateTo('simulator')" class="mt-4 w-full py-2 rounded-lg bg-pink-600/20 hover:bg-pink-600/40 text-pink-300 border border-pink-500/30 text-sm font-medium transition-all flex items-center justify-center gap-2">
+                                <i data-lucide="play-circle" class="w-4 h-4"></i> Simulate Z-Gate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== SIMULATOR PAGE ==================== -->
+        <section id="simulator" class="page-section hidden py-6 fade-in">
+            <div class="flex flex-col h-full">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Circuit Composer</h2>
+                        <p class="text-gray-400 text-sm">Drag gates from the palette onto the wires.</p>
+                    </div>
+                    <button onclick="reloadSimulator()" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors" title="Reset Circuit">
+                        <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                
+                <div class="glass-panel p-1 rounded-xl shadow-2xl">
+                    <iframe 
+                        id="sim-frame"
+                        src="new/index.html" 
+                        class="sim-frame" 
+                        title="Quantum Circuit Simulator"
+                        allowfullscreen>
                     </iframe>
-                    
+                </div>
+                
+                <div class="mt-4 p-4 glass-card rounded-xl">
+                    <h4 class="text-sm font-bold text-white mb-2">Instructions</h4>
+                    <ul class="text-xs text-gray-400 space-y-1 list-disc list-inside">
+                        <li>Drag <strong>H</strong> gates to create superposition.</li>
+                        <li>Use the <strong>Bloch Sphere</strong> display to visualize the qubit state vector.</li>
+                        <li>Use <strong>Measure</strong> blocks to collapse the wavefunction.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
     </main>
 
     <!-- Footer -->
-    <footer class="bg-bg-medium/50 border-t border-gray-700/50 mt-20">
-        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-gray-400">
-                IITGN QuantumLab &copy; 2025. All rights reserved.
-            </p>
-            <p class="text-gray-500 text-sm mt-2">
-                An educational tool for exploring quantum computation.
-            </p>
+    <footer class="border-t border-white/5 bg-black/20 backdrop-blur-xl mt-auto">
+        <div class="max-w-7xl mx-auto px-4 py-6 text-center text-gray-500 text-xs">
+            <p>&copy; 2025 IITGN QuantumLab. Project: Quantum Machine Learning for Cyber Security.</p>
         </div>
     </footer>
 
-
-    <!-- ============================================= -->
-    <!-- JAVASCRIPT -->
-    <!-- ============================================= -->
-    
-    <!-- 1. Particle Background Script (from original file) -->
     <script>
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        let particlesArray;
+        // Initialize Icons
+        lucide.createIcons();
 
-        let mouse = { x: null, y: null, radius: (canvas.height/110) * (canvas.width/110) };
+        // Navigation Functionality (SPA Logic)
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.add('hidden');
+            });
 
-        window.addEventListener('mousemove', function(event){
-            mouse.x = event.x;
-            mouse.y = event.y;
-        });
-
-        class Particle {
-            constructor(x, y, directionX, directionY, size, color){
-                this.x = x;
-                this.y = y;
-                this.directionX = directionX;
-                this.directionY = directionY;
-                this.size = size;
-                this.color = color;
-            }
-            draw(){
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-                ctx.fillStyle = 'rgba(0,191,255,0.6)'; // Accent Blue
-                ctx.fill();
-            }
-            update(){
-                if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
-                if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
-                this.x += this.directionX;
-                this.y += this.directionY;
-                this.draw();
-            }
-        }
-
-        function initParticles(){
-            particlesArray = [];
-            let numberOfParticles = (canvas.height * canvas.width) / 9000;
-            for (let i=0; i<numberOfParticles; i++){
-                let size = (Math.random() * 2) + 1;
-                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
-                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-                let directionX = (Math.random() * 0.4) - 0.2;
-                let directionY = (Math.random() * 0.4) - 0.2;
-                let color = 'rgba(0,191,255,0.6)';
-                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
-            }
-        }
-
-        function connectParticles(){
-            let opacityValue = 1;
-            for (let a=0; a<particlesArray.length; a++){
-                for (let b=a; b<particlesArray.length; b++){
-                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-                    if (distance < (canvas.width/7)*(canvas.height/7)){
-                        opacityValue = 1 - (distance/20000);
-                        ctx.strokeStyle = 'rgba(0,191,255,' + opacityValue + ')';
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                        ctx.stroke();
-                    }
-                }
-                if (mouse.x && mouse.y){
-                    let mouseDistance = ((particlesArray[a].x-mouse.x)*(particlesArray[a].x-mouse.x)) + ((particlesArray[a].y-mouse.y)*(particlesArray[a].y-mouse.y));
-                    if (mouseDistance < (mouse.radius*mouse.radius)){
-                        opacityValue = 1 - (mouseDistance/(mouse.radius*mouse.radius));
-                        ctx.strokeStyle = 'rgba(138,43,226,' + opacityValue + ')'; // Accent Purple
-                        ctx.lineWidth = 1.5;
-                        ctx.beginPath();
-                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                        ctx.lineTo(mouse.x, mouse.y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-
-        function animateCanvas(){
-            requestAnimationFrame(animateCanvas);
-            ctx.clearRect(0,0,innerWidth,innerHeight);
-            for (let i=0; i<particlesArray.length; i++) particlesArray[i].update();
-            connectParticles();
-        }
-
-        window.addEventListener('resize', ()=>{
-            canvas.width = innerWidth;
-            canvas.height = innerHeight;
-            mouse.radius = (canvas.height/110) * (canvas.width/110);
-            initParticles();
-        });
-
-        window.addEventListener('mouseout', ()=>{
-            mouse.x = undefined;
-            mouse.y = undefined;
-        });
-
-        initParticles();
-        animateCanvas();
-    </script>
-
-    <!-- 2. Simple Page Router & Mobile Menu Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const pageContent = document.getElementById('page-content');
-            const pages = pageContent.querySelectorAll('.page-section');
-            const navLinks = document.querySelectorAll('.nav-link');
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
-
-            // let simulatorInitialized = false; // <-- Removed
-
-            function showPage(pageId) {
-                // Default to 'home' if hash is empty or invalid
-                if (!pageId) {
-                    pageId = 'home';
-                }
-
-                // Find the target page
-                const targetPage = document.getElementById(pageId);
-
-                // If target doesn't exist, show home
-                if (!targetPage || !targetPage.classList.contains('page-section')) {
-                    showPage('home');
-                    window.location.hash = '#home';
-                    return;
-                }
-
-                // Hide all pages
-                pages.forEach(page => {
-                    page.classList.add('hidden');
-                });
-
-                // Show the target page
-                targetPage.classList.remove('hidden');
-
-                // Scroll to top
+            const target = document.getElementById(pageId);
+            if (target) {
+                target.classList.remove('hidden');
                 window.scrollTo(0, 0);
-
-                // Update active nav link
-                navLinks.forEach(link => {
-                    if (link.getAttribute('href') === `#${pageId}`) {
-                        link.classList.add('text-white', 'bg-gray-700');
-                    } else {
-                        link.classList.remove('text-white', 'bg-gray-700');
-                    }
-                });
-
-                // Special: Initialize simulator if this is the simulator page
-                if (pageId === 'simulator' && !simulatorInitialized) {
-                    initializeSimulator();
-                    simulatorInitialized = true;
+                
+                // Initialize 3D spheres only if Gates page is shown and they haven't been initialized yet
+                if (pageId === 'gates') {
+                    // Slight delay to ensure containers have size
+                    setTimeout(initAllBlochSpheres, 100);
                 }
-
-                // Close mobile menu
-                mobileMenu.classList.add('hidden');
             }
 
-            // Handle navigation clicks
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const href = link.getAttribute('href');
-                    if (href.startsWith('#')) {
-                        e.preventDefault(); // Prevent default anchor jump
-                        const pageId = href.substring(1);
-                        window.location.hash = pageId; // This triggers the hashchange event
-                    }
-                });
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white', 'shadow-lg');
+                btn.classList.add('text-gray-300', 'hover:text-white');
+                
+                if (btn.id === `nav-${pageId}`) {
+                    btn.classList.remove('text-gray-300', 'hover:text-white');
+                    btn.classList.add('bg-blue-600', 'text-white', 'shadow-lg');
+                }
             });
 
-            // Handle hash changes (e.g., back/forward buttons, manual URL)
-            window.addEventListener('hashchange', () => {
-                const pageId = window.location.hash.substring(1);
-                showPage(pageId);
-            });
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
 
-            // Handle mobile menu toggle
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-
-            // Show initial page on load
-            const initialPageId = window.location.hash.substring(1);
-            showPage(initialPageId || 'home');
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
         });
-    </script>
 
-    <!-- 3. QirK Simulator Script (from original file, wrapped in a function) -->
-    <!-- Removed entire script block for initializeSimulator() as it's no longer needed -->
-    
+        function reloadSimulator() {
+            const frame = document.getElementById('sim-frame');
+            frame.src = frame.src;
+        }
+
+        // Initialize MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+
+        // ============================================
+        // THREE.JS BLOCH SPHERE LOGIC
+        // ============================================
+        
+        let spheresInitialized = false;
+
+        function initAllBlochSpheres() {
+            if (spheresInitialized) return;
+            
+            // 1. Hadamard: |+> (X axis)
+            // theta = 90 deg (PI/2), phi = 0
+            createBlochSphere('bloch-h', 0x60a5fa, Math.PI/2, 0);
+
+            // 2. Pauli-X: |1> (South Pole)
+            // theta = 180 deg (PI), phi = 0
+            createBlochSphere('bloch-x', 0x4ade80, Math.PI, 0);
+
+            // 3. CNOT: Target Flip |1> (South Pole)
+            createBlochSphere('bloch-cnot', 0xc084fc, Math.PI, 0);
+
+            // 4. Pauli-Z: |- > (Negative X axis)
+            // Input |+> (90,0) -> Z -> |-> (90, 180)
+            createBlochSphere('bloch-z', 0xf472b6, Math.PI/2, Math.PI);
+
+            spheresInitialized = true;
+        }
+
+        function createBlochSphere(containerId, colorHex, theta, phi) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            // Setup Scene
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(2, 1.5, 2); // Angle view
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            // Orbit Controls (Interaction)
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableZoom = false;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 2.0;
+
+            // 1. Wireframe Sphere
+            const geometry = new THREE.SphereGeometry(1, 32, 32);
+            const material = new THREE.MeshBasicMaterial({ 
+                color: 0xffffff, 
+                wireframe: true, 
+                transparent: true, 
+                opacity: 0.1 
+            });
+            const sphere = new THREE.Mesh(geometry, material);
+            scene.add(sphere);
+
+            // 2. Equator Ring
+            const ringGeo = new THREE.RingGeometry(1, 1.02, 64);
+            const ringMat = new THREE.MeshBasicMaterial({ color: 0x444444, side: THREE.DoubleSide, transparent: true, opacity: 0.5 });
+            const ring = new THREE.Mesh(ringGeo, ringMat);
+            ring.rotation.x = Math.PI / 2;
+            scene.add(ring);
+
+            // 3. Axes Lines
+            // Y-Axis (Green in ThreeJS, but implies Z in Bloch)
+            const yAxisGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, -1.2, 0), new THREE.Vector3(0, 1.2, 0)]);
+            const axisMat = new THREE.LineBasicMaterial({ color: 0x444444 });
+            scene.add(new THREE.Line(yAxisGeo, axisMat));
+
+            // 4. State Vector Arrow
+            // Mapping Bloch(theta, phi) to ThreeJS Cartesian(x, y, z)
+            // Bloch Up (|0>) is +Z, but in ThreeJS Y is usually up. Let's map Bloch Z -> Three Y.
+            // x = sin(theta) * cos(phi)
+            // y = cos(theta)
+            // z = sin(theta) * sin(phi)
+            const x = Math.sin(theta) * Math.cos(phi);
+            const y = Math.cos(theta);
+            const z = Math.sin(theta) * Math.sin(phi);
+
+            const dir = new THREE.Vector3(x, y, z).normalize();
+            const origin = new THREE.Vector3(0, 0, 0);
+            const arrowHelper = new THREE.ArrowHelper(dir, origin, 1, colorHex, 0.2, 0.1);
+            scene.add(arrowHelper);
+
+            // Animation Loop
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Responsive Resize
+            window.addEventListener('resize', () => {
+                if(container.clientWidth > 0) {
+                    camera.aspect = container.clientWidth / container.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(container.clientWidth, container.clientHeight);
+                }
+            });
+        }
+
+        // Start
+        navigateTo('home');
+    </script>
 </body>
 </html>
