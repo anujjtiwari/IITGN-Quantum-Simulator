@@ -179,21 +179,17 @@ State: |+⟩ (Superposition)
                         </div>
 
                         <div class="flex-1">
-    <span class="text-sm text-gray-400 font-semibold uppercase tracking-wider mb-2 block">Circuit Diagram</span>
-    <div class="w-full h-40 bg-white/5 rounded-xl border border-white/10 p-2 flex items-center justify-center relative overflow-hidden group hover:border-blue-500/50 transition-colors">
-        
-       <img src="images/AngleEncoding.png" 
-     alt="Angle Encoding Circuit Diagram" 
-     onclick="openModal(this.src)"
-     class="max-w-full max-h-full object-contain rounded-lg cursor-zoom-in hover:opacity-80 transition-opacity">
-             
-    </div>
-</div>
+                            <span class="text-sm text-gray-400 font-semibold uppercase tracking-wider mb-2 block">Circuit Diagram</span>
+                            <div class="w-full h-40 bg-white/5 rounded-xl border border-white/10 p-2 flex items-center justify-center relative overflow-hidden group hover:border-blue-500/50 transition-colors">
+                                <img src="images/AngleEncoding.png" 
+                                     alt="Angle Encoding Circuit Diagram" 
+                                     onclick="openModal(this.src)"
+                                     class="max-w-full max-h-full object-contain rounded-lg cursor-zoom-in hover:opacity-80 transition-opacity">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
 
             <div class="glass-card p-8 rounded-2xl w-full">
                 <div class="flex items-center gap-4 mb-6 pb-4 border-b border-white/10">
@@ -249,8 +245,11 @@ State: 0.6|0⟩ + 0.8|1⟩
                         <div class="flex-1">
                             <span class="text-sm text-gray-400 font-semibold uppercase tracking-wider mb-2 block">Circuit Diagram</span>
                             <div class="w-full h-40 bg-white/5 rounded-xl border border-dashed border-white/20 flex flex-col items-center justify-center relative overflow-hidden group hover:border-purple-500/50 transition-colors">
-                                
-                                <p class="text-xs text-gray-500 mt-2">Series of Ry and CNOT rotations</p>
+                                <img src="images/AmplitudeEncoding.png" 
+                                     alt="Amplitude Encoding Circuit Diagram" 
+                                     onclick="openModal(this.src)"
+                                     class="max-w-full max-h-full object-contain rounded-lg cursor-zoom-in hover:opacity-80 transition-opacity">
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -259,24 +258,15 @@ State: 0.6|0⟩ + 0.8|1⟩
 
         </section>
 
-        <section class="max-w-6xl mx-auto mt-24 px-6 border-t border-white/5 pt-12">
-            <div class="flex items-center justify-between mb-8">
-                <h2 class="text-2xl font-bold text-white">Lecture Notes & Sketches</h2>
-                <a href="#" class="text-blue-400 text-sm hover:text-blue-300 flex items-center gap-1">View All <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="glass-card rounded-xl h-48 flex items-center justify-center text-gray-500 border border-white/10">
-                    
-
-[Image of handwritten math]
-
-                </div>
-                <div class="glass-card rounded-xl h-48 flex items-center justify-center text-gray-500 border border-white/10">
-                    
-                </div>
-                <div class="glass-card rounded-xl h-48 flex items-center justify-center text-gray-500 border border-white/10">
-                    
-                </div>
+        <section class="max-w-6xl mx-auto mt-16 px-6 mb-12">
+            <div class="border-t border-white/10 pt-12 flex flex-col items-center justify-center gap-4">
+                <h2 class="text-2xl font-bold text-white">Want to dive deeper?</h2>
+                <p class="text-gray-400 text-sm mb-4">Get the comprehensive reference notes on Quantum Encoding and State Preparation.</p>
+                
+                <a href="assets\Begineer'sGuide-QC&QML.pdf" download class="group relative inline-flex items-center gap-3 px-8 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-500 transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] transform hover:-translate-y-1">
+                    <i data-lucide="download" class="w-5 h-5"></i>
+                    <span>Download Study Material</span>
+                </a>
             </div>
         </section>
 
@@ -285,63 +275,56 @@ State: 0.6|0⟩ + 0.8|1⟩
     <footer class="border-t border-white/5 bg-black/20 py-6 mt-20 text-center text-gray-500 text-xs">
         © 2025 IITGN QuantumLab — Quantum Machine Learning for Cyber Security
     </footer>
-    <div id="image-modal" 
-     class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4"
-     onclick="closeModal()">
-    
-    <button class="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors" onclick="closeModal()">
-        <i data-lucide="x" class="w-10 h-10"></i>
-    </button>
 
-    <img id="modal-img" src="" alt="Enlarged View" 
-         class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl scale-95 transition-transform duration-300"
-         onclick="event.stopPropagation()"> 
-         </div>
+    <div id="image-modal" 
+         class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4"
+         onclick="closeModal()">
+    
+        <button class="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors" onclick="closeModal()">
+            <i data-lucide="x" class="w-10 h-10"></i>
+        </button>
+
+        <img id="modal-img" src="" alt="Enlarged View" 
+             class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl scale-95 transition-transform duration-300"
+             onclick="event.stopPropagation()"> 
+    </div>
 
     <script>
         // Initialize Icons
         lucide.createIcons();
+        
         // ==========================================
-    // LIGHTBOX MODAL LOGIC
-    // ==========================================
-    const modal = document.getElementById('image-modal');
-    const modalImg = document.getElementById('modal-img');
+        // LIGHTBOX MODAL LOGIC
+        // ==========================================
+        const modal = document.getElementById('image-modal');
+        const modalImg = document.getElementById('modal-img');
 
-    function openModal(src) {
-        // 1. Set the image source
-        modalImg.src = src;
-        
-        // 2. Unhide the modal container
-        modal.classList.remove('hidden');
-        
-        // 3. Small timeout to allow the browser to render "block" before fading in
-        // This makes the transition opacity work
-        setTimeout(() => {
-            modal.classList.remove('opacity-0');
-            modalImg.classList.remove('scale-95');
-            modalImg.classList.add('scale-100');
-        }, 10);
-    }
-
-    function closeModal() {
-        // 1. Fade out
-        modal.classList.add('opacity-0');
-        modalImg.classList.remove('scale-100');
-        modalImg.classList.add('scale-95');
-
-        // 2. Hide display:none after the transition (300ms) matches CSS duration
-        setTimeout(() => {
-            modal.classList.add('hidden');
-            modalImg.src = ''; // Clear src
-        }, 300);
-    }
-
-    // Close modal on Escape key press
-    document.addEventListener('keydown', function(event) {
-        if (event.key === "Escape") {
-            closeModal();
+        function openModal(src) {
+            modalImg.src = src;
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalImg.classList.remove('scale-95');
+                modalImg.classList.add('scale-100');
+            }, 10);
         }
-    });
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalImg.classList.remove('scale-100');
+            modalImg.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modalImg.src = ''; 
+            }, 300);
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeModal();
+            }
+        });
+
         // ==========================================
         // THREE.JS BLOCH SPHERE IMPLEMENTATION
         // ==========================================
@@ -349,29 +332,23 @@ State: 0.6|0⟩ + 0.8|1⟩
             const container = document.getElementById(containerId);
             if (!container) return;
 
-            // Scene Setup
             const scene = new THREE.Scene();
-            
-            // Camera
             const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
             camera.position.z = 3.5;
             camera.position.y = 1;
             camera.position.x = 1.5;
 
-            // Renderer
             const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            // Controls
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.enableZoom = false;
 
-            // 1. The Sphere (Wireframe)
+            // Sphere & Wireframe
             const geometry = new THREE.SphereGeometry(1, 32, 32);
-            // Inner opaque sphere (faint)
             const materialInner = new THREE.MeshBasicMaterial({ 
                 color: 0xffffff, 
                 transparent: true, 
@@ -380,45 +357,31 @@ State: 0.6|0⟩ + 0.8|1⟩
             const sphereInner = new THREE.Mesh(geometry, materialInner);
             scene.add(sphereInner);
 
-            // Wireframe
             const edges = new THREE.EdgesGeometry(geometry);
             const lineMaterial = new THREE.LineBasicMaterial({ color: 0x475569, transparent: true, opacity: 0.3 });
             const sphereWireframe = new THREE.LineSegments(edges, lineMaterial);
             scene.add(sphereWireframe);
 
-            // 2. Axes (X, Y, Z)
+            // Axes
             const axesHelper = new THREE.AxesHelper(1.2);
-            // Customizing axes colors slightly
-            const colors = axesHelper.geometry.attributes.color;
-            // X (Red), Y (Green), Z (Blue) default is fine, but let's make them clearer
             scene.add(axesHelper);
 
-            // 3. The Quantum State Vector (Arrow)
+            // Vector Arrow
             const dir = new THREE.Vector3(vectorPos.x, vectorPos.y, vectorPos.z).normalize();
             const origin = new THREE.Vector3(0, 0, 0);
             const length = 1;
-            const hex = colorHex; 
-            const arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex, 0.1, 0.08);
+            const arrowHelper = new THREE.ArrowHelper(dir, origin, length, colorHex, 0.1, 0.08);
             scene.add(arrowHelper);
 
-            // 4. Labels (Simple Sprites - Optional for simplicity we skip text sprites in raw ThreeJS without font loader, 
-            // typically you need to load a font or use canvas texture. 
-            // For now, the Axes helper serves as orientation).
-
-            // Animation Loop
             function animate() {
                 requestAnimationFrame(animate);
                 controls.update();
-                
-                // Subtle auto-rotation
                 sphereWireframe.rotation.y += 0.001;
                 sphereInner.rotation.y += 0.001;
-                
                 renderer.render(scene, camera);
             }
             animate();
 
-            // Handle Resize
             window.addEventListener('resize', () => {
                 const width = container.clientWidth;
                 const height = container.clientHeight;
@@ -428,14 +391,8 @@ State: 0.6|0⟩ + 0.8|1⟩
             });
         }
 
-        // Initialize Angle Encoding Sphere (Blue Vector - rotated on Y)
-        // Representing Ry(pi/3) roughly
         initBlochSphere('bloch-angle', 0x60a5fa, {x: 0.5, y: 0, z: 0.866}); 
-
-        // Initialize Amplitude Encoding Sphere (Purple Vector)
-        // Representing a specific state
         initBlochSphere('bloch-amplitude', 0xc084fc, {x: 0.5, y: 0.5, z: 0.7});
-
     </script>
 </body>
 </html>
