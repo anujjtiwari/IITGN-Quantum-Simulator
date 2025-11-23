@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IITGN QuantumLab | Quantum Encoding</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 15% 50%, rgba(79, 70, 229, 0.12) 0%, transparent 30%),
+                radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.12) 0%, transparent 30%);
+        }
+
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(30, 41, 59, 0.7);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Glow Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.28;
+        }
+        .orb-1 { top: -12%; left: -12%; width: 45vw; height: 45vw; background: #4f46e5; }
+        .orb-2 { bottom: -12%; right: -12%; width: 40vw; height: 40vw; background: #ec4899; }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Canvas container style */
+        .bloch-container {
+            width: 100%;
+            height: 300px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.2);
+            position: relative;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <nav class="glass-nav fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-3 cursor-pointer">
+                <div class="relative w-10 h-10 bg-white rounded-lg p-1">
+                    <span class="text-black font-bold flex items-center justify-center h-full">IT</span> 
+                </div>
+                <span class="text-xl font-bold">Kuantum<span class="text-blue-400">Sec</span></span>
+            </a>
+
+            <div class="hidden md:flex gap-3 items-center">
+                <a href="index.html" class="text-gray-300 hover:text-white px-3 py-2">Home</a>
+                <a href="index.html#gates" class="text-gray-300 hover:text-white px-3 py-2">Gate Library</a>
+                <a href="encoding.html"
+                   class="px-4 py-2 rounded-lg bg-blue-600 text-white shadow-lg hover:bg-blue-500">
+                    Encoding
+                </a>
+                <a href="index.html#simulator"
+                   class="px-4 py-2 rounded-lg bg-purple-600 text-white shadow-lg hover:bg-purple-500">
+                    Simulator
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-28 pb-24 relative z-10 fade-in">
+
+        <section class="text-center max-w-4xl mx-auto mb-16 px-6">
+            <div class="inline-block mb-4">
+                <span class="px-4 py-2 rounded-full border border-blue-400/30 bg-blue-900/30 text-blue-200 text-sm font-semibold backdrop-blur-md">
+                    Quantum Data Encoding
+                </span>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                Classical Data →  
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-pink-400">
+                    Quantum States
+                </span>
+            </h1>
+        </section>
+
+        <section class="max-w-6xl mx-auto flex flex-col gap-16 px-6">
+
+            <div class="glass-card p-8 rounded-2xl w-full">
+                <div class="flex items-center gap-4 mb-6 pb-4 border-b border-white/10">
+                    <div class="w-12 h-12 bg-blue-600/20 border border-blue-600/40 rounded-xl 
+                                flex items-center justify-center">
+                        <i data-lucide="rotate-ccw" class="w-6 h-6 text-blue-400"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-white">Angle Encoding (Rotation)</h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    
+                    <div>
+                        <p class="text-gray-300 mb-6 leading-relaxed text-lg">
+                            Angle Encoding maps classical numerical values into <strong>quantum rotation angles</strong>.
+                            Each classical feature rotates a qubit around the X, Y, or Z axis of the Bloch sphere.
+                        </p>
+
+                        <h3 class="text-white font-semibold text-lg mb-2">📌 Concept</h3>
+                        <p class="text-gray-400 text-sm">For vector \( x = (x_1, ..., x_n) \), each feature is encoded as:</p>
+                        <div class="bg-black/20 rounded-lg p-3 my-4 border-l-2 border-blue-500">
+                            <p class="font-mono text-lg text-blue-300">
+                                \( |x_i\rangle = R_y(x_i)|0\rangle = \cos(x_i/2)|0\rangle + \sin(x_i/2)|1\rangle \)
+                            </p>
+                        </div>
+
+                        <h3 class="text-white font-semibold mb-2">⭐ Key Features</h3>
+                        <ul class="text-gray-300 list-disc pl-5 mb-6 space-y-1">
+                            <li><strong>Efficient depth:</strong> Constant circuit depth (1 gate per qubit).</li>
+                            <li><strong>Use cases:</strong> QSVM, Variational Quantum Classifiers.</li>
+                            <li><strong>Limitation:</strong> Requires \(N\) qubits for \(N\) features.</li>
+                        </ul>
+
+                        <h3 class="text-white font-semibold mb-2">📘 Example</h3>
+                        <pre class="bg-black/30 p-4 rounded-xl text-blue-200 text-xs font-mono">
+Input: x = 1.57 (approx π/2)
+Gate: Ry(1.57)
+State: |+⟩ (Superposition)
+                        </pre>
+                    </div>
+
+                    <div class="flex flex-col gap-6">
+                        
+                        <div>
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="text-sm text-blue-400 font-semibold uppercase tracking-wider">Interactive Bloch Sphere</span>
+                                <span class="text-xs text-gray-500">Click & Drag to Rotate</span>
+                            </div>
+                            <div id="bloch-angle" class="bloch-container border border-blue-500/30 shadow-[0_0_30px_rgba(59,130,246,0.2)]"></div>
+                        </div>
+
+                        <div class="flex-1">
+    <span class="text-sm text-gray-400 font-semibold uppercase tracking-wider mb-2 block">Circuit Diagram</span>
+    <div class="w-full h-40 bg-white/5 rounded-xl border border-white/10 p-2 flex items-center justify-center relative overflow-hidden group hover:border-blue-500/50 transition-colors">
+        
+       <img src="images/AngleEncoding.png" 
+     alt="Angle Encoding Circuit Diagram" 
+     onclick="openModal(this.src)"
+     class="max-w-full max-h-full object-contain rounded-lg cursor-zoom-in hover:opacity-80 transition-opacity">
+             
+    </div>
+</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="glass-card p-8 rounded-2xl w-full">
+                <div class="flex items-center gap-4 mb-6 pb-4 border-b border-white/10">
+                    <div class="w-12 h-12 bg-purple-600/20 border border-purple-600/40 rounded-xl 
+                                flex items-center justify-center">
+                        <i data-lucide="waves" class="w-6 h-6 text-purple-400"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-white">Amplitude Encoding</h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    
+                    <div>
+                        <p class="text-gray-300 mb-6 leading-relaxed text-lg">
+                            Amplitude Encoding stores data in the <strong>amplitudes</strong> of a quantum state. 
+                            It is exponentially efficient: <span class="text-purple-300">\(N\) qubits can store \(2^N\) features</span>.
+                        </p>
+
+                        <h3 class="text-white font-semibold text-lg mb-2">📌 Concept</h3>
+                        <p class="text-gray-400 text-sm">For normalized vector \( x \), the state is:</p>
+                        <div class="bg-black/20 rounded-lg p-3 my-4 border-l-2 border-purple-500">
+                            <p class="font-mono text-lg text-purple-300">
+                                \( |\psi_x\rangle = \sum_{i=0}^{2^N-1} x_i |i\rangle \)
+                            </p>
+                        </div>
+                        <p class="text-xs text-gray-500 italic mb-4">Constraint: \( \sum |x_i|^2 = 1 \) (Normalization required)</p>
+
+                        <h3 class="text-white font-semibold mb-2">⭐ Key Features</h3>
+                        <ul class="text-gray-300 list-disc pl-5 mb-6 space-y-1">
+                            <li><strong>High Capacity:</strong> Encodes images/audio efficiently.</li>
+                            <li><strong>Complexity:</strong> High circuit depth to prepare the state (requires many CNOTs).</li>
+                            <li><strong>Applications:</strong> Quantum Machine Learning, QGANs.</li>
+                        </ul>
+
+                        <h3 class="text-white font-semibold mb-2">📘 Example</h3>
+                        <pre class="bg-black/30 p-4 rounded-xl text-purple-200 text-xs font-mono">
+Input: v = [0.6, 0.8]
+State: 0.6|0⟩ + 0.8|1⟩
+(Probabilities sum to 0.36 + 0.64 = 1)
+                        </pre>
+                    </div>
+
+                    <div class="flex flex-col gap-6">
+                        
+                        <div>
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="text-sm text-purple-400 font-semibold uppercase tracking-wider">State Visualization</span>
+                                <span class="text-xs text-gray-500">Single Qubit Projection</span>
+                            </div>
+                            <div id="bloch-amplitude" class="bloch-container border border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.2)]"></div>
+                        </div>
+
+                        <div class="flex-1">
+                            <span class="text-sm text-gray-400 font-semibold uppercase tracking-wider mb-2 block">Circuit Diagram</span>
+                            <div class="w-full h-40 bg-white/5 rounded-xl border border-dashed border-white/20 flex flex-col items-center justify-center relative overflow-hidden group hover:border-purple-500/50 transition-colors">
+                                
+                                <p class="text-xs text-gray-500 mt-2">Series of Ry and CNOT rotations</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="max-w-6xl mx-auto mt-24 px-6 border-t border-white/5 pt-12">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-2xl font-bold text-white">Lecture Notes & Sketches</h2>
+                <a href="#" class="text-blue-400 text-sm hover:text-blue-300 flex items-center gap-1">View All <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card rounded-xl h-48 flex items-center justify-center text-gray-500 border border-white/10">
+                    
+
+[Image of handwritten math]
+
+                </div>
+                <div class="glass-card rounded-xl h-48 flex items-center justify-center text-gray-500 border border-white/10">
+                    
+                </div>
+                <div class="glass-card rounded-xl h-48 flex items-center justify-center text-gray-500 border border-white/10">
+                    
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-white/5 bg-black/20 py-6 mt-20 text-center text-gray-500 text-xs">
+        © 2025 IITGN QuantumLab — Quantum Machine Learning for Cyber Security
+    </footer>
+    <div id="image-modal" 
+     class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4"
+     onclick="closeModal()">
+    
+    <button class="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors" onclick="closeModal()">
+        <i data-lucide="x" class="w-10 h-10"></i>
+    </button>
+
+    <img id="modal-img" src="" alt="Enlarged View" 
+         class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl scale-95 transition-transform duration-300"
+         onclick="event.stopPropagation()"> 
+         </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+        // ==========================================
+    // LIGHTBOX MODAL LOGIC
+    // ==========================================
+    const modal = document.getElementById('image-modal');
+    const modalImg = document.getElementById('modal-img');
+
+    function openModal(src) {
+        // 1. Set the image source
+        modalImg.src = src;
+        
+        // 2. Unhide the modal container
+        modal.classList.remove('hidden');
+        
+        // 3. Small timeout to allow the browser to render "block" before fading in
+        // This makes the transition opacity work
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            modalImg.classList.remove('scale-95');
+            modalImg.classList.add('scale-100');
+        }, 10);
+    }
+
+    function closeModal() {
+        // 1. Fade out
+        modal.classList.add('opacity-0');
+        modalImg.classList.remove('scale-100');
+        modalImg.classList.add('scale-95');
+
+        // 2. Hide display:none after the transition (300ms) matches CSS duration
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modalImg.src = ''; // Clear src
+        }, 300);
+    }
+
+    // Close modal on Escape key press
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            closeModal();
+        }
+    });
+        // ==========================================
+        // THREE.JS BLOCH SPHERE IMPLEMENTATION
+        // ==========================================
+        function initBlochSphere(containerId, colorHex, vectorPos) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            // Scene Setup
+            const scene = new THREE.Scene();
+            
+            // Camera
+            const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.z = 3.5;
+            camera.position.y = 1;
+            camera.position.x = 1.5;
+
+            // Renderer
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            // Controls
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.enableZoom = false;
+
+            // 1. The Sphere (Wireframe)
+            const geometry = new THREE.SphereGeometry(1, 32, 32);
+            // Inner opaque sphere (faint)
+            const materialInner = new THREE.MeshBasicMaterial({ 
+                color: 0xffffff, 
+                transparent: true, 
+                opacity: 0.05 
+            });
+            const sphereInner = new THREE.Mesh(geometry, materialInner);
+            scene.add(sphereInner);
+
+            // Wireframe
+            const edges = new THREE.EdgesGeometry(geometry);
+            const lineMaterial = new THREE.LineBasicMaterial({ color: 0x475569, transparent: true, opacity: 0.3 });
+            const sphereWireframe = new THREE.LineSegments(edges, lineMaterial);
+            scene.add(sphereWireframe);
+
+            // 2. Axes (X, Y, Z)
+            const axesHelper = new THREE.AxesHelper(1.2);
+            // Customizing axes colors slightly
+            const colors = axesHelper.geometry.attributes.color;
+            // X (Red), Y (Green), Z (Blue) default is fine, but let's make them clearer
+            scene.add(axesHelper);
+
+            // 3. The Quantum State Vector (Arrow)
+            const dir = new THREE.Vector3(vectorPos.x, vectorPos.y, vectorPos.z).normalize();
+            const origin = new THREE.Vector3(0, 0, 0);
+            const length = 1;
+            const hex = colorHex; 
+            const arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex, 0.1, 0.08);
+            scene.add(arrowHelper);
+
+            // 4. Labels (Simple Sprites - Optional for simplicity we skip text sprites in raw ThreeJS without font loader, 
+            // typically you need to load a font or use canvas texture. 
+            // For now, the Axes helper serves as orientation).
+
+            // Animation Loop
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                
+                // Subtle auto-rotation
+                sphereWireframe.rotation.y += 0.001;
+                sphereInner.rotation.y += 0.001;
+                
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Handle Resize
+            window.addEventListener('resize', () => {
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                renderer.setSize(width, height);
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+            });
+        }
+
+        // Initialize Angle Encoding Sphere (Blue Vector - rotated on Y)
+        // Representing Ry(pi/3) roughly
+        initBlochSphere('bloch-angle', 0x60a5fa, {x: 0.5, y: 0, z: 0.866}); 
+
+        // Initialize Amplitude Encoding Sphere (Purple Vector)
+        // Representing a specific state
+        initBlochSphere('bloch-amplitude', 0xc084fc, {x: 0.5, y: 0.5, z: 0.7});
+
+    </script>
+</body>
+</html>
