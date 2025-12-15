@@ -28,6 +28,33 @@
       background-attachment: fixed;
     }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
+    /* NAV LINK ANIMATION */
+.nav-link {
+  position: relative;
+  padding: 6px 0;
+  transition: color 0.3s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.nav-link:hover {
+  color: white;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
     
     /* Enhanced Glassmorphism */
     .glass {
@@ -85,32 +112,67 @@
 </head>
 <body class="min-h-screen">
 
-  <nav class="fixed w-full z-50 glass border-b-0 top-0">
-    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-2 font-bold text-xl tracking-tight">
-        <!-- <div class="p-1 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg">
-            <i data-lucide="shield-check" class="text-white w-5 h-5"></i>
-        </div>
-        <span class="text-white">QuantumSec-<span class="gradient-text">Blockchain</span></span>
-      </div> -->
-      <div class="flex items-center gap-2 px-3 py-1 rounded-lg 
-            bg-black/40 border border-blue-500/30 backdrop-blur">
+ <nav class="fixed top-4 left-1/2 -translate-x-1/2 z-50 
+            w-[95%] max-w-7xl
+            rounded-2xl glass-strong 
+            shadow-[0_20px_50px_rgba(0,0,0,0.5)]
+            border border-blue-500/20">
 
-  <img src="images/iitgn_logo.png" class="w-10 h-10 object-contain">
-  <span class="w-1 h-1 bg-blue-400 rounded-full"></span>
-  <img src="images/BlockChain Symbol.png" class="w-10 h-10 object-contain">
+  <div class="px-6 h-16 flex items-center justify-between">
 
-</div>
+    <!-- LEFT: LOGO -->
+    <div class="flex items-center gap-4 group cursor-pointer">
 
+      <!-- Logo Container -->
+      <div class="flex items-center gap-3 px-3 py-2 rounded-full 
+                  bg-gradient-to-br from-blue-500 to-purple-600
+                  shadow-lg shadow-blue-500/30
+                  transition-transform duration-300
+                  group-hover:scale-105">
 
-      <div class="hidden md:flex gap-8 text-sm font-medium text-gray-400">
-        <a href="#step1" class="hover:text-blue-400 transition-colors">1. Hashing</a>
-        <a href="#step2" class="hover:text-yellow-400 transition-colors">2. Mining</a>
-        <a href="#step3" class="hover:text-purple-400 transition-colors">3. Chaining</a>
-        <a href="#step4" class="hover:text-green-400 transition-colors">4. Distribution</a>
+        <img src="images/iitgn-logo.png"
+             class="w-9 h-9 rounded-full bg-white p-1 object-contain">
+
+        <img src="images/BlockChain Symbol.png"
+             class="w-9 h-9 rounded-full bg-white p-1 object-contain">
+      </div>
+
+      <!-- Brand Text -->
+      <div class="leading-tight">
+        <span class="block text-white font-extrabold tracking-tight text-lg">
+          QuantumSec
+        </span>
+        <span class="block text-xs text-blue-400 tracking-widest uppercase">
+          Blockchain
+        </span>
       </div>
     </div>
-  </nav>
+
+    <!-- CENTER: NAV LINKS -->
+    <div class="hidden md:flex items-center gap-10 text-sm font-semibold text-slate-300">
+
+      <a href="#step1" class="nav-link">Hashing</a>
+      <a href="#blocks" class="nav-link">Blocks</a>
+      <a href="#step2" class="nav-link">Mining</a>
+      <a href="#step3" class="nav-link">Chaining</a>
+      <a href="#step4" class="nav-link">Consensus</a>
+
+    </div>
+
+    <!-- RIGHT: CTA -->
+    <!-- <div class="hidden md:flex">
+      <a href="#step1"
+         class="px-5 py-2 rounded-full text-sm font-bold
+                bg-gradient-to-r from-blue-500 to-purple-600
+                text-white shadow-lg shadow-blue-500/30
+                hover:shadow-purple-500/40
+                transition-all hover:scale-105">
+        Start Learning
+      </a>
+    </div> -->
+
+  </div>
+</nav>
 
   <header class="pt-36 pb-24 px-6 text-center max-w-5xl mx-auto relative overflow-hidden">
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[100px] -z-10"></div>
