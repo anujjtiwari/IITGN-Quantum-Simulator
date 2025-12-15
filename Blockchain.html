@@ -28,6 +28,26 @@
       background-attachment: fixed;
     }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+
+    .step-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  background: #1e293b;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.step-dot.active {
+  background: linear-gradient(to bottom right, #3b82f6, #8b5cf6);
+  color: white;
+  box-shadow: 0 0 15px rgba(59,130,246,0.6);
+}
+
     /* NAV LINK ANIMATION */
 .nav-link {
   position: relative;
@@ -111,6 +131,22 @@
   </style>
 </head>
 <body class="min-h-screen">
+  <div id="scroll-indicator" class="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-6">
+
+  <div class="relative h-[320px] w-1 bg-slate-700 rounded-full overflow-hidden">
+    <div id="progress-fill" class="absolute bottom-0 w-full bg-gradient-to-t from-blue-500 to-purple-600 h-0 transition-all duration-300"></div>
+  </div>
+
+  <div class="flex flex-col gap-6 text-sm font-bold">
+    <span class="step-dot">1</span>
+    <span class="step-dot">2</span>
+    <span class="step-dot">3</span>
+    <span class="step-dot">4</span>
+    <span class="step-dot">5</span>
+  </div>
+
+</div>
+
 
  <nav class="fixed top-4 left-1/2 -translate-x-1/2 z-50 
             w-[95%] max-w-7xl
@@ -188,6 +224,43 @@
     <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight">
       QuantumSec-<span class="gradient-text">Blockchain</span> <br>
   </header>
+<section id="index" class="max-w-5xl mx-auto px-6 pb-24">
+  <div class="glass-strong rounded-3xl p-8 border border-blue-500/20">
+    
+    <h2 class="text-3xl font-extrabold text-white mb-8 text-center">
+      What will you learn?
+    </h2>
+
+    <div class="grid md:grid-cols-2 gap-6 text-lg">
+      
+      <a href="#step1" class="flex items-center gap-4 p-4 rounded-xl bg-black/40 hover:bg-blue-500/10 transition">
+        <span class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 text-white font-bold">1</span>
+        <span>Cryptographic Hashing</span>
+      </a>
+
+      <a href="#blocks" class="flex items-center gap-4 p-4 rounded-xl bg-black/40 hover:bg-cyan-500/10 transition">
+        <span class="w-10 h-10 flex items-center justify-center rounded-full bg-cyan-500 text-white font-bold">2</span>
+        <span>Blocks & Block Structure</span>
+      </a>
+
+      <a href="#step2" class="flex items-center gap-4 p-4 rounded-xl bg-black/40 hover:bg-yellow-500/10 transition">
+        <span class="w-10 h-10 flex items-center justify-center rounded-full bg-yellow-500 text-white font-bold">3</span>
+        <span>Mining & Proof of Work</span>
+      </a>
+
+      <a href="#step3" class="flex items-center gap-4 p-4 rounded-xl bg-black/40 hover:bg-purple-500/10 transition">
+        <span class="w-10 h-10 flex items-center justify-center rounded-full bg-purple-500 text-white font-bold">4</span>
+        <span>Blockchain Chaining</span>
+      </a>
+
+      <a href="#step4" class="flex items-center gap-4 p-4 rounded-xl bg-black/40 hover:bg-green-500/10 transition md:col-span-2">
+        <span class="w-10 h-10 flex items-center justify-center rounded-full bg-green-500 text-white font-bold">5</span>
+        <span>Distributed Consensus</span>
+      </a>
+
+    </div>
+  </div>
+</section>
 
   <main class="max-w-7xl mx-auto px-6 pb-32 space-y-40">
 
@@ -270,7 +343,7 @@ The output is called a hash or digest. A Hash function (like SHA-256) is the mat
       <i data-lucide="box" class="text-white w-8 h-8"></i>
     </div>
     <div>
-      <h2 class="text-3xl font-bold text-white">What Exactly Is a Block?</h2>
+      <h2 class="text-3xl font-bold text-white">2. What Exactly Is a Block?</h2>
       <p class="text-cyan-400">The fundamental building unit of a blockchain.</p>
     </div>
   </div>
@@ -381,7 +454,7 @@ The output is called a hash or digest. A Hash function (like SHA-256) is the mat
               <i data-lucide="pickaxe" class="text-white w-8 h-8"></i>
           </div>
           <div>
-              <h2 class="text-3xl font-bold text-white">2. Mining & The Nonce</h2>
+              <h2 class="text-3xl font-bold text-white">3. Mining & The Nonce</h2>
               <p class="text-yellow-400">Proof of Work securing the block.</p>
           </div>
       </div>
@@ -445,7 +518,7 @@ The output is called a hash or digest. A Hash function (like SHA-256) is the mat
               <i data-lucide="link-2" class="text-white w-8 h-8"></i>
           </div>
           <div>
-              <h2 class="text-3xl font-bold text-white">3. The Immutable Chain</h2>
+              <h2 class="text-3xl font-bold text-white">4. The Immutable Chain</h2>
               <p class="text-purple-400">Cryptographic linking for tamper-evidence.</p>
           </div>
       </div>
@@ -520,7 +593,7 @@ The output is called a hash or digest. A Hash function (like SHA-256) is the mat
               <i data-lucide="globe-2" class="text-white w-8 h-8"></i>
           </div>
           <div>
-              <h2 class="text-3xl font-bold text-white">4. Distributed Consensus</h2>
+              <h2 class="text-3xl font-bold text-white">5. Distributed Consensus</h2>
               <p class="text-green-400">Peer-to-Peer network security.</p>
           </div>
       </div>
@@ -637,6 +710,35 @@ The output is called a hash or digest. A Hash function (like SHA-256) is the mat
 
 
   <script>
+    const sections = [
+  document.getElementById("step1"),
+  document.getElementById("blocks"),
+  document.getElementById("step2"),
+  document.getElementById("step3"),
+  document.getElementById("step4")
+];
+
+const dots = document.querySelectorAll(".step-dot");
+const fill = document.getElementById("progress-fill");
+
+window.addEventListener("scroll", () => {
+  let current = 0;
+
+  sections.forEach((section, i) => {
+    const rect = section.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.5) {
+      current = i;
+    }
+  });
+
+  dots.forEach((dot, i) => {
+    dot.classList.toggle("active", i <= current);
+  });
+
+  const progressPercent = ((current + 1) / dots.length) * 100;
+  fill.style.height = `${progressPercent}%`;
+});
+
     lucide.createIcons();
 
     // --- SHA256 HELPER ---
