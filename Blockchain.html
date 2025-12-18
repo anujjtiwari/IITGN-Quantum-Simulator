@@ -29,53 +29,46 @@
     }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
 
-
     .step-dot {
-  width: 36px;
-  height: 36px;
-  border-radius: 9999px;
-  background: #1e293b;
-  color: #94a3b8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
+        width: 36px;
+        height: 36px;
+        border-radius: 9999px;
+        background: #1e293b;
+        color: #94a3b8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
 
-.step-dot.active {
-  background: linear-gradient(to bottom right, #3b82f6, #8b5cf6);
-  color: white;
-  box-shadow: 0 0 15px rgba(59,130,246,0.6);
-}
+    .step-dot.active {
+        background: linear-gradient(to bottom right, #3b82f6, #8b5cf6);
+        color: white;
+        box-shadow: 0 0 15px rgba(59,130,246,0.6);
+    }
 
     /* NAV LINK ANIMATION */
-.nav-link {
-  position: relative;
-  padding: 6px 0;
-  transition: color 0.3s ease;
-}
+    .nav-link {
+        position: relative;
+        padding: 6px 0;
+        transition: color 0.3s ease;
+    }
 
-.nav-link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  width: 0%;
-  height: 2px;
-  background: linear-gradient(to right, #3b82f6, #8b5cf6);
-  transition: width 0.3s ease;
-  border-radius: 2px;
-}
+    .nav-link::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -6px;
+        width: 0%;
+        height: 2px;
+        background: linear-gradient(to right, #3b82f6, #8b5cf6);
+        transition: width 0.3s ease;
+        border-radius: 2px;
+    }
 
-.nav-link:hover {
-  color: white;
-}
+    .nav-link:hover { color: white; }
+    .nav-link:hover::after { width: 100%; }
 
-.nav-link:hover::after {
-  width: 100%;
-}
-
-    
     /* Enhanced Glassmorphism */
     .glass {
       background: rgba(17, 24, 39, 0.7);
@@ -90,7 +83,6 @@
         box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.05);
     }
     
-    /* Custom Inputs */
     input, textarea {
       background: rgba(0,0,0,0.4);
       border: 1px solid rgba(59, 130, 246, 0.2);
@@ -103,7 +95,6 @@
       box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
     }
 
-    /* Glowing Text */
     .gradient-text {
         background-clip: text;
         -webkit-background-clip: text;
@@ -111,7 +102,6 @@
         background-image: linear-gradient(to right, var(--accent-blue), var(--accent-purple));
     }
 
-    /* Interactive States */
     .valid-glow {
         box-shadow: 0 0 30px rgba(16, 185, 129, 0.2), inset 0 0 10px rgba(16, 185, 129, 0.1);
         border-color: rgba(16, 185, 129, 0.5);
@@ -121,7 +111,6 @@
         border-color: rgba(239, 68, 68, 0.5);
     }
 
-    /* Animations */
     @keyframes pulse-blue {
         0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
         50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.7); }
@@ -131,12 +120,11 @@
   </style>
 </head>
 <body class="min-h-screen">
-  <div id="scroll-indicator" class="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-6">
-
+  
+<div id="scroll-indicator" class="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-6">
   <div class="relative h-[320px] w-1 bg-slate-700 rounded-full overflow-hidden">
     <div id="progress-fill" class="absolute bottom-0 w-full bg-gradient-to-t from-blue-500 to-purple-600 h-0 transition-all duration-300"></div>
   </div>
-
   <div class="flex flex-col gap-6 text-sm font-bold">
     <span class="step-dot">1</span>
     <span class="step-dot">2</span>
@@ -144,125 +132,74 @@
     <span class="step-dot">4</span>
     <span class="step-dot">5</span>
   </div>
-
 </div>
 
-
- <nav class="fixed top-4 left-1/2 -translate-x-1/2 z-50 
-            w-[95%] max-w-7xl
-            rounded-2xl glass-strong 
-            shadow-[0_20px_50px_rgba(0,0,0,0.5)]
-            border border-blue-500/20">
-
+<nav class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl rounded-2xl glass-strong shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-blue-500/20">
   <div class="px-6 h-16 flex items-center justify-between">
-
-    <!-- LEFT: LOGO -->
     <div class="flex items-center gap-4 group cursor-pointer">
-
-      <!-- Logo Container -->
-       <a href = "https://iitgn-qsim.netlify.app/"
-       target = "_blank"
-       class="inline-block">
-      <div class="flex items-center gap-3 px-3 py-2 rounded-full 
-                  bg-gradient-to-br from-blue-500 to-purple-600
-                  shadow-lg shadow-blue-500/30
-                  transition-transform duration-300
-                  group-hover:scale-105">
-
-        <img src="images/iitgn-logo.png"
-             class="w-9 h-9 rounded-full bg-white p-1 object-contain">
-
-        <img src="images/BlockChain Symbol.png"
-             class="w-9 h-9 rounded-full bg-white p-1 object-contain">
+       <a href="https://iitgn-qsim.netlify.app/" target="_blank" class="inline-block">
+      <div class="flex items-center gap-3 px-3 py-2 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg shadow-blue-500/30 transition-transform duration-300 group-hover:scale-105">
+        <img src="images/iitgn-logo.png" class="w-9 h-9 rounded-full bg-white p-1 object-contain" onerror="this.src='https://via.placeholder.com/40?text=IIT'">
+        <img src="images/BlockChain Symbol.png" class="w-9 h-9 rounded-full bg-white p-1 object-contain" onerror="this.src='https://via.placeholder.com/40?text=BC'">
       </div>
-      <a>
-        <!-- Brand Text -->
-         <a href="https://iitgn-qsim.netlify.app/">
+      </a>
+      <a href="https://iitgn-qsim.netlify.app/">
         <div class="leading-tight">
-        <span class="block text-white font-extrabold tracking-tight text-lg">
-          QuantumSec
-        </span>
-        </a>
-        <span class="block text-xs text-blue-400 tracking-widest uppercase">
-          Blockchain
-        </span>
-      </div>
+          <span class="block text-white font-extrabold tracking-tight text-lg">QuantumSec</span>
+          <span class="block text-xs text-blue-400 tracking-widest uppercase">Blockchain</span>
+        </div>
+      </a>
     </div>
-    <!-- CENTER: NAV LINKS -->
     <div class="hidden md:flex items-center gap-10 text-sm font-semibold text-slate-300">
-
       <a href="#step1" class="nav-link">Hashing</a>
       <a href="#blocks" class="nav-link">Blocks</a>
       <a href="#step2" class="nav-link">Mining</a>
       <a href="#step3" class="nav-link">Chaining</a>
       <a href="#step4" class="nav-link">Consensus</a>
-
     </div>
-
-    <!-- RIGHT: CTA -->
-    <!-- <div class="hidden md:flex">
-      <a href="#step1"
-         class="px-5 py-2 rounded-full text-sm font-bold
-                bg-gradient-to-r from-blue-500 to-purple-600
-                text-white shadow-lg shadow-blue-500/30
-                hover:shadow-purple-500/40
-                transition-all hover:scale-105">
-        Start Learning
-      </a>
-    </div> -->
-
   </div>
 </nav>
 
-  <header class="pt-36 pb-24 px-6 text-center max-w-5xl mx-auto relative overflow-hidden">
+<header class="pt-36 pb-24 px-6 text-center max-w-5xl mx-auto relative overflow-hidden">
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[100px] -z-10"></div>
-
     <div class="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full bg-blue-500/10 text-blue-300 text-xs font-bold uppercase tracking-widest border border-blue-500/30 shadow-[0_0_20px_rgba(59,130,246,0.2)]">
       <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
       Interactive Educational Module
     </div>
     <h1 class="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight">
       QuantumSec-<span class="gradient-text">Blockchain</span> <br>
-  </header>
+    </h1>
+</header>
+
 <section id="index" class="max-w-5xl mx-auto px-6 pb-24">
   <div class="glass-strong rounded-3xl p-8 border border-blue-500/20">
-    
-    <h2 class="text-3xl font-extrabold text-white mb-8 text-center">
-      What will you learn?
-    </h2>
-
+    <h2 class="text-3xl font-extrabold text-white mb-8 text-center">What will you learn?</h2>
     <div class="grid md:grid-cols-2 gap-6 text-lg">
-      
       <a href="#step1" class="flex items-center gap-4 p-4 rounded-xl bg-black/40 hover:bg-blue-500/10 transition">
         <span class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 text-white font-bold">1</span>
         <span>Cryptographic Hashing</span>
       </a>
-
       <a href="#blocks" class="flex items-center gap-4 p-4 rounded-xl bg-black/40 hover:bg-cyan-500/10 transition">
         <span class="w-10 h-10 flex items-center justify-center rounded-full bg-cyan-500 text-white font-bold">2</span>
         <span>Blocks & Block Structure</span>
       </a>
-
       <a href="#step2" class="flex items-center gap-4 p-4 rounded-xl bg-black/40 hover:bg-yellow-500/10 transition">
         <span class="w-10 h-10 flex items-center justify-center rounded-full bg-yellow-500 text-white font-bold">3</span>
         <span>Mining & Proof of Work</span>
       </a>
-
       <a href="#step3" class="flex items-center gap-4 p-4 rounded-xl bg-black/40 hover:bg-purple-500/10 transition">
         <span class="w-10 h-10 flex items-center justify-center rounded-full bg-purple-500 text-white font-bold">4</span>
         <span>Blockchain Chaining</span>
       </a>
-
       <a href="#step4" class="flex items-center gap-4 p-4 rounded-xl bg-black/40 hover:bg-green-500/10 transition md:col-span-2">
         <span class="w-10 h-10 flex items-center justify-center rounded-full bg-green-500 text-white font-bold">5</span>
         <span>Distributed Consensus</span>
       </a>
-
     </div>
   </div>
 </section>
 
-  <main class="max-w-7xl mx-auto px-6 pb-32 space-y-40">
+<main class="max-w-7xl mx-auto px-6 pb-32 space-y-40">
 
     <section id="step1" class="scroll-mt-28 relative">
       <div class="flex items-center gap-4 mb-12">
@@ -288,7 +225,6 @@ The output is called a hash or digest. A Hash function (like SHA-256) is the mat
 
         <div class="glass-strong p-8 rounded-3xl relative overflow-hidden group">
             <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
             <div class="flex flex-col gap-6 relative z-10">
                 <div class="flex items-center gap-4">
                     <div class="p-3 bg-slate-800 rounded-xl border border-slate-700 shadow-sm">
@@ -336,118 +272,71 @@ The output is called a hash or digest. A Hash function (like SHA-256) is the mat
         <p class="text-sm text-slate-400 mt-4 text-center">Tip: Change a single character in the input and observe the complete transformation of the output.</p>
       </div>
     </section>
-       <!-- What is a block  -->
-        <section id="blocks" class="scroll-mt-28">
-  <div class="flex items-center gap-4 mb-12">
-    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
-      <i data-lucide="box" class="text-white w-8 h-8"></i>
-    </div>
-    <div>
-      <h2 class="text-3xl font-bold text-white">2. What Exactly Is a Block?</h2>
-      <p class="text-cyan-400">The fundamental building unit of a blockchain.</p>
-    </div>
-  </div>
 
-  <div class="grid lg:grid-cols-2 gap-16 items-center">
-
-    <!-- LEFT: EXPLANATION -->
-    <div class="space-y-6 text-slate-300 text-lg leading-relaxed">
-      <p>
-        A <strong>block</strong> is a structured container of data that represents a
-        <strong>snapshot of the system state</strong> at a specific moment in time.
-      </p>
-
-      <p>
-        Instead of storing transactions randomly, blockchains group them into blocks.
-        This makes the system:
-      </p>
-
-      <ul class="list-disc ml-6 space-y-2 text-slate-400">
-        <li>✔ Easier to verify</li>
-        <li>✔ Cryptographically secure</li>
-        <li>✔ Tamper-evident</li>
-        <li>✔ Chronologically ordered</li>
-      </ul>
-
-      <div class="p-4 bg-cyan-500/10 border-l-4 border-cyan-500 rounded-r-xl">
-        <strong class="text-white">Key idea:</strong><br>
-        A blockchain is not secured by trust — it is secured by the
-        <strong>mathematical structure of its blocks</strong>.
-      </div>
-    </div>
-
-    <!-- RIGHT: BLOCK STRUCTURE VISUAL -->
-    <div class="glass-strong p-8 rounded-3xl">
-      <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-        <i data-lucide="layers" class="text-cyan-400"></i>
-        Anatomy of a Block
-      </h3>
-
-      <div class="space-y-4 font-mono text-sm">
-
-        <div class="p-4 bg-black/60 rounded-xl border border-slate-700">
-          <span class="text-slate-500">Block ID</span><br>
-          <span class="text-cyan-400">#1024</span>
+    <section id="blocks" class="scroll-mt-28">
+      <div class="flex items-center gap-4 mb-12">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+          <i data-lucide="box" class="text-white w-8 h-8"></i>
         </div>
-
-        <div class="p-4 bg-black/60 rounded-xl border border-slate-700">
-          <span class="text-slate-500">Transaction Data</span><br>
-          <span class="text-white">Anuj → Shashi : 50 Coins</span>
+        <div>
+          <h2 class="text-3xl font-bold text-white">2. What Exactly Is a Block?</h2>
+          <p class="text-cyan-400">The fundamental building unit of a blockchain.</p>
         </div>
-
-        <div class="p-4 bg-black/60 rounded-xl border border-slate-700">
-          <span class="text-slate-500">Previous Block Hash</span><br>
-          <span class="text-purple-400">000af9c1e3b2...</span>
-        </div>
-
-        <div class="p-4 bg-black/60 rounded-xl border border-slate-700">
-          <span class="text-slate-500">Nonce</span><br>
-          <span class="text-yellow-400">35230</span>
-        </div>
-
-        <div class="p-4 bg-black/80 rounded-xl border border-green-500/30">
-          <span class="text-slate-500">Current Block Hash</span><br>
-          <span class="text-green-400 break-all">
-            0000c91a4f88e0a91d7d0d3b...
-          </span>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- WHY BLOCKS MATTER -->
-  <div class="mt-16 glass p-8 rounded-2xl border-t-4 border-cyan-500">
-    <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-      <i data-lucide="shield" class="text-cyan-400"></i>
-      Why Blocks Make Blockchain Secure
-    </h3>
-
-    <div class="grid md:grid-cols-3 gap-6 text-slate-300">
-      <div class="p-5 bg-black/40 rounded-xl border border-slate-700">
-        <strong class="text-white">Immutability</strong>
-        <p class="text-sm mt-2">
-          Changing any data inside a block completely changes its hash.
-        </p>
       </div>
 
-      <div class="p-5 bg-black/40 rounded-xl border border-slate-700">
-        <strong class="text-white">Chain Reaction</strong>
-        <p class="text-sm mt-2">
-          Since each block stores the previous hash, one change breaks the entire chain.
-        </p>
-      </div>
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="space-y-6 text-slate-300 text-lg leading-relaxed">
+          <p>
+            A <strong>block</strong> is a structured container of data that represents a
+            <strong>snapshot of the system state</strong> at a specific moment in time.
+          </p>
+          <p>Instead of storing transactions randomly, blockchains group them into blocks. This makes the system:</p>
+          <ul class="list-disc ml-6 space-y-2 text-slate-400">
+            <li>✔ Easier to verify</li>
+            <li>✔ Cryptographically secure</li>
+            <li>✔ Tamper-evident</li>
+            <li>✔ Chronologically ordered</li>
+          </ul>
+          <div class="p-4 bg-cyan-500/10 border-l-4 border-cyan-500 rounded-r-xl">
+            <strong class="text-white">Key idea:</strong><br>
+            A blockchain is not secured by trust — it is secured by the
+            <strong>mathematical structure of its blocks</strong>.
+          </div>
+        </div>
 
-      <div class="p-5 bg-black/40 rounded-xl border border-slate-700">
-        <strong class="text-white">Verifiability</strong>
-        <p class="text-sm mt-2">
-          Anyone can recompute hashes and verify integrity without trust.
-        </p>
+        <div class="glass-strong p-8 rounded-3xl">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <i data-lucide="layers" class="text-cyan-400"></i>
+            Anatomy of a Block
+          </h3>
+          <div class="space-y-4 font-mono text-sm">
+            <div class="p-4 bg-black/60 rounded-xl border border-slate-700">
+              <span class="text-slate-500">Block ID</span><br>
+              <span class="text-cyan-400">#1024</span>
+            </div>
+            <div class="p-4 bg-black/60 rounded-xl border border-slate-700">
+              <span class="text-slate-500">Transaction Data</span><br>
+              <span class="text-white">Anuj → Shashi : 50 Coins</span>
+            </div>
+            <div class="p-4 bg-black/60 rounded-xl border border-slate-700">
+              <span class="text-slate-500">Previous Block Hash</span><br>
+              <span class="text-purple-400">000af9c1e3b2...</span>
+            </div>
+            <div class="p-4 bg-black/60 rounded-xl border border-slate-700">
+              <span class="text-slate-500">Nonce</span><br>
+              <span class="text-yellow-400">35230</span>
+            </div>
+            <div class="p-4 bg-black/80 rounded-xl border border-green-500/30">
+              <span class="text-slate-500">Current Block Hash</span><br>
+              <span class="text-green-400 break-all">
+                0000c91a4f88e0a91d7d0d3b...
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
-<!-- block explanation ends here  -->
+    </section>
+
     <section id="step2" class="scroll-mt-28">
       <div class="flex items-center gap-4 mb-12">
           <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center shadow-lg shadow-yellow-500/30">
@@ -629,88 +518,38 @@ The output is called a hash or digest. A Hash function (like SHA-256) is the mat
         </div>
       </div>
 
-      <div class="glass-strong p-8 rounded-3xl border-t-4 border-green-500">
-        <h3 class="text-2xl font-bold text-white mb-8 text-center">Network Simulation: Attack Vector</h3>
-        <p class="text-center text-slate-400 mb-8">
-            Try to <span class="text-red-400 font-bold">hack Peer A</span> by changing its data. Watch how it loses consensus with the honest nodes (B & C).
-        </p>
+      <div class="mt-12 text-center">
+        <div class="glass-strong p-12 rounded-3xl border border-green-500/30 relative overflow-hidden group hover:border-green-500/60 transition-colors duration-500">
+            <div class="absolute inset-0 bg-gradient-to-r from-green-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <h3 class="text-3xl font-bold text-white mb-4 relative z-10">Ready to go deeper?</h3>
+            <p class="text-slate-300 mb-8 max-w-2xl mx-auto text-lg relative z-10">
+                Launch the full-scale Distributed Ledger Simulator. Observe how 3 peers maintain consensus across 5 chained blocks in real-time, and what happens when you try to hack one.
+            </p>
 
-        <div class="space-y-6">
-          
-          <div id="peer-a" class="glass p-6 rounded-2xl border-l-4 border-green-500 transition-all duration-500 shadow-[inset_0_0_20px_rgba(16,185,129,0.1)]">
-            <div class="flex justify-between mb-4">
-              <h4 class="font-bold text-xl text-white flex gap-3 items-center">
-                  <div class="p-2 bg-slate-800 rounded-lg"><i data-lucide="server" class="text-blue-400"></i></div>
-                  Peer A (Node #1)
-              </h4>
-              <span id="status-a" class="text-xs px-3 py-1.5 rounded-full bg-green-500/20 text-green-400 font-bold uppercase tracking-wider flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Matched
-              </span>
-            </div>
-            <div class="flex flex-col md:flex-row gap-4">
-              <div class="md:w-1/3">
-                <label class="text-xs font-bold text-slate-500 uppercase mb-1 block">Block 1 Data (Editable)</label>
-                <input id="p-a-data" value="Tx: ₹100 Verified" class="w-full p-3 rounded-xl text-sm font-mono border-slate-700 focus:border-red-500/50">
-              </div>
-              <div class="md:w-2/3">
-                 <label class="text-xs font-bold text-slate-500 uppercase mb-1 block">Chain Hash Result</label>
-                <div class="p-3 bg-black/50 rounded-xl flex items-center font-mono text-sm text-slate-400 border border-slate-800">
-                  <i data-lucide="hash" class="w-4 h-4 mr-2 opacity-50"></i> <span id="hash-a" class="text-blue-300">...</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="grid md:grid-cols-2 gap-6 opacity-75 hover:opacity-100 transition-opacity">
-              <div id="peer-b" class="glass p-5 rounded-2xl border-l-4 border-green-500 relative overflow-hidden">
-                 <div class="absolute inset-0 bg-green-500/5 pointer-events-none"></div>
-                <div class="flex justify-between mb-3">
-                  <h4 class="font-bold text-white flex gap-2 items-center"><i data-lucide="server" class="text-slate-400"></i> Peer B</h4>
-                  <span class="text-xs text-green-400 font-bold uppercase flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Honest</span>
-                </div>
-                 <div class="space-y-2">
-                    <div class="text-xs text-slate-500 font-mono p-2 bg-black/30 rounded border border-slate-800 truncate">Data: Tx: ₹100 Verified</div>
-                    <div class="text-xs text-green-300 font-mono p-2 bg-black/30 rounded border border-green-500/20 truncate flex items-center"><i data-lucide="hash" class="w-3 h-3 mr-1 opacity-50"></i> <span id="hash-b">...</span></div>
-                 </div>
-              </div>
-
-               <div id="peer-c" class="glass p-5 rounded-2xl border-l-4 border-green-500 relative overflow-hidden">
-                 <div class="absolute inset-0 bg-green-500/5 pointer-events-none"></div>
-                <div class="flex justify-between mb-3">
-                  <h4 class="font-bold text-white flex gap-2 items-center"><i data-lucide="server" class="text-slate-400"></i> Peer C</h4>
-                   <span class="text-xs text-green-400 font-bold uppercase flex items-center gap-1"><i data-lucide="check-circle" class="w-3 h-3"></i> Honest</span>
-                </div>
-                 <div class="space-y-2">
-                    <div class="text-xs text-slate-500 font-mono p-2 bg-black/30 rounded border border-slate-800 truncate">Data: Tx: ₹100 Verified</div>
-                    <div class="text-xs text-green-300 font-mono p-2 bg-black/30 rounded border border-green-500/20 truncate flex items-center"><i data-lucide="hash" class="w-3 h-3 mr-1 opacity-50"></i> <span id="hash-c">...</span></div>
-                 </div>
-              </div>
-          </div>
-
+            <a href="distributed.html" target="_blank" class="relative z-10 inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-green-600 to-teal-600 text-white font-bold text-lg shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_50px_rgba(16,185,129,0.5)] hover:scale-105 transition-all duration-300">
+                <i data-lucide="network"></i>
+                Launch Simulator
+                <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </a>
         </div>
       </div>
     </section>
 
-  </main>
-  
-  <footer class="text-center py-12 border-t border-blue-900/30 bg-slate-900/50 relative overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent pointer-events-none"></div>
-      <div class="relative z-10 flex flex-col items-center gap-4">
-          <!-- <div class="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl shadow-lg shadow-blue-500/20">
-            <i data-lucide="shield-check" class="text-white w-6 h-6"></i>
-          </div> -->
-          <div class="flex items-center gap-1 px-1 py-1 rounded-full
-            bg-black/40 border border-blue-500/30 backdrop-blur">
+</main>
+ 
+<footer class="text-center py-12 border-t border-blue-900/30 bg-slate-900/50 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent pointer-events-none"></div>
+    <div class="relative z-10 flex flex-col items-center gap-4">
+        <div class="flex items-center gap-1 px-1 py-1 rounded-full bg-black/40 border border-blue-500/30 backdrop-blur">
+          <img src="images/iitgn_logo.png" class="w-20 h-20 object-contain" onerror="this.src='https://via.placeholder.com/80?text=IITGN'">
+        </div>
+        <p class="text-slate-400 text-sm">© 2025 QuantumSec-IITGN. <br> Advanced Educational Demonstrations.</p>
+    </div>
+</footer>
 
-  <img src="images/iitgn_logo.png" class="w-20 h-20 object-contain">
-  </div>
-          <p class="text-slate-400 text-sm">© 2025 QuantumSec-IITGN. <br> Advanced Educational Demonstrations.</p>
-      </div>
-  </footer>
-
-
-  <script>
-    const sections = [
+<script>
+const sections = [
   document.getElementById("step1"),
   document.getElementById("blocks"),
   document.getElementById("step2"),
@@ -723,254 +562,200 @@ const fill = document.getElementById("progress-fill");
 
 window.addEventListener("scroll", () => {
   let current = 0;
-
   sections.forEach((section, i) => {
     const rect = section.getBoundingClientRect();
     if (rect.top < window.innerHeight * 0.5) {
       current = i;
     }
   });
-
   dots.forEach((dot, i) => {
     dot.classList.toggle("active", i <= current);
   });
-
   const progressPercent = ((current + 1) / dots.length) * 100;
   fill.style.height = `${progressPercent}%`;
 });
 
-    lucide.createIcons();
+lucide.createIcons();
 
-    // --- SHA256 HELPER ---
-    async function sha256(message) {
-      const msgBuffer = new TextEncoder().encode(message);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
+// --- SHA256 HELPER ---
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
-    // --- LAB 1: SIMPLE HASHING ---
-    const hashIn = document.getElementById('hash-input');
-    const hashOut = document.getElementById('hash-output');
-    hashIn.addEventListener('input', async () => {
-      const hash = await sha256(hashIn.value);
-      hashOut.innerText = hash;
-      // Add flash effect on update
-      hashOut.classList.remove('animate-pulse-blue');
-      void hashOut.offsetWidth; // trigger reflow
-      hashOut.classList.add('animate-pulse-blue');
+// --- LAB 1: SIMPLE HASHING ---
+const hashIn = document.getElementById('hash-input');
+const hashOut = document.getElementById('hash-output');
+hashIn.addEventListener('input', async () => {
+  const hash = await sha256(hashIn.value);
+  hashOut.innerText = hash;
+  hashOut.classList.remove('animate-pulse-blue');
+  void hashOut.offsetWidth;
+  hashOut.classList.add('animate-pulse-blue');
+});
+(async() => hashOut.innerText = await sha256(hashIn.value))();
 
-    });
-    (async() => hashOut.innerText = await sha256(hashIn.value))();
+// --- LAB 2: MINING SINGLE BLOCK ---
+const difficulty = 4;
+const targetPattern = "0".repeat(difficulty);
+const lab2Data = document.getElementById('lab2-data');
+const lab2Nonce = document.getElementById('lab2-nonce');
+const lab2Hash = document.getElementById('lab2-hash');
+const lab2Wrap = document.getElementById('block-lab-wrapper');
+const btnLab2 = document.getElementById('btn-lab2');
+const hashTargetLabel = document.getElementById('hash-target-label');
+const statusOverlay = document.getElementById('mining-status-overlay');
 
+async function updateLab2() {
+  const hash = await sha256("1024" + lab2Nonce.value + lab2Data.value);
+  lab2Hash.innerText = hash;
+  
+  if(hash.startsWith(targetPattern)) {
+    lab2Wrap.classList.remove('invalid-glow', 'border-red-500/50');
+    lab2Wrap.classList.add('valid-glow', 'border-green-500/50');
+    lab2Hash.classList.remove('text-red-400', 'border-red-500/30');
+    lab2Hash.classList.add('text-green-400', 'border-green-500/30');
+    hashTargetLabel.innerText = "Target Met: Valid Block";
+    hashTargetLabel.classList.remove('text-red-400');
+    hashTargetLabel.classList.add('text-green-400');
+    statusOverlay.classList.remove('bg-red-500/5');
+    statusOverlay.classList.add('bg-green-500/5');
+  } else {
+    lab2Wrap.classList.remove('valid-glow', 'border-green-500/50');
+    lab2Wrap.classList.add('invalid-glow', 'border-red-500/50');
+    lab2Hash.classList.remove('text-green-400', 'border-green-500/30');
+    lab2Hash.classList.add('text-red-400', 'border-red-500/30');
+    hashTargetLabel.innerText = "Target: Must start with '0000'";
+    hashTargetLabel.classList.remove('text-green-400');
+    hashTargetLabel.classList.add('text-red-400');
+    statusOverlay.classList.remove('bg-green-500/5');
+    statusOverlay.classList.add('bg-red-500/5');
+  }
+}
+lab2Data.addEventListener('input', updateLab2);
+lab2Nonce.addEventListener('input', updateLab2);
 
-    // --- LAB 2: MINING SINGLE BLOCK ---
-    const difficulty = 4;
-    const targetPattern = "0".repeat(difficulty);
+async function mineLab2() {
+  btnLab2.disabled = true;
+  btnLab2.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-6 h-6"></i> Mining in progress...`;
+  
+  lab2Nonce.value = 0;
+  await updateLab2();
 
-    const lab2Data = document.getElementById('lab2-data');
-    const lab2Nonce = document.getElementById('lab2-nonce');
-    const lab2Hash = document.getElementById('lab2-hash');
-    const lab2Wrap = document.getElementById('block-lab-wrapper');
-    const btnLab2 = document.getElementById('btn-lab2');
-    const hashTargetLabel = document.getElementById('hash-target-label');
-    const statusOverlay = document.getElementById('mining-status-overlay');
-
-    async function updateLab2() {
-      const hash = await sha256("1024" + lab2Nonce.value + lab2Data.value);
-      lab2Hash.innerText = hash;
-      
+  let nonce = 0;
+  const loop = async () => {
+    for(let i=0; i<2000; i++) {
+      const hash = await sha256("1024" + nonce + lab2Data.value);
       if(hash.startsWith(targetPattern)) {
-        lab2Wrap.classList.remove('invalid-glow', 'border-red-500/50');
-        lab2Wrap.classList.add('valid-glow', 'border-green-500/50');
-        lab2Hash.classList.remove('text-red-400', 'border-red-500/30');
-        lab2Hash.classList.add('text-green-400', 'border-green-500/30');
-        hashTargetLabel.innerText = "Target Met: Valid Block";
-        hashTargetLabel.classList.remove('text-red-400');
-        hashTargetLabel.classList.add('text-green-400');
-        statusOverlay.classList.remove('bg-red-500/5');
-        statusOverlay.classList.add('bg-green-500/5');
-      } else {
-        lab2Wrap.classList.remove('valid-glow', 'border-green-500/50');
-        lab2Wrap.classList.add('invalid-glow', 'border-red-500/50');
-        lab2Hash.classList.remove('text-green-400', 'border-green-500/30');
-        lab2Hash.classList.add('text-red-400', 'border-red-500/30');
-        hashTargetLabel.innerText = "Target: Must start with '0000'";
-        hashTargetLabel.classList.remove('text-green-400');
-        hashTargetLabel.classList.add('text-red-400');
-        statusOverlay.classList.remove('bg-green-500/5');
-        statusOverlay.classList.add('bg-red-500/5');
-      }
-    }
-
-    lab2Data.addEventListener('input', updateLab2);
-    lab2Nonce.addEventListener('input', updateLab2);
-
-    async function mineLab2() {
-      btnLab2.disabled = true;
-      btnLab2.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-6 h-6"></i> Mining in progress...`;
-      
-      // Reset state to invalid before starting
-      lab2Nonce.value = 0;
-      await updateLab2();
-
-      let nonce = 0;
-      const loop = async () => {
-        for(let i=0; i<2000; i++) { // Speed up simulation
-          const hash = await sha256("1024" + nonce + lab2Data.value);
-          if(hash.startsWith(targetPattern)) {
-            lab2Nonce.value = nonce;
-            await updateLab2();
-            btnLab2.innerHTML = `<i data-lucide="pickaxe" class="w-6 h-6"></i> Start Mining Sequence`;
-            btnLab2.disabled = false;
-            lucide.createIcons();
-            return;
-          }
-          nonce++;
-        }
-        // Update UI with current attempt occasionally
         lab2Nonce.value = nonce;
-        setTimeout(loop, 0);
+        await updateLab2();
+        btnLab2.innerHTML = `<i data-lucide="pickaxe" class="w-6 h-6"></i> Start Mining Sequence`;
+        btnLab2.disabled = false;
+        lucide.createIcons();
+        return;
       }
-      loop();
+      nonce++;
     }
-    updateLab2();
+    lab2Nonce.value = nonce;
+    setTimeout(loop, 0);
+  }
+  loop();
+}
+updateLab2();
 
+// --- LAB 3: CHAIN ---
+const chainBlocks = [
+  { id: 1, nonceId: 'c-b1-nonce', dataId: 'c-b1-data', hashId: 'c-b1-hash', prevId: null, wrapperId: 'chain-b1', linkId: 'link-1-2' },
+  { id: 2, nonceId: 'c-b2-nonce', dataId: 'c-b2-data', hashId: 'c-b2-hash', prevId: 'c-b2-prev', wrapperId: 'chain-b2', linkId: 'link-2-3' },
+  { id: 3, nonceId: 'c-b3-nonce', dataId: 'c-b3-data', hashId: 'c-b3-hash', prevId: 'c-b3-prev', wrapperId: 'chain-b3', linkId: null }
+];
 
-    // --- LAB 3: CHAIN ---
-    const chainBlocks = [
-      { id: 1, nonceId: 'c-b1-nonce', dataId: 'c-b1-data', hashId: 'c-b1-hash', prevId: null, wrapperId: 'chain-b1', linkId: 'link-1-2' },
-      { id: 2, nonceId: 'c-b2-nonce', dataId: 'c-b2-data', hashId: 'c-b2-hash', prevId: 'c-b2-prev', wrapperId: 'chain-b2', linkId: 'link-2-3' },
-      { id: 3, nonceId: 'c-b3-nonce', dataId: 'c-b3-data', hashId: 'c-b3-hash', prevId: 'c-b3-prev', wrapperId: 'chain-b3', linkId: null }
-    ];
-
-    async function updateChain() {
-      let prev = "0000000000000000000000000000000000000000000000000000000000000000";
-      
-      for(let i = 0; i < chainBlocks.length; i++) {
-        const block = chainBlocks[i];
-        const nonce = document.getElementById(block.nonceId).value;
-        const data = document.getElementById(block.dataId).value;
-        
-        if(block.prevId) {
-          const prevEl = document.getElementById(block.prevId);
-          // Flash effect on change
-          if(prevEl.innerText !== prev && prevEl.innerText !== "...") {
-               prevEl.classList.add('animate-pulse', 'text-purple-200');
-               setTimeout(() => prevEl.classList.remove('animate-pulse', 'text-purple-200'), 500);
-          }
-          prevEl.innerText = prev;
-        }
-
-        const hash = await sha256(block.id + nonce + data + prev);
-        document.getElementById(block.hashId).innerText = hash;
-        
-        const wrapper = document.getElementById(block.wrapperId);
-        const hashEl = document.getElementById(block.hashId);
-        const isValid = hash.startsWith(targetPattern);
-
-        if(isValid) {
-          wrapper.classList.add('valid-glow', 'border-green-500/50');
-          wrapper.classList.remove('invalid-glow', 'border-red-500/50');
-          hashEl.classList.add('text-green-400');
-          hashEl.classList.remove('text-red-400');
-          // Update link color if it exists
-          if(block.linkId) {
-             const link = document.getElementById(block.linkId);
-             link.classList.remove('from-red-500', 'to-red-600', 'shadow-red-500/50');
-             link.classList.add('from-green-500', 'to-green-400', 'shadow-green-500/50');
-          }
-        } else {
-          wrapper.classList.remove('valid-glow', 'border-green-500/50');
-          wrapper.classList.add('invalid-glow', 'border-red-500/50');
-          hashEl.classList.remove('text-green-400');
-          hashEl.classList.add('text-red-400');
-           // Update link color if it exists
-          if(block.linkId) {
-             const link = document.getElementById(block.linkId);
-             link.classList.remove('from-green-500', 'to-green-400', 'shadow-green-500/50');
-             link.classList.add('from-red-500', 'to-red-600', 'shadow-red-500/50');
-          }
-        }
-        prev = hash;
-      }
-    }
-
-    chainBlocks.forEach(b => {
-      document.getElementById(b.nonceId).addEventListener('input', updateChain);
-      document.getElementById(b.dataId).addEventListener('input', updateChain);
-    });
-
-    async function mineChain(blockIndex) {
-      const block = chainBlocks[blockIndex - 1];
-      const data = document.getElementById(block.dataId).value;
-      let prev = "0000000000000000000000000000000000000000000000000000000000000000";
-      if(block.prevId) prev = document.getElementById(block.prevId).innerText;
-
-      let nonce = 0;
-      const btn = document.querySelector(`#₹{block.wrapperId} button`);
-      const originalText = btn.innerHTML;
-      btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin"></i> Mining...`;
-      btn.disabled = true;
-      
-      const loop = async () => {
-        for(let i=0; i<2000; i++) {
-          const hash = await sha256(block.id + nonce + data + prev);
-          if(hash.startsWith(targetPattern)) {
-            document.getElementById(block.nonceId).value = nonce;
-            await updateChain();
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-            lucide.createIcons();
-            return;
-          }
-          nonce++;
-        }
-        setTimeout(loop, 0);
-      }
-      loop();
-    }
-    updateChain(); // Init
-
-
-    // --- LAB 4: DISTRIBUTION ---
-    const peerAData = document.getElementById('p-a-data');
-    const hashA = document.getElementById('hash-a');
-    const hashB = document.getElementById('hash-b');
-    const hashC = document.getElementById('hash-c');
+async function updateChain() {
+  let prev = "0000000000000000000000000000000000000000000000000000000000000000";
+  
+  for(let i = 0; i < chainBlocks.length; i++) {
+    const block = chainBlocks[i];
+    const nonce = document.getElementById(block.nonceId).value;
+    const data = document.getElementById(block.dataId).value;
     
-    async function updateDistribution() {
-      const valA = await sha256(peerAData.value);
-      const valCorrect = await sha256("Tx: ₹100 Verified"); // The honest value
+    if(block.prevId) {
+      const prevEl = document.getElementById(block.prevId);
+      if(prevEl.innerText !== prev && prevEl.innerText !== "...") {
+           prevEl.classList.add('animate-pulse', 'text-purple-200');
+           setTimeout(() => prevEl.classList.remove('animate-pulse', 'text-purple-200'), 500);
+      }
+      prevEl.innerText = prev;
+    }
 
-      hashA.innerText = valA.substring(0, 20) + "...";
-      hashB.innerText = valCorrect.substring(0, 20) + "...";
-      hashC.innerText = valCorrect.substring(0, 20) + "...";
+    const hash = await sha256(block.id + nonce + data + prev);
+    document.getElementById(block.hashId).innerText = hash;
+    
+    const wrapper = document.getElementById(block.wrapperId);
+    const hashEl = document.getElementById(block.hashId);
+    const isValid = hash.startsWith(targetPattern);
 
-      const peerADiv = document.getElementById('peer-a');
-      const statusA = document.getElementById('status-a');
-
-      if(valA !== valCorrect) {
-        // Peer A is hacked
-        peerADiv.classList.remove('border-green-500', 'shadow-[inset_0_0_20px_rgba(16,185,129,0.1)]');
-        peerADiv.classList.add('border-red-500', 'shadow-[inset_0_0_20px_rgba(239,68,68,0.1)]');
-        hashA.classList.remove('text-blue-300');
-        hashA.classList.add('text-red-400');
-        statusA.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span> REJECTED (Mismatch)`;
-        statusA.className = "text-xs px-3 py-1.5 rounded-full bg-red-500/20 text-red-400 font-bold uppercase tracking-wider flex items-center gap-2";
-      } else {
-        // Peer A is good
-        peerADiv.classList.add('border-green-500', 'shadow-[inset_0_0_20px_rgba(16,185,129,0.1)]');
-        peerADiv.classList.remove('border-red-500', 'shadow-[inset_0_0_20px_rgba(239,68,68,0.1)]');
-        hashA.classList.add('text-blue-300');
-        hashA.classList.remove('text-red-400');
-        statusA.innerHTML = `<span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Matched`;
-        statusA.className = "text-xs px-3 py-1.5 rounded-full bg-green-500/20 text-green-400 font-bold uppercase tracking-wider flex items-center gap-2";
+    if(isValid) {
+      wrapper.classList.add('valid-glow', 'border-green-500/50');
+      wrapper.classList.remove('invalid-glow', 'border-red-500/50');
+      hashEl.classList.add('text-green-400');
+      hashEl.classList.remove('text-red-400');
+      if(block.linkId) {
+         const link = document.getElementById(block.linkId);
+         link.classList.remove('from-red-500', 'to-red-600', 'shadow-red-500/50');
+         link.classList.add('from-green-500', 'to-green-400', 'shadow-green-500/50');
+      }
+    } else {
+      wrapper.classList.remove('valid-glow', 'border-green-500/50');
+      wrapper.classList.add('invalid-glow', 'border-red-500/50');
+      hashEl.classList.remove('text-green-400');
+      hashEl.classList.add('text-red-400');
+      if(block.linkId) {
+         const link = document.getElementById(block.linkId);
+         link.classList.remove('from-green-500', 'to-green-400', 'shadow-green-500/50');
+         link.classList.add('from-red-500', 'to-red-600', 'shadow-red-500/50');
       }
     }
-    peerAData.addEventListener('input', updateDistribution);
-    updateDistribution();
+    prev = hash;
+  }
+}
 
-  </script>
+chainBlocks.forEach(b => {
+  document.getElementById(b.nonceId).addEventListener('input', updateChain);
+  document.getElementById(b.dataId).addEventListener('input', updateChain);
+});
+
+async function mineChain(blockIndex) {
+  const block = chainBlocks[blockIndex - 1];
+  const data = document.getElementById(block.dataId).value;
+  let prev = "0000000000000000000000000000000000000000000000000000000000000000";
+  if(block.prevId) prev = document.getElementById(block.prevId).innerText;
+
+  let nonce = 0;
+  const btn = document.querySelector(`#${block.wrapperId} button`);
+  const originalText = btn.innerHTML;
+  btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin"></i> Mining...`;
+  btn.disabled = true;
+  
+  const loop = async () => {
+    for(let i=0; i<2000; i++) {
+      const hash = await sha256(block.id + nonce + data + prev);
+      if(hash.startsWith(targetPattern)) {
+        document.getElementById(block.nonceId).value = nonce;
+        await updateChain();
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+        lucide.createIcons();
+        return;
+      }
+      nonce++;
+    }
+    setTimeout(loop, 0);
+  }
+  loop();
+}
+updateChain();
+</script>
 </body>
 </html>
