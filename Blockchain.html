@@ -254,22 +254,40 @@ The output is called a hash or digest. A Hash function (like SHA-256) is the mat
       </div>
 
       <div class="mt-16 glass p-8 rounded-2xl border-t-4 border-blue-500">
-        <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-          <i data-lucide="flask-conical" class="text-blue-400"></i> Lab 1: Real-time Avalanche Test
-        </h3>
+        <div class="flex flex-wrap items-center justify-between mb-6 gap-4">
+          <h3 class="text-2xl font-bold text-white flex items-center gap-3">
+            <i data-lucide="flask-conical" class="text-blue-400"></i> Lab 1: Real-time Avalanche Test
+          </h3>
+          
+          <div class="flex items-center gap-3 bg-slate-900/80 p-1.5 rounded-lg border border-slate-700">
+            <span class="text-xs font-bold text-slate-400 px-2 uppercase">Algorithm:</span>
+            <select id="algo-select" class="bg-blue-600/20 text-green-700 text-sm font-mono font-bold border border-blue-500/30 rounded px-3 py-1 focus:outline-none focus:border-blue-500 hover:bg-blue-600/30 transition-colors cursor-pointer">
+              <option value="SHA-256" selected>SHA-256</option>
+              <option value="SHA-512">SHA-512</option>
+              <option value="SHA-384">SHA-384</option>
+              <option value="SHA-1">SHA-1 (Legacy)</option>
+            </select>
+          </div>
+        </div>
+
         <div class="grid md:grid-cols-2 gap-8">
           <div>
             <label class="text-xs uppercase font-bold text-blue-400 tracking-wider mb-2 block">Data Input</label>
             <textarea id="hash-input" rows="5" class="w-full p-4 rounded-xl font-mono text-sm focus:shadow-[0_0_20px_rgba(59,130,246,0.3)]" placeholder="Type to hash...">QuantumSec</textarea>
           </div>
           <div>
-            <label class="text-xs uppercase font-bold text-green-400 tracking-wider mb-2 block">SHA-256 Output (256-bit)</label>
-            <div id="hash-output" class="w-full h-full p-4 bg-black/50 rounded-xl font-mono text-sm text-green-400 break-all border border-green-500/20 shadow-[inset_0_0_20px_rgba(16,185,129,0.1)] flex items-center">
+            <div class="flex justify-between items-end mb-2">
+               <label class="text-xs uppercase font-bold text-green-400 tracking-wider block">Cryptographic Digest</label>
+               <span id="hash-meta" class="text-[10px] font-mono text-slate-500 border border-slate-800 px-2 py-0.5 rounded bg-black/40">256-bit / 64 chars</span>
+            </div>
+            
+            <div id="hash-output" class="w-full p-4 bg-black/50 rounded-xl font-mono text-sm text-green-400 break-all border border-green-500/20 shadow-[inset_0_0_20px_rgba(16,185,129,0.1)] flex items-center min-h-[130px]">
               Loading...
             </div>
           </div>
         </div>
-        <p class="text-sm text-slate-400 mt-4 text-center">Tip: Change a single character in the input and observe the complete transformation of the output.</p>
+        
+        <p class="text-sm text-slate-400 mt-4 text-center">Tip: Compare the length of SHA-256 vs SHA-512. Longer hashes offer higher collision resistance.</p>
       </div>
     </section>
 
@@ -577,25 +595,60 @@ window.addEventListener("scroll", () => {
 
 lucide.createIcons();
 
-// --- SHA256 HELPER ---
-async function sha256(message) {
+// --- DYNAMIC HASHING HELPER ---
+// Now accepts an algorithm argument (SHA-1, SHA-256, SHA-384, SHA-512)
+async function generateHash(message, algorithm = 'SHA-256') {
   const msgBuffer = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  try {
+    const hashBuffer = await crypto.subtle.digest(algorithm, msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  } catch (e) {
+    return "Error: Algorithm not supported by this browser.";
+  }
 }
 
-// --- LAB 1: SIMPLE HASHING ---
+// --- LAB 1: MULTI-ALGO HASHING ---
 const hashIn = document.getElementById('hash-input');
 const hashOut = document.getElementById('hash-output');
-hashIn.addEventListener('input', async () => {
-  const hash = await sha256(hashIn.value);
+const algoSelect = document.getElementById('algo-select');
+const hashMeta = document.getElementById('hash-meta');
+
+async function updateLab1() {
+  const algo = algoSelect.value;
+  const text = hashIn.value;
+  
+  // Visual loading state for heavy calculations
+  hashOut.style.opacity = '0.5';
+  
+  const hash = await generateHash(text, algo);
+  
   hashOut.innerText = hash;
+  hashOut.style.opacity = '1';
+  
+  // Animation effect
   hashOut.classList.remove('animate-pulse-blue');
-  void hashOut.offsetWidth;
+  void hashOut.offsetWidth; // Trigger reflow
   hashOut.classList.add('animate-pulse-blue');
-});
-(async() => hashOut.innerText = await sha256(hashIn.value))();
+
+  // Update the meta-data label (Bits / Characters)
+  const charLength = hash.length;
+  const bitLength = charLength * 4; // Hex char = 4 bits
+  hashMeta.innerText = `${bitLength}-bit / ${charLength} chars`;
+}
+
+// Event Listeners
+hashIn.addEventListener('input', updateLab1);
+algoSelect.addEventListener('change', updateLab1);
+
+// Initial Load
+updateLab1();
+
+// NOTE: Keep your existing SHA256 specific helper for the Block Mining labs (Lab 2 & 3)
+// because Blockchains usually fix one specific algorithm.
+async function sha256(message) {
+  return await generateHash(message, 'SHA-256');
+}
 
 // --- LAB 2: MINING SINGLE BLOCK ---
 const difficulty = 4;
