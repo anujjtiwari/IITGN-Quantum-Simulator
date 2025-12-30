@@ -71,9 +71,17 @@
   <div class="max-w-[95%] mx-auto">
     
     <header class="mb-12 flex items-center gap-6">
-      <div class="p-4 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl shadow-lg shadow-blue-500/20">
-        <i data-lucide="link-2" class="w-8 h-8 text-white"></i>
-      </div>
+   <a href="https://iitgn-qsim.netlify.app/" target="_blank" class="inline-block group">
+  <div class="p-1 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 
+              shadow-lg shadow-blue-500/30 transition-transform duration-300
+              group-hover:scale-110">
+    <img 
+      src="images/iitgn-logo.png"
+      class="w-20 h-20 rounded-full bg-white p-1 object-contain"
+    />
+  </div>
+</a>
+
       <div>
         <h1 class="text-4xl font-extrabold text-white tracking-tight">Distributed <span class="text-blue-400">Ledger</span></h1>
         <p class="text-slate-400 mt-1">Real-time hash linking visualization. Try editing the data!</p>
@@ -84,7 +92,30 @@
       </div>
 
   </div>
+<div>
+                            <!-- <h4 class="text-white font-semibold mb-6">Technical Inspirations</h4> -->
+                            <div class="glass-card p-6 rounded-xl">
+                                <p class="text-sm text-center text-gray-300 mb-4">
+                                    The Blockchain educational module is heavily inspired by the interactive demo created by <a href="https://andersbrownworth.com/" target="_blank" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-dotted">Anders Brownworth</a>.
+                                </p>
+                                
+                                <div class="bg-black/30 rounded-lg p-4 border border-white/5 text-left">
+                                    <p class="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Attribution</p>
+                                    <div class="text-xs text-gray-500 space-y-2 font-mono">
+                                        <p>
+                                            [3] Anders Brownworth. "Blockchain Demo." 
+                                            <a href="https://andersbrownworth.com/blockchain/" target="_blank" class="text-blue-500/60 hover:text-blue-400 hover:underline">Website</a>, 
+                                            <a href="https://github.com/anders94/blockchain-demo" target="_blank" class="text-blue-500/60 hover:text-blue-400 hover:underline">GitHub</a>.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
+                    </div>
+                </div>
+
+            </div>
 <script>
 /* ---------- CRYPTO HELPER ---------- */
 async function sha256(msg) {
@@ -408,7 +439,7 @@ function drawLines() {
       if(isLineValid) {
         // path.setAttribute("stroke-dasharray", "10,5");
       }
-
+      
       svg.appendChild(path);
     }
   });
