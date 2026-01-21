@@ -131,7 +131,7 @@
                 <div class="hidden md:flex space-x-1">
                     <button onclick="navigateTo('home')" id="nav-home" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-gray-300 hover:text-white hover:bg-white/5">Home</button>
                     <button onclick="navigateTo('gates')" id="nav-gates" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-gray-300 hover:text-white hover:bg-white/5">Gate Library</button>
-                    <button onclick="navigateTo('simulator')" id="nav-simulator" class="nav-btn ml-4 px-5 py-2 rounded-lg text-sm font-medium bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/25 transition-all">Simulator</button>
+                    <button onclick="navigateTo('simulator')" id="nav-simulator" class="nav-btn ml-4 px-5 py-2 rounded-lg text-sm font-medium bg-blue-600 hover:bg-white/5 text-white shadow-lg shadow-blue-500/25 transition-all">Simulator</button>
                    <a href="encoding.html"
    class="ml-4 px-5 py-2 rounded-lg text-sm font-medium 
           text-gray-300 hover:text-white hover:bg-white/5 transition-all">
@@ -757,7 +757,20 @@ print(qc)</code></pre>
         }
 
         // Start
-        navigateTo('home');
+        // navigateTo('home');
+        function openFromHash() {
+    const hash = window.location.hash.replace('#', '');
+    if (!hash) return;
+
+    const section = document.getElementById(hash);
+    if (section && section.classList.contains('page-section')) {
+        navigateTo(hash);
+    }
+}
+
+window.addEventListener('load', openFromHash);
+window.addEventListener('hashchange', openFromHash);
+
     </script>
 </body>
 </html>
