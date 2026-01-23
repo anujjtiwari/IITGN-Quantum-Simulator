@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IITGN QuantumLab | Research Frontier</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+      background-image:
+        radial-gradient(circle at 15% 50%, rgba(79,70,229,0.12) 0%, transparent 30%),
+        radial-gradient(circle at 85% 30%, rgba(236,72,153,0.12) 0%, transparent 30%);
+    }
+
+    .glass-nav {
+      background: rgba(15,23,42,0.6);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .glass-card {
+      background: rgba(30,41,59,0.4);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.05);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+    }
+
+    .glass-card:hover {
+      background: rgba(30,41,59,0.65);
+      border-color: rgba(255,255,255,0.1);
+      transform: translateY(-4px);
+    }
+
+    .nav-link {
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      color: #d1d5db;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: white;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .nav-link.active {
+      background: #2563eb;
+      color: white;
+      box-shadow: 0 0 20px rgba(37,99,235,0.4);
+    }
+
+    .badge {
+      font-size: 0.65rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body class="antialiased">
+
+<!-- ================= NAVBAR ================= -->
+<nav class="glass-nav fixed w-full top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
+
+    <a href="index.html" class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-white rounded-lg p-1">
+        <img src="images/iitgn-logo.png" class="w-full h-full object-contain">
+      </div>
+      <span class="text-xl font-bold text-white">
+        Quantum<span class="text-blue-400">Sec</span>
+      </span>
+    </a>
+
+    <div class="hidden md:flex gap-3 items-center">
+      <a href="index.html#home" class="nav-link" data-page="home">Home</a>
+      <a href="index.html#gates" class="nav-link" data-page="gates">Gate Library</a>
+      <a href="index.html#simulator" class="nav-link" data-page="simulator">Simulator</a>
+      <a href="encoding.html" class="nav-link" data-page="encoding">Encoding</a>
+      <a href="research.html" class="nav-link" data-page="research">Research</a>
+      <a href="blockchain.html" class="nav-link" data-page="blockchain">Blockchain</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= MAIN ================= -->
+<main class="pt-28 pb-24 max-w-7xl mx-auto px-6">
+
+  <!-- HERO -->
+  <section class="text-center max-w-4xl mx-auto mb-24">
+    <span class="inline-block mb-4 px-4 py-2 rounded-full border border-purple-400/30 bg-purple-900/30 text-purple-200 text-sm font-semibold">
+      Research Frontier
+    </span>
+    <h1 class="text-5xl md:text-6xl font-bold mb-6">
+      Quantum Machine Learning
+      <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-pink-400">
+        Research & Innovation
+      </span>
+    </h1>
+    <p class="text-gray-400 text-lg">
+      Published work, ongoing research, and experimental ideas from IITGN QuantumLab.
+    </p>
+  </section>
+
+  <!-- ================= OVERVIEW ================= -->
+  <section class="glass-card p-8 rounded-2xl mb-28 max-w-5xl mx-auto">
+    <h2 class="text-3xl font-bold mb-4">Research Vision</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Our research explores the intersection of <strong>Quantum Machine Learning</strong>,
+      <strong>Cyber Security</strong>, and <strong>NISQ-era quantum systems</strong>.
+      We aim to design quantum-enhanced algorithms that are theoretically grounded
+      and practically deployable on near-term quantum hardware.
+    </p>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Key focus areas include quantum kernel methods, variational quantum circuits,
+      quantum generative models, and hybrid quantum–classical learning pipelines.
+    </p>
+    <p class="text-gray-400 text-sm italic">
+      This page serves as a living archive of our published research,
+      experimental systems, and future research directions.
+    </p>
+  </section>
+
+  <!-- ================= PUBLISHED PAPERS ================= -->
+  <section class="mb-28">
+    <h2 class="text-4xl font-bold mb-12 text-center">Published Research (COMSNETS)</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+      <!-- Paper 1 -->
+      <div class="glass-card p-6 rounded-2xl">
+        <div class="flex justify-between items-start mb-3">
+          <h3 class="text-xl font-bold">
+            Leveraging Quantum Kernel Methods for Enhanced Intrusion Detection
+          </h3>
+          <span class="badge bg-blue-500/20 text-blue-300">COMSNETS</span>
+        </div>
+
+        <p class="text-gray-300 text-sm mb-4">
+          A systematic evaluation of <strong>Quantum Support Vector Machines (QSVM)</strong>
+          for intrusion detection using quantum kernels and feature maps.
+        </p>
+
+        <ul class="text-gray-400 text-sm list-disc pl-5 mb-4 space-y-1">
+          <li>ZZFeatureMap-based quantum kernel construction</li>
+          <li>Evaluated on CICIDS2017, NSL-KDD, CIDDS-001, UGR’16</li>
+          <li>Up to <strong>98% reduction in false positives</strong></li>
+          <li>Best performance in low-dimensional feature spaces</li>
+        </ul>
+
+        <details class="text-gray-400 text-sm">
+          <summary class="cursor-pointer text-blue-400 font-semibold">Key Insight</summary>
+          <p class="mt-2">
+            Quantum kernels create sharper class separation, improving precision
+            and reliability of IDS under NISQ constraints.
+          </p>
+        </details>
+
+        <div class="flex gap-5 mt-4">
+          <a href="assets/Leveraging_Quantum_Kernel_Methods_for_Enhanced_Intrusion_Detection.pdf"
+             class="text-blue-400 hover:underline text-sm font-semibold">
+            📄 Paper
+          </a>
+          <a href="https://github.com/your-org/qsqm-ids"
+             target="_blank"
+             class="text-gray-300 hover:text-white text-sm font-semibold flex items-center gap-1">
+            <i data-lucide="github" class="w-4 h-4"></i> GitHub
+          </a>
+        </div>
+      </div>
+
+      <!-- Paper 2 -->
+      <div class="glass-card p-6 rounded-2xl">
+        <div class="flex justify-between items-start mb-3">
+          <h3 class="text-xl font-bold">
+            Quantum GAN for Synthetic Anomalous Data Generation
+          </h3>
+          <span class="badge bg-blue-500/20 text-blue-300">COMSNETS</span>
+        </div>
+
+        <p class="text-gray-300 text-sm mb-4">
+          A <strong>Quantum Generative Adversarial Network (QGAN)</strong>
+          designed to generate synthetic anomalous network traffic.
+        </p>
+
+        <ul class="text-gray-400 text-sm list-disc pl-5 mb-4 space-y-1">
+          <li>Variational quantum generator circuits</li>
+          <li>Synthetic anomaly generation for IDS training</li>
+          <li>Improves generalization on rare attack classes</li>
+          <li>Addresses data imbalance and privacy concerns</li>
+        </ul>
+
+        <details class="text-gray-400 text-sm">
+          <summary class="cursor-pointer text-blue-400 font-semibold">Key Insight</summary>
+          <p class="mt-2">
+            QGAN-generated data improves robustness of IDS models
+            without relying on sensitive real-world traffic.
+          </p>
+        </details>
+
+        <div class="flex gap-5 mt-4">
+          <a href="assets/QGAN_Synthetic_Anomaly_Generation.pdf"
+             class="text-blue-400 hover:underline text-sm font-semibold">
+            📄 Paper
+          </a>
+          <a href="https://github.com/your-org/qgan-anomaly-generator"
+             target="_blank"
+             class="text-gray-300 hover:text-white text-sm font-semibold flex items-center gap-1">
+            <i data-lucide="github" class="w-4 h-4"></i> GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ONGOING RESEARCH ================= -->
+  <section class="mb-28">
+    <h2 class="text-4xl font-bold mb-12 text-center">Ongoing & Exploratory Research</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+      <div class="glass-card p-6 rounded-2xl">
+        <h3 class="text-xl font-bold mb-2">Noise-Resilient VQC</h3>
+        <p class="text-gray-300 text-sm mb-3">
+          Designing circuit ansätze resilient to barren plateaus and hardware noise.
+        </p>
+        <span class="badge bg-yellow-500/20 text-yellow-300">EXPERIMENTAL</span>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl">
+        <h3 class="text-xl font-bold mb-2">Quantum Anomaly Detection</h3>
+        <p class="text-gray-300 text-sm mb-3">
+          Fidelity-based unsupervised quantum models for anomaly detection.
+        </p>
+        <span class="badge bg-purple-500/20 text-purple-300">ONGOING</span>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl">
+        <h3 class="text-xl font-bold mb-2">Hybrid Quantum LSTM</h3>
+        <p class="text-gray-300 text-sm mb-3">
+          Temporal modeling using quantum-enhanced recurrent architectures.
+        </p>
+        <span class="badge bg-green-500/20 text-green-300">IDEATION</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= CTA ================= -->
+  <section class="text-center mt-24">
+    <h2 class="text-3xl font-bold mb-4">Collaborate With Us</h2>
+    <p class="text-gray-400 mb-6">
+      Interested in contributing, publishing, or exploring ideas together?
+    </p>
+    <a href="mailto:quantumlab@iitgn.ac.in"
+       class="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 rounded-xl font-semibold
+              hover:bg-blue-500 transition shadow-[0_0_25px_rgba(37,99,235,0.5)]">
+      <i data-lucide="mail"></i>
+      Contact Research Team
+    </a>
+  </section>
+
+</main>
+
+<footer class="border-t border-white/5 bg-black/20 py-6 text-center text-gray-500 text-xs">
+  © 2025 IITGN QuantumLab — Research & Innovation
+</footer>
+
+<script>
+  lucide.createIcons();
+
+  function highlightActiveNav() {
+    const path = window.location.pathname;
+    let activePage = 'home';
+    if (path.includes('research.html')) activePage = 'research';
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.classList.remove('active');
+      if (link.dataset.page === activePage) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+  window.addEventListener('load', highlightActiveNav);
+</script>
+
+</body>
+</html>
