@@ -5,15 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>IITGN QuantumLab | Research Frontier</title>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
@@ -70,18 +67,29 @@
       border-radius: 999px;
       font-weight: 600;
     }
+
+    /* Form Input Styling */
+    .glass-input {
+      background: rgba(15,23,42,0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #f8fafc;
+    }
+    .glass-input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 10px rgba(59,130,246,0.3);
+    }
   </style>
 </head>
 
 <body class="antialiased">
 
-<!-- ================= NAVBAR ================= -->
 <nav class="glass-nav fixed w-full top-0 z-50">
   <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
 
     <a href="index.html" class="flex items-center gap-3">
       <div class="w-10 h-10 bg-white rounded-lg p-1">
-        <img src="images/iitgn-logo.png" class="w-full h-full object-contain">
+        <img src="images/iitgn-logo.png" class="w-full h-full object-contain" alt="IITGN Logo">
       </div>
       <span class="text-xl font-bold text-white">
         Quantum<span class="text-blue-400">Sec</span>
@@ -99,10 +107,8 @@
   </div>
 </nav>
 
-<!-- ================= MAIN ================= -->
 <main class="pt-28 pb-24 max-w-7xl mx-auto px-6">
 
-  <!-- HERO -->
   <section class="text-center max-w-4xl mx-auto mb-24">
     <span class="inline-block mb-4 px-4 py-2 rounded-full border border-purple-400/30 bg-purple-900/30 text-purple-200 text-sm font-semibold">
       Research Frontier
@@ -118,7 +124,6 @@
     </p>
   </section>
 
-  <!-- ================= OVERVIEW ================= -->
   <section class="glass-card p-8 rounded-2xl mb-28 max-w-5xl mx-auto">
     <h2 class="text-3xl font-bold mb-4">Research Vision</h2>
     <p class="text-gray-300 mb-4 leading-relaxed">
@@ -137,140 +142,221 @@
     </p>
   </section>
 
-  <!-- ================= PUBLISHED PAPERS ================= -->
-  <section class="mb-28">
-    <h2 class="text-4xl font-bold mb-12 text-center">Published Research (COMSNETS)</h2>
+  <section class="mb-28 max-w-5xl mx-auto">
+    <h2 class="text-4xl font-bold mb-12 text-center">Published Research</h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+    <div class="flex flex-col gap-8">
 
-      <!-- Paper 1 -->
-      <div class="glass-card p-6 rounded-2xl">
-        <div class="flex justify-between items-start mb-3">
-          <h3 class="text-xl font-bold">
+      <div class="glass-card p-8 rounded-2xl">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+          <h3 class="text-2xl font-bold text-white">
             Leveraging Quantum Kernel Methods for Enhanced Intrusion Detection
           </h3>
-          <span class="badge bg-blue-500/20 text-blue-300">COMSNETS</span>
+          <div class="flex items-center gap-3 shrink-0">
+            <span class="text-sm font-medium text-gray-400">Jan 2024</span>
+            <span class="badge bg-blue-500/20 text-blue-300 border border-blue-500/30">COMSNETS</span>
+          </div>
         </div>
 
-        <p class="text-gray-300 text-sm mb-4">
+        <p class="text-gray-300 text-base mb-5">
           A systematic evaluation of <strong>Quantum Support Vector Machines (QSVM)</strong>
           for intrusion detection using quantum kernels and feature maps.
         </p>
 
-        <ul class="text-gray-400 text-sm list-disc pl-5 mb-4 space-y-1">
+        <ul class="text-gray-400 text-sm list-disc pl-5 mb-6 space-y-2">
           <li>ZZFeatureMap-based quantum kernel construction</li>
           <li>Evaluated on CICIDS2017, NSL-KDD, CIDDS-001, UGR’16</li>
-          <li>Up to <strong>98% reduction in false positives</strong></li>
+          <li>Up to <strong class="text-gray-200">98% reduction in false positives</strong></li>
           <li>Best performance in low-dimensional feature spaces</li>
         </ul>
 
-        <details class="text-gray-400 text-sm">
-          <summary class="cursor-pointer text-blue-400 font-semibold">Key Insight</summary>
-          <p class="mt-2">
+        <details class="text-gray-400 text-sm bg-slate-800/50 p-4 rounded-lg border border-slate-700/50">
+          <summary class="cursor-pointer text-blue-400 font-semibold outline-none">Key Insight</summary>
+          <p class="mt-3 leading-relaxed">
             Quantum kernels create sharper class separation, improving precision
             and reliability of IDS under NISQ constraints.
           </p>
         </details>
 
-        <div class="flex gap-5 mt-4">
+        <div class="flex gap-6 mt-6">
           <a href="assets/Leveraging_Quantum_Kernel_Methods_for_Enhanced_Intrusion_Detection.pdf"
-             class="text-blue-400 hover:underline text-sm font-semibold">
-            📄 Paper
+             class="text-blue-400 hover:text-blue-300 transition text-sm font-semibold flex items-center gap-2">
+            📄 View Paper
           </a>
           <a href="https://github.com/your-org/qsqm-ids"
              target="_blank"
-             class="text-gray-300 hover:text-white text-sm font-semibold flex items-center gap-1">
-            <i data-lucide="github" class="w-4 h-4"></i> GitHub
+             class="text-gray-300 hover:text-white transition text-sm font-semibold flex items-center gap-2">
+            <i data-lucide="github" class="w-4 h-4"></i> Source Code
           </a>
         </div>
       </div>
 
-      <!-- Paper 2 -->
-      <div class="glass-card p-6 rounded-2xl">
-        <div class="flex justify-between items-start mb-3">
-          <h3 class="text-xl font-bold">
+      <div class="glass-card p-8 rounded-2xl">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+          <h3 class="text-2xl font-bold text-white">
             Quantum GAN for Synthetic Anomalous Data Generation
           </h3>
-          <span class="badge bg-blue-500/20 text-blue-300">COMSNETS</span>
+          <div class="flex items-center gap-3 shrink-0">
+            <span class="text-sm font-medium text-gray-400">Jan 2024</span>
+            <span class="badge bg-blue-500/20 text-blue-300 border border-blue-500/30">COMSNETS</span>
+          </div>
         </div>
 
-        <p class="text-gray-300 text-sm mb-4">
+        <p class="text-gray-300 text-base mb-5">
           A <strong>Quantum Generative Adversarial Network (QGAN)</strong>
           designed to generate synthetic anomalous network traffic.
         </p>
 
-        <ul class="text-gray-400 text-sm list-disc pl-5 mb-4 space-y-1">
+        <ul class="text-gray-400 text-sm list-disc pl-5 mb-6 space-y-2">
           <li>Variational quantum generator circuits</li>
           <li>Synthetic anomaly generation for IDS training</li>
           <li>Improves generalization on rare attack classes</li>
           <li>Addresses data imbalance and privacy concerns</li>
         </ul>
 
-        <details class="text-gray-400 text-sm">
-          <summary class="cursor-pointer text-blue-400 font-semibold">Key Insight</summary>
-          <p class="mt-2">
+        <details class="text-gray-400 text-sm bg-slate-800/50 p-4 rounded-lg border border-slate-700/50">
+          <summary class="cursor-pointer text-blue-400 font-semibold outline-none">Key Insight</summary>
+          <p class="mt-3 leading-relaxed">
             QGAN-generated data improves robustness of IDS models
             without relying on sensitive real-world traffic.
           </p>
         </details>
 
-        <div class="flex gap-5 mt-4">
+        <div class="flex gap-6 mt-6">
           <a href="assets/QGAN_Synthetic_Anomaly_Generation.pdf"
-             class="text-blue-400 hover:underline text-sm font-semibold">
-            📄 Paper
+             class="text-blue-400 hover:text-blue-300 transition text-sm font-semibold flex items-center gap-2">
+            📄 View Paper
           </a>
           <a href="https://github.com/your-org/qgan-anomaly-generator"
              target="_blank"
-             class="text-gray-300 hover:text-white text-sm font-semibold flex items-center gap-1">
-            <i data-lucide="github" class="w-4 h-4"></i> GitHub
+             class="text-gray-300 hover:text-white transition text-sm font-semibold flex items-center gap-2">
+            <i data-lucide="github" class="w-4 h-4"></i> Source Code
           </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="mb-28 max-w-5xl mx-auto">
+    <h2 class="text-4xl font-bold mb-12 text-center">Ongoing & Exploratory Research</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="glass-card p-6 rounded-2xl flex flex-col h-full">
+        <h3 class="text-xl font-bold mb-3">Noise-Resilient VQC</h3>
+        <p class="text-gray-300 text-sm mb-6 flex-grow">
+          Designing circuit ansätze resilient to barren plateaus and hardware noise.
+        </p>
+        <div class="mt-auto">
+          <span class="badge bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">EXPERIMENTAL</span>
+        </div>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl flex flex-col h-full">
+        <h3 class="text-xl font-bold mb-3">Quantum Anomaly Detection</h3>
+        <p class="text-gray-300 text-sm mb-6 flex-grow">
+          Fidelity-based unsupervised quantum models for anomaly detection.
+        </p>
+        <div class="mt-auto">
+          <span class="badge bg-purple-500/20 text-purple-300 border border-purple-500/30">ONGOING</span>
+        </div>
+      </div>
+
+      <div class="glass-card p-6 rounded-2xl flex flex-col h-full">
+        <h3 class="text-xl font-bold mb-3">Hybrid Quantum LSTM</h3>
+        <p class="text-gray-300 text-sm mb-6 flex-grow">
+          Temporal modeling using quantum-enhanced recurrent architectures.
+        </p>
+        <div class="mt-auto">
+          <span class="badge bg-green-500/20 text-green-300 border border-green-500/30">IDEATION</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ================= ONGOING RESEARCH ================= -->
-  <section class="mb-28">
-    <h2 class="text-4xl font-bold mb-12 text-center">Ongoing & Exploratory Research</h2>
+  <section class="mb-28 max-w-4xl mx-auto">
+    <div class="text-center mb-10">
+      <h2 class="text-4xl font-bold mb-4">Submit Your Research</h2>
+      <p class="text-gray-400">
+        Have you worked on something exciting? Submit your findings below. 
+        Approved submissions will be showcased on our platform.
+      </p>
+    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+    <div class="glass-card p-8 md:p-10 rounded-2xl">
+      <form action="#" method="POST" class="space-y-6">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="fullName" class="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+            <input type="text" id="fullName" name="fullName" required placeholder="Dr. Jane Doe" 
+                   class="glass-input w-full px-4 py-3 rounded-xl transition duration-200">
+          </div>
+          
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+            <input type="email" id="email" name="email" required placeholder="jane@example.com" 
+                   class="glass-input w-full px-4 py-3 rounded-xl transition duration-200">
+          </div>
+        </div>
 
-      <div class="glass-card p-6 rounded-2xl">
-        <h3 class="text-xl font-bold mb-2">Noise-Resilient VQC</h3>
-        <p class="text-gray-300 text-sm mb-3">
-          Designing circuit ansätze resilient to barren plateaus and hardware noise.
-        </p>
-        <span class="badge bg-yellow-500/20 text-yellow-300">EXPERIMENTAL</span>
-      </div>
+        <div>
+          <label for="title" class="block text-sm font-medium text-gray-300 mb-2">Research Title</label>
+          <input type="text" id="title" name="title" required placeholder="e.g., Quantum Algorithm for..." 
+                 class="glass-input w-full px-4 py-3 rounded-xl transition duration-200">
+        </div>
 
-      <div class="glass-card p-6 rounded-2xl">
-        <h3 class="text-xl font-bold mb-2">Quantum Anomaly Detection</h3>
-        <p class="text-gray-300 text-sm mb-3">
-          Fidelity-based unsupervised quantum models for anomaly detection.
-        </p>
-        <span class="badge bg-purple-500/20 text-purple-300">ONGOING</span>
-      </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="conference" class="block text-sm font-medium text-gray-300 mb-2">Conference / Journal (Optional)</label>
+            <input type="text" id="conference" name="conference" placeholder="e.g., COMSNETS, IEEE" 
+                   class="glass-input w-full px-4 py-3 rounded-xl transition duration-200">
+          </div>
+          <div>
+            <label for="publishDate" class="block text-sm font-medium text-gray-300 mb-2">Publish Date</label>
+            <input type="month" id="publishDate" name="publishDate" required 
+                   class="glass-input w-full px-4 py-3 rounded-xl transition duration-200 text-gray-400">
+          </div>
+        </div>
 
-      <div class="glass-card p-6 rounded-2xl">
-        <h3 class="text-xl font-bold mb-2">Hybrid Quantum LSTM</h3>
-        <p class="text-gray-300 text-sm mb-3">
-          Temporal modeling using quantum-enhanced recurrent architectures.
-        </p>
-        <span class="badge bg-green-500/20 text-green-300">IDEATION</span>
-      </div>
+        <div>
+          <label for="abstract" class="block text-sm font-medium text-gray-300 mb-2">Abstract / Description</label>
+          <textarea id="abstract" name="abstract" rows="5" required placeholder="Briefly describe your methodology and key findings..." 
+                    class="glass-input w-full px-4 py-3 rounded-xl transition duration-200 resize-y"></textarea>
+        </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="paperLink" class="block text-sm font-medium text-gray-300 mb-2">Link to Paper (URL)</label>
+            <input type="url" id="paperLink" name="paperLink" placeholder="https://arxiv.org/abs/..." 
+                   class="glass-input w-full px-4 py-3 rounded-xl transition duration-200">
+          </div>
+          <div>
+            <label for="githubLink" class="block text-sm font-medium text-gray-300 mb-2">GitHub Repository (Optional)</label>
+            <input type="url" id="githubLink" name="githubLink" placeholder="https://github.com/..." 
+                   class="glass-input w-full px-4 py-3 rounded-xl transition duration-200">
+          </div>
+        </div>
+
+        <div class="pt-4 text-center md:text-left">
+          <button type="submit" 
+                  class="inline-flex items-center justify-center gap-2 w-full md:w-auto px-8 py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold transition duration-300 shadow-[0_0_20px_rgba(37,99,235,0.4)]">
+            <i data-lucide="send" class="w-5 h-5"></i>
+            Submit Research
+          </button>
+        </div>
+
+      </form>
     </div>
   </section>
 
-  <!-- ================= CTA ================= -->
-  <section class="text-center mt-24">
+  <section class="text-center mt-12">
     <h2 class="text-3xl font-bold mb-4">Collaborate With Us</h2>
     <p class="text-gray-400 mb-6">
-      Interested in contributing, publishing, or exploring ideas together?
+      Interested in joining the lab, or exploring ideas together?
     </p>
     <a href="mailto:quantumlab@iitgn.ac.in"
-       class="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 rounded-xl font-semibold
-              hover:bg-blue-500 transition shadow-[0_0_25px_rgba(37,99,235,0.5)]">
+       class="inline-flex items-center gap-3 px-8 py-4 bg-slate-800 border border-slate-700 hover:bg-slate-700 hover:border-slate-600 text-white rounded-xl font-semibold transition duration-300">
       <i data-lucide="mail"></i>
       Contact Research Team
     </a>
@@ -279,10 +365,51 @@
 </main>
 
 <footer class="border-t border-white/5 bg-black/20 py-6 text-center text-gray-500 text-xs">
-  © 2025 IITGN QuantumLab — Research & Innovation
+  © 2026 IITGN QuantumLab — Research & Innovation
 </footer>
 
 <script>
+  const form = document.getElementById('researchSubmitForm');
+  const formStatus = document.getElementById('formStatus');
+  
+  // REPLACE THIS with your actual Google Apps Script Web App URL
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbwKiujgyNgo1WA-aH4dwpS0Er17Th2aUyqIJ0I5FhnRBNztzMhvYUifTV4kCGWYeodwyw/exec';
+
+  form.addEventListener('submit', e => {
+    e.preventDefault(); // Stop the page from reloading
+    
+    // Update button text to show it's loading
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Submitting...';
+    lucide.createIcons();
+    submitBtn.disabled = true;
+
+    // Send the data
+    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+      .then(response => {
+        // Show success message
+        formStatus.classList.remove('hidden', 'bg-red-500/20', 'text-red-400');
+        formStatus.classList.add('bg-green-500/20', 'text-green-400', 'border', 'border-green-500/30');
+        formStatus.textContent = 'Awesome! Your research has been submitted successfully.';
+        
+        // Reset the form fields
+        form.reset();
+      })
+      .catch(error => {
+        // Show error message
+        formStatus.classList.remove('hidden', 'bg-green-500/20', 'text-green-400');
+        formStatus.classList.add('bg-red-500/20', 'text-red-400', 'border', 'border-red-500/30');
+        formStatus.textContent = 'Oops! Something went wrong. Please try again.';
+        console.error('Error!', error.message);
+      })
+      .finally(() => {
+        // Restore the button
+        submitBtn.innerHTML = originalBtnText;
+        submitBtn.disabled = false;
+        lucide.createIcons();
+      });
+  });
   lucide.createIcons();
 
   function highlightActiveNav() {
