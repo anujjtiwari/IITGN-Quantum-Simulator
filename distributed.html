@@ -29,7 +29,8 @@
     }
 
     /* Modern Scrollbar */
-    .custom-scrollbar::-webkit-scrollbar { height: 12px; }
+    .custom-scrollbar::-webkit-scrollbar { height: 8px; }
+    @media (min-width: 768px) { .custom-scrollbar::-webkit-scrollbar { height: 12px; } }
     .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 8px; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.3); border-radius: 8px; border: 2px solid transparent; background-clip: content-box; }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: rgba(59, 130, 246, 0.5); }
@@ -66,56 +67,53 @@
     }
   </style>
 </head>
-<body class="min-h-screen p-8">
+<body class="min-h-screen p-4 md:p-8">
 
-  <div class="max-w-[95%] mx-auto">
+  <div class="max-w-full md:max-w-[95%] mx-auto">
     
-    <header class="mb-12 flex items-center gap-6">
-   <a href="https://iitgn-qsim.netlify.app/" target="_blank" class="inline-block group">
-  <div class="p-1 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 
-              shadow-lg shadow-blue-500/30 transition-transform duration-300
-              group-hover:scale-110">
-    <img 
-      src="images/iitgn-logo.png"
-      class="w-20 h-20 rounded-full bg-white p-1 object-contain"
-    />
-  </div>
-</a>
+    <header class="mb-8 md:mb-12 flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-4 md:gap-6">
+       <a href="https://iitgn-qsim.netlify.app/" target="_blank" class="inline-block group">
+      <div class="p-1 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 
+                  shadow-lg shadow-blue-500/30 transition-transform duration-300
+                  group-hover:scale-110">
+        <img 
+          src="images/iitgn-logo.png"
+          alt="IITGN Logo"
+          class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white p-1 object-contain"
+        />
+      </div>
+    </a>
 
       <div>
-        <h1 class="text-4xl font-extrabold text-white tracking-tight">Distributed <span class="text-blue-400">Ledger</span></h1>
-        <p class="text-slate-400 mt-1">Real-time hash linking visualization. Try editing the data!</p>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">Distributed <span class="text-blue-400">Ledger</span></h1>
+        <p class="text-sm md:text-base text-slate-400 mt-2 md:mt-1">Real-time hash linking visualization. Try editing the data!</p>
       </div>
     </header>
 
-    <div id="chains-container" class="space-y-16">
-      </div>
+    <div id="chains-container" class="space-y-12 md:space-y-16">
+      <!-- dynamically injected -->
+    </div>
+
+    <!-- Info Footer -->
+    <div class="mt-12 glass-card p-4 md:p-6 rounded-xl mx-auto w-full md:w-3/4 lg:w-1/2">
+        <p class="text-xs md:text-sm text-center text-gray-300 mb-4">
+            The Blockchain educational module is heavily inspired by the interactive demo created by <a href="https://andersbrownworth.com/" target="_blank" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-dotted">Anders Brownworth</a>.
+        </p>
+        
+        <div class="bg-black/30 rounded-lg p-3 md:p-4 border border-white/5 text-left">
+            <p class="text-[10px] md:text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Attribution</p>
+            <div class="text-[10px] md:text-xs text-gray-500 space-y-2 font-mono break-words">
+                <p>
+                    [3] Anders Brownworth. "Blockchain Demo." 
+                    <a href="https://andersbrownworth.com/blockchain/" target="_blank" class="text-blue-500/60 hover:text-blue-400 hover:underline">Website</a>, 
+                    <a href="https://github.com/anders94/blockchain-demo" target="_blank" class="text-blue-500/60 hover:text-blue-400 hover:underline">GitHub</a>.
+                </p>
+            </div>
+        </div>
+    </div>
 
   </div>
 
-                            <!-- <h4 class="text-white font-semibold mb-6">Technical Inspirations</h4> -->
-                            <div class="glass-card p-6 rounded-xl">
-                                <p class="text-sm text-center text-gray-300 mb-4">
-                                    The Blockchain educational module is heavily inspired by the interactive demo created by <a href="https://andersbrownworth.com/" target="_blank" class="text-blue-400 hover:text-blue-300 font-semibold underline decoration-dotted">Anders Brownworth</a>.
-                                </p>
-                                
-                                <div class="bg-black/30 rounded-lg p-4 border border-white/5 text-left">
-                                    <p class="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Attribution</p>
-                                    <div class="text-xs text-gray-500 space-y-2 font-mono">
-                                        <p>
-                                            [3] Anders Brownworth. "Blockchain Demo." 
-                                            <a href="https://andersbrownworth.com/blockchain/" target="_blank" class="text-blue-500/60 hover:text-blue-400 hover:underline">Website</a>, 
-                                            <a href="https://github.com/anders94/blockchain-demo" target="_blank" class="text-blue-500/60 hover:text-blue-400 hover:underline">GitHub</a>.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
 <script>
 /* ---------- CRYPTO HELPER ---------- */
 async function sha256(msg) {
@@ -129,14 +127,11 @@ const PEERS = ["A", "B", "C"];
 const BLOCKS = 5;
 const DIFFICULTY = "0000";
 
-// Pre-calculated nonces so blocks start valid (Green)
-// These work for "Genesis", "Tx 2", "Tx 3" etc.
 const PRE_MINED_NONCES = [11316, 13867, 33543, 856, 44673];
 
 const state = {};
 
 /* ---------- INITIALIZATION ---------- */
-// Initialize state with pre-mined valid blocks
 PEERS.forEach(p => {
   state[p] = [];
   for (let i = 0; i < BLOCKS; i++) {
@@ -157,24 +152,23 @@ async function initApp() {
   root.innerHTML = "";
 
   for (const peer of PEERS) {
-    // Container for Peer
     const peerSection = document.createElement("div");
     peerSection.className = "relative group";
     
-    // Header
+    // Updated header for better mobile wrapping
     peerSection.innerHTML = `
-      <div class="flex items-center gap-3 mb-6">
-        <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700">
-          <i data-lucide="server" class="text-blue-400 w-5 h-5"></i>
+      <div class="flex flex-wrap items-center gap-2 md:gap-3 mb-4 md:mb-6">
+        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700">
+          <i data-lucide="server" class="text-blue-400 w-4 h-4 md:w-5 md:h-5"></i>
         </div>
-        <h2 class="text-2xl font-bold text-white">Peer ${peer}</h2>
-        <span class="text-xs font-mono text-slate-500 bg-black/30 px-2 py-1 rounded border border-slate-800">Node ID: ${Math.random().toString(16).substr(2, 8)}</span>
+        <h2 class="text-xl md:text-2xl font-bold text-white">Peer ${peer}</h2>
+        <span class="text-[10px] md:text-xs font-mono text-slate-500 bg-black/30 px-2 py-1 rounded border border-slate-800 ml-auto md:ml-0">Node: ${Math.random().toString(16).substr(2, 8)}</span>
       </div>
       
-      <div class="relative overflow-x-auto pb-12 custom-scrollbar" id="scroll-container-${peer}">
+      <div class="relative overflow-x-auto pb-8 md:pb-12 custom-scrollbar -mx-4 px-4 md:mx-0 md:px-0" id="scroll-container-${peer}">
         <svg id="svg-${peer}" class="absolute top-0 left-0 w-[2000px] h-full pointer-events-none z-0"></svg>
         
-        <div class="flex gap-16 min-w-max px-4 relative z-10 pt-4" id="blocks-row-${peer}">
+        <div class="flex gap-8 md:gap-16 min-w-max relative z-10 pt-2 md:pt-4" id="blocks-row-${peer}">
           </div>
       </div>
     `;
@@ -183,63 +177,63 @@ async function initApp() {
 
     const row = document.getElementById(`blocks-row-${peer}`);
 
-    // Create Block DOM Elements
     state[peer].forEach((block, index) => {
       const card = document.createElement("div");
       card.id = `${peer}-${block.id}`;
-      card.className = "glass-card w-[320px] rounded-2xl p-5 flex flex-col gap-4 relative";
+      // Updated card sizing and padding
+      card.className = "glass-card w-[280px] md:w-[320px] rounded-2xl p-4 md:p-5 flex flex-col gap-3 md:gap-4 relative";
       
       card.innerHTML = `
-        <div class="flex justify-between items-center pb-3 border-b border-white/5">
-          <span class="font-bold text-lg text-white">Block #${block.id}</span>
-          ${block.id === 1 ? '<span class="text-[10px] uppercase tracking-wider font-bold text-blue-400 bg-blue-500/10 px-2 py-1 rounded">Genesis</span>' : ''}
+        <div class="flex justify-between items-center pb-2 border-b border-white/5">
+          <span class="font-bold text-base md:text-lg text-white">Block #${block.id}</span>
+          ${block.id === 1 ? '<span class="text-[8px] md:text-[10px] uppercase tracking-wider font-bold text-blue-400 bg-blue-500/10 px-2 py-1 rounded">Genesis</span>' : ''}
         </div>
 
-        <div class="space-y-3">
+        <div class="space-y-2 md:space-y-3">
           <div>
-            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Nonce</label>
+            <label class="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Nonce</label>
             <input type="number" 
-              class="w-full p-2.5 rounded-lg text-sm text-yellow-400 font-bold bg-black/40 border-slate-700 focus:border-yellow-500/50"
+              class="w-full p-2 md:p-2.5 rounded-lg text-xs md:text-sm text-yellow-400 font-bold bg-black/40 border-slate-700 focus:border-yellow-500/50"
               value="${block.nonce}"
               oninput="handleInput('${peer}', ${block.id}, 'nonce', this.value)">
           </div>
           
           <div>
-            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Data</label>
+            <label class="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Data</label>
             <textarea rows="2"
-              class="w-full p-2.5 rounded-lg text-sm text-slate-200 bg-black/40 border-slate-700 resize-none"
+              class="w-full p-2 md:p-2.5 rounded-lg text-xs md:text-sm text-slate-200 bg-black/40 border-slate-700 resize-none"
               oninput="handleInput('${peer}', ${block.id}, 'data', this.value)">${block.data}</textarea>
           </div>
         </div>
 
-        <div class="space-y-3 mt-1 bg-black/20 p-3 rounded-xl border border-white/5">
+        <div class="space-y-2 md:space-y-3 mt-1 bg-black/20 p-2 md:p-3 rounded-xl border border-white/5">
           
           <div class="relative group/prev">
              <div class="flex justify-between items-end mb-1">
-               <label class="text-[10px] font-bold text-slate-500 uppercase">Prev Hash</label>
-               <i data-lucide="link" class="w-3 h-3 text-slate-600"></i>
+               <label class="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase">Prev Hash</label>
+               <i data-lucide="link" class="w-2 h-2 md:w-3 md:h-3 text-slate-600"></i>
              </div>
-             <div class="text-[10px] font-mono text-slate-400 break-all leading-tight prev-hash-display opacity-80">
+             <div class="text-[9px] md:text-[10px] font-mono text-slate-400 break-all leading-tight prev-hash-display opacity-80">
                Calculating...
              </div>
-             <div id="anchor-prev-${peer}-${block.id}" class="absolute top-1/2 -left-[26px] w-2 h-2 rounded-full bg-slate-700 z-20"></div>
+             <div id="anchor-prev-${peer}-${block.id}" class="absolute top-1/2 -left-[20px] md:-left-[26px] w-2 h-2 rounded-full bg-slate-700 z-20"></div>
           </div>
 
           <div class="relative pt-2 border-t border-white/5">
              <div class="flex justify-between items-end mb-1">
-               <label class="text-[10px] font-bold text-slate-500 uppercase">Hash</label>
+               <label class="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase">Hash</label>
                <span class="status-icon"></span>
              </div>
-             <div class="text-[10px] font-mono text-white break-all leading-tight curr-hash-display font-bold">
+             <div class="text-[9px] md:text-[10px] font-mono text-white break-all leading-tight curr-hash-display font-bold">
                Calculating...
              </div>
-             <div id="anchor-hash-${peer}-${block.id}" class="absolute top-1/2 -right-[26px] w-2 h-2 rounded-full bg-blue-500 z-20 shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
+             <div id="anchor-hash-${peer}-${block.id}" class="absolute top-1/2 -right-[20px] md:-right-[26px] w-2 h-2 rounded-full bg-blue-500 z-20 shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
           </div>
         </div>
 
         <button onclick="mineChain('${peer}', ${block.id})" 
-          class="w-full py-2.5 mt-1 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold shadow-lg shadow-blue-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
-          <i data-lucide="pickaxe" class="w-4 h-4"></i> Mine Block
+          class="w-full py-2 md:py-2.5 mt-1 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs md:text-sm font-bold shadow-lg shadow-blue-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+          <i data-lucide="pickaxe" class="w-3 h-3 md:w-4 md:h-4"></i> Mine Block
         </button>
       `;
       
@@ -250,7 +244,6 @@ async function initApp() {
   lucide.createIcons();
   await updateChainState();
   
-  // Add Scroll Listeners for Line Sync
   PEERS.forEach(peer => {
     document.getElementById(`scroll-container-${peer}`).addEventListener('scroll', drawLines);
   });
@@ -258,8 +251,6 @@ async function initApp() {
 }
 
 /* ---------- LOGIC CORE ---------- */
-
-// Input Handler
 function handleInput(peer, id, field, value) {
   const chain = state[peer];
   const block = chain[id - 1];
@@ -267,12 +258,6 @@ function handleInput(peer, id, field, value) {
   if (field === 'nonce') block.nonce = parseInt(value) || 0;
   if (field === 'data') block.data = value;
 
-  // INVALIDATION LOGIC:
-  // When a block changes, it becomes invalid (likely).
-  // AND all subsequent blocks become invalid because their 'prev' will change.
-  // We mark them as invalid in state immediately to show RED.
-  
-  // 1. Mark this block and all forward blocks as "potentially broken" until recalculated
   for (let i = id - 1; i < chain.length; i++) {
     chain[i].valid = false; 
   }
@@ -280,60 +265,50 @@ function handleInput(peer, id, field, value) {
   updateChainState();
 }
 
-// Master Update Function
 async function updateChainState() {
   for (const peer of PEERS) {
     let prevHash = "0000000000000000000000000000000000000000000000000000000000000000";
 
     for (const block of state[peer]) {
-      // 1. Set Prev Hash
       block.prev = prevHash;
-      
-      // 2. Compute Hash
       block.hash = await sha256(block.id + block.nonce + block.data + block.prev);
-      
-      // 3. Check Validity (PoW Check)
       const isValidPoW = block.hash.startsWith(DIFFICULTY);
-      // Logic: It is valid ONLY if PoW is good AND the previous block was valid (Chain integrity)
-      // Actually, simple visualizers usually just check PoW per block relative to the input it received.
-      // If Block 1 changes, Block 2 receives a new Prev. Block 2's nonce is old. So Block 2's PoW fails.
-      // So checking startsWith(0000) is sufficient to trigger the chain reaction red effect.
       block.valid = isValidPoW;
 
-      // 4. Update DOM
       const card = document.getElementById(`${peer}-${block.id}`);
       const prevDisplay = card.querySelector(".prev-hash-display");
       const hashDisplay = card.querySelector(".curr-hash-display");
       const prevAnchor = document.getElementById(`anchor-prev-${peer}-${block.id}`);
       const hashAnchor = document.getElementById(`anchor-hash-${peer}-${block.id}`);
+      
+      // Screen width check to adjust anchor position classes slightly for mobile vs desktop
+      const isMobile = window.innerWidth < 768;
+      const leftOffsetClass = isMobile ? '-left-[20px]' : '-left-[26px]';
+      const rightOffsetClass = isMobile ? '-right-[20px]' : '-right-[26px]';
 
       prevDisplay.innerText = block.prev;
       hashDisplay.innerText = block.hash;
 
-      // Styles
       if (block.valid) {
         card.classList.add("status-valid");
         card.classList.remove("status-invalid");
         hashDisplay.classList.add("text-green-400");
         hashDisplay.classList.remove("text-red-400");
-        // Anchor Colors
-        prevAnchor.className = "absolute top-1/2 -left-[26px] w-2 h-2 rounded-full bg-slate-600 z-20";
-        hashAnchor.className = "absolute top-1/2 -right-[26px] w-3 h-3 rounded-full bg-green-500 z-20 shadow-[0_0_10px_rgba(16,185,129,0.5)]";
+        prevAnchor.className = `absolute top-1/2 ${leftOffsetClass} w-2 h-2 rounded-full bg-slate-600 z-20`;
+        hashAnchor.className = `absolute top-1/2 ${rightOffsetClass} w-3 h-3 rounded-full bg-green-500 z-20 shadow-[0_0_10px_rgba(16,185,129,0.5)]`;
       } else {
         card.classList.add("status-invalid");
         card.classList.remove("status-valid");
         hashDisplay.classList.add("text-red-400");
         hashDisplay.classList.remove("text-green-400");
-        // Anchor Colors
-        prevAnchor.className = "absolute top-1/2 -left-[26px] w-2 h-2 rounded-full bg-red-900 z-20";
-        hashAnchor.className = "absolute top-1/2 -right-[26px] w-3 h-3 rounded-full bg-red-500 z-20 shadow-[0_0_10px_rgba(239,68,68,0.5)]";
+        prevAnchor.className = `absolute top-1/2 ${leftOffsetClass} w-2 h-2 rounded-full bg-red-900 z-20`;
+        hashAnchor.className = `absolute top-1/2 ${rightOffsetClass} w-3 h-3 rounded-full bg-red-500 z-20 shadow-[0_0_10px_rgba(239,68,68,0.5)]`;
       }
 
       prevHash = block.hash;
     }
   }
   
-  // Draw lines after DOM updates
   requestAnimationFrame(drawLines);
 }
 
@@ -343,17 +318,14 @@ async function mineChain(peer, startId) {
   const btn = document.querySelector(`#${peer}-${startId} button`);
   const originalText = btn.innerHTML;
   
-  btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-4 h-4"></i> Mining Chain...`;
+  btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-3 h-3 md:w-4 md:h-4"></i> Mining Chain...`;
   btn.disabled = true;
 
-  // Allow UI to render the loading state
   await new Promise(r => setTimeout(r, 50));
 
-  // Mine from startId to End
   for (let i = startId - 1; i < chain.length; i++) {
     const block = chain[i];
     
-    // Get fresh prev hash (important if previous block just changed)
     let currentPrev = i === 0 
       ? "0000000000000000000000000000000000000000000000000000000000000000" 
       : chain[i-1].hash;
@@ -365,13 +337,11 @@ async function mineChain(peer, startId) {
         block.nonce = nonce;
         block.hash = hash;
         block.valid = true;
-        // Update DOM input to show found nonce
         const input = document.querySelector(`#${peer}-${block.id} input`);
         if(input) input.value = nonce;
         break;
       }
       nonce++;
-      // Safety break
       if(nonce > 500000) break;
     }
   }
@@ -387,11 +357,13 @@ async function mineChain(peer, startId) {
 function drawLines() {
   PEERS.forEach(peer => {
     const svg = document.getElementById(`svg-${peer}`);
-    svg.innerHTML = ""; // Clear
+    svg.innerHTML = ""; 
     
     const container = document.getElementById(`scroll-container-${peer}`);
     const containerRect = container.getBoundingClientRect();
     const scrollLeft = container.scrollLeft;
+    
+    const isMobile = window.innerWidth < 768;
 
     for (let i = 0; i < BLOCKS - 1; i++) {
       const currentBlock = state[peer][i];
@@ -405,28 +377,25 @@ function drawLines() {
       const startRect = startEl.getBoundingClientRect();
       const endRect = endEl.getBoundingClientRect();
 
-      // Calculate SVG coordinates relative to the scrollable container
-      const x1 = (startRect.left - containerRect.left) + scrollLeft + 6; // +6 center of anchor
-      const y1 = (startRect.top - containerRect.top) + 6;
-      const x2 = (endRect.left - containerRect.left) + scrollLeft + 4;
-      const y2 = (endRect.top - containerRect.top) + 4;
+      // Mobile anchors are smaller, adjust offsets
+      const startCenterOffset = isMobile ? 4 : 6;
+      const endCenterOffset = isMobile ? 4 : 4; 
 
-      // Line Color Logic
-      // Connection is valid only if BOTH blocks are valid. 
-      // Actually, specifically if the output of Block A matches the Input of Block B (which it physically does here)
-      // But visually, we want red lines if the chain is broken.
-      // If CurrentBlock is invalid, its output line is red.
+      const x1 = (startRect.left - containerRect.left) + scrollLeft + startCenterOffset;
+      const y1 = (startRect.top - containerRect.top) + startCenterOffset;
+      const x2 = (endRect.left - containerRect.left) + scrollLeft + endCenterOffset;
+      const y2 = (endRect.top - containerRect.top) + endCenterOffset;
+
       const isLineValid = currentBlock.valid; 
-      
-      const color = isLineValid ? "#10b981" : "#ef4444"; // Green vs Red
-      const width = 3;
+      const color = isLineValid ? "#10b981" : "#ef4444"; 
+      const width = isMobile ? 2 : 3;
 
       const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
       
-      // S-Curve Bezier
-      const cp1x = x1 + 50;
+      const cpDist = isMobile ? 30 : 50;
+      const cp1x = x1 + cpDist;
       const cp1y = y1;
-      const cp2x = x2 - 50;
+      const cp2x = x2 - cpDist;
       const cp2y = y2;
 
       path.setAttribute("d", `M ${x1} ${y1} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${x2} ${y2}`);
@@ -435,17 +404,11 @@ function drawLines() {
       path.setAttribute("fill", "none");
       path.setAttribute("stroke-linecap", "round");
       
-      // Animated dash effect for valid lines
-      if(isLineValid) {
-        // path.setAttribute("stroke-dasharray", "10,5");
-      }
-      
       svg.appendChild(path);
     }
   });
 }
 
-// Start
 initApp();
 
 </script>
