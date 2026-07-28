@@ -101,6 +101,7 @@
       <a href="index.html#gates" class="nav-link" data-page="gates">Gate Library</a>
       <a href="index.html#simulator" class="nav-link" data-page="simulator">Simulator</a>
       <a href="encoding.html" class="nav-link" data-page="encoding">Encoding</a>
+      <a href="circuit-zoo.html" class="nav-link" data-page="circuit-zoo">Circuit Zoo</a>
       <a href="research.html" class="nav-link" data-page="research">Research</a>
       <a href="blockchain.html" class="nav-link" data-page="blockchain">Blockchain</a>
     </div>
@@ -416,6 +417,7 @@
     const path = window.location.pathname;
     let activePage = 'home';
     if (path.includes('research.html')) activePage = 'research';
+    else if (path.includes('circuit-zoo.html')) activePage = 'circuit-zoo';
 
     document.querySelectorAll('.nav-link').forEach(link => {
       link.classList.remove('active');

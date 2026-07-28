@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IITGN QuantumLab | Grover's Search Algorithm</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+      background-image:
+        radial-gradient(circle at 15% 50%, rgba(79,70,229,0.12) 0%, transparent 30%),
+        radial-gradient(circle at 85% 30%, rgba(236,72,153,0.12) 0%, transparent 30%);
+    }
+
+    .glass-nav {
+      background: rgba(15,23,42,0.6);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .glass-card {
+      background: rgba(30,41,59,0.4);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.05);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    .nav-link {
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      color: #d1d5db;
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover { color: white; background: rgba(255,255,255,0.05); }
+    .nav-link.active {
+      background: #2563eb;
+      color: white;
+      box-shadow: 0 0 20px rgba(37,99,235,0.4);
+    }
+
+    .badge {
+      font-size: 0.65rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      font-weight: 600;
+      background: rgba(245,158,11,0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245,158,11,0.3);
+    }
+
+    .breadcrumb a { color: #94a3b8; }
+    .breadcrumb a:hover { color: #60a5fa; }
+  </style>
+</head>
+
+<body class="antialiased">
+
+<nav class="glass-nav fixed w-full top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
+    <a href="index.html" class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-white rounded-lg p-1">
+        <img src="images/iitgn-logo.png" class="w-full h-full object-contain" alt="IITGN Logo">
+      </div>
+      <span class="text-xl font-bold text-white">
+        Quantum<span class="text-blue-400">Sec</span>
+      </span>
+    </a>
+    <div class="hidden md:flex gap-3 items-center">
+      <a href="index.html#home" class="nav-link" data-page="home">Home</a>
+      <a href="index.html#gates" class="nav-link" data-page="gates">Gate Library</a>
+      <a href="index.html#simulator" class="nav-link" data-page="simulator">Simulator</a>
+      <a href="encoding.html" class="nav-link" data-page="encoding">Encoding</a>
+      <a href="circuit-zoo.html" class="nav-link active" data-page="circuit-zoo">Circuit Zoo</a>
+      <a href="research.html" class="nav-link" data-page="research">Research</a>
+      <a href="blockchain.html" class="nav-link" data-page="blockchain">Blockchain</a>
+    </div>
+  </div>
+</nav>
+
+<main class="pt-28 pb-24 max-w-6xl mx-auto px-6">
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb text-sm mb-6 flex items-center gap-2">
+    <a href="circuit-zoo.html" class="flex items-center gap-1">
+      <i data-lucide="arrow-left" class="w-4 h-4"></i> Circuit Zoo
+    </a>
+    <span class="text-gray-600">/</span>
+    <span class="text-gray-400">Grover's Search Algorithm</span>
+  </div>
+
+  <section class="mb-12">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="w-14 h-14 rounded-2xl bg-blue-600/20 border border-blue-600/40 flex items-center justify-center">
+        <i data-lucide="search" class="w-7 h-7 text-blue-400"></i>
+      </div>
+      <div>
+        <span class="badge">Intermediate</span>
+        <h1 class="text-4xl md:text-5xl font-bold text-white mt-2">Grover's Search Algorithm</h1>
+      </div>
+    </div>
+    <p class="text-gray-300 text-lg leading-relaxed max-w-3xl">
+      Grover's algorithm finds a marked item in an unsorted list of <span class="text-blue-300">N</span> items using
+      roughly <span class="text-blue-300">√N</span> lookups instead of the classical <span class="text-blue-300">N/2</span> —
+      a quadratic speedup that comes from amplifying the amplitude of the answer you're looking for.
+    </p>
+  </section>
+
+  <!-- Concept -->
+  <section class="glass-card p-8 rounded-2xl mb-8">
+    <h2 class="text-white font-semibold text-2xl mb-4 flex items-center gap-2">
+      <i data-lucide="pin" class="w-5 h-5 text-blue-400"></i> Concept
+    </h2>
+    <p class="text-gray-300 leading-relaxed mb-4">
+      Classically, searching an unsorted database of <em>N</em> items for one marked entry takes, on average,
+      <em>N/2</em> checks — there's no shortcut, you just have to look. Grover's algorithm reframes the search as a
+      geometric rotation in amplitude space: it starts in an equal superposition of every possible answer, then
+      repeatedly applies two steps that rotate the state a little closer to the marked item each time.
+    </p>
+    <div class="bg-black/20 rounded-lg p-4 my-4 border-l-2 border-blue-500">
+      <p class="font-mono text-blue-300">
+        \( |\psi\rangle = \frac{1}{\sqrt{N}}\sum_{x=0}^{N-1}|x\rangle \;\xrightarrow{\;(\,U_f,\;U_s\,)^{r}\;}\; |x^*\rangle \)
+      </p>
+      <p class="text-gray-500 text-sm mt-2">where \(x^*\) is the marked item and \(r \approx \frac{\pi}{4}\sqrt{N}\) is the optimal number of iterations.</p>
+    </div>
+    <p class="text-gray-300 leading-relaxed">
+      Each Grover iteration has two parts:
+    </p>
+    <ul class="text-gray-300 list-disc pl-5 mt-3 space-y-2">
+      <li><strong class="text-white">The oracle \(U_f\)</strong> — flips the phase (not the value) of the marked state, tagging it as "this one" without revealing which one it is.</li>
+      <li><strong class="text-white">The diffusion operator \(U_s\)</strong> — reflects every amplitude about the average, which turns that phase flip into a boost in probability for the marked state.</li>
+    </ul>
+    <p class="text-gray-300 leading-relaxed mt-4">
+      Repeat oracle → diffusion about \(\frac{\pi}{4}\sqrt{N}\) times and the marked state's probability climbs close to 1,
+      so measuring the register returns the answer with high confidence.
+    </p>
+  </section>
+
+  <!-- Circuit Diagram -->
+  <section class="glass-card p-8 rounded-2xl mb-8">
+    <h2 class="text-white font-semibold text-2xl mb-2 flex items-center gap-2">
+      <i data-lucide="workflow" class="w-5 h-5 text-purple-400"></i> Circuit Design
+    </h2>
+    <p class="text-gray-400 text-sm mb-6">
+      A 2-qubit toy version searching for <span class="font-mono text-purple-300">|11⟩</span> among 4 possible states.
+      With N = 4, a single Grover iteration is optimal — one oracle call plus one diffusion call gives ~100% success.
+    </p>
+
+    <div class="w-full overflow-x-auto bg-white/5 rounded-xl border border-white/10 p-4">
+      <svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" style="min-width:760px; width:100%; height:auto;">
+        <!-- Wires -->
+        <line x1="70" y1="90" x2="850" y2="90" stroke="#475569" stroke-width="2"/>
+        <line x1="70" y1="180" x2="850" y2="180" stroke="#475569" stroke-width="2"/>
+
+        <!-- Qubit labels -->
+        <text x="20" y="95" fill="#94a3b8" font-size="20" font-family="JetBrains Mono, monospace">q0</text>
+        <text x="20" y="185" fill="#94a3b8" font-size="20" font-family="JetBrains Mono, monospace">q1</text>
+        <text x="70" y="70" fill="#64748b" font-size="14" font-family="JetBrains Mono, monospace">|0⟩</text>
+        <text x="70" y="160" fill="#64748b" font-size="14" font-family="JetBrains Mono, monospace">|0⟩</text>
+
+        <!-- Column 1: Initial H,H -->
+        <rect x="115" y="65" width="50" height="50" rx="8" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="140" y="97" fill="#93c5fd" font-size="20" font-weight="700" text-anchor="middle" font-family="JetBrains Mono, monospace">H</text>
+        <rect x="115" y="155" width="50" height="50" rx="8" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="140" y="187" fill="#93c5fd" font-size="20" font-weight="700" text-anchor="middle" font-family="JetBrains Mono, monospace">H</text>
+
+        <!-- Column 2: Oracle CZ -->
+        <line x1="240" y1="90" x2="240" y2="180" stroke="#c084fc" stroke-width="2"/>
+        <circle cx="240" cy="90" r="7" fill="#c084fc"/>
+        <circle cx="240" cy="180" r="7" fill="#c084fc"/>
+        <text x="240" y="230" fill="#c084fc" font-size="13" text-anchor="middle">Oracle Uf</text>
+        <text x="240" y="246" fill="#64748b" font-size="11" text-anchor="middle">marks |11⟩</text>
+
+        <!-- Column 3: H,H (diffusion start) -->
+        <rect x="325" y="65" width="50" height="50" rx="8" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="350" y="97" fill="#93c5fd" font-size="20" font-weight="700" text-anchor="middle" font-family="JetBrains Mono, monospace">H</text>
+        <rect x="325" y="155" width="50" height="50" rx="8" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="350" y="187" fill="#93c5fd" font-size="20" font-weight="700" text-anchor="middle" font-family="JetBrains Mono, monospace">H</text>
+
+        <!-- Column 4: X,X -->
+        <rect x="410" y="65" width="50" height="50" rx="8" fill="#312e81" stroke="#818cf8" stroke-width="1.5"/>
+        <text x="435" y="97" fill="#a5b4fc" font-size="20" font-weight="700" text-anchor="middle" font-family="JetBrains Mono, monospace">X</text>
+        <rect x="410" y="155" width="50" height="50" rx="8" fill="#312e81" stroke="#818cf8" stroke-width="1.5"/>
+        <text x="435" y="187" fill="#a5b4fc" font-size="20" font-weight="700" text-anchor="middle" font-family="JetBrains Mono, monospace">X</text>
+
+        <!-- Column 5: CZ (diffusion middle) -->
+        <line x1="510" y1="90" x2="510" y2="180" stroke="#f472b6" stroke-width="2"/>
+        <circle cx="510" cy="90" r="7" fill="#f472b6"/>
+        <circle cx="510" cy="180" r="7" fill="#f472b6"/>
+        <text x="510" y="230" fill="#f472b6" font-size="13" text-anchor="middle">Diffusion</text>
+        <text x="510" y="246" fill="#64748b" font-size="11" text-anchor="middle">reflect about mean</text>
+
+        <!-- Column 6: X,X -->
+        <rect x="580" y="65" width="50" height="50" rx="8" fill="#312e81" stroke="#818cf8" stroke-width="1.5"/>
+        <text x="605" y="97" fill="#a5b4fc" font-size="20" font-weight="700" text-anchor="middle" font-family="JetBrains Mono, monospace">X</text>
+        <rect x="580" y="155" width="50" height="50" rx="8" fill="#312e81" stroke="#818cf8" stroke-width="1.5"/>
+        <text x="605" y="187" fill="#a5b4fc" font-size="20" font-weight="700" text-anchor="middle" font-family="JetBrains Mono, monospace">X</text>
+
+        <!-- Column 7: H,H -->
+        <rect x="665" y="65" width="50" height="50" rx="8" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="690" y="97" fill="#93c5fd" font-size="20" font-weight="700" text-anchor="middle" font-family="JetBrains Mono, monospace">H</text>
+        <rect x="665" y="155" width="50" height="50" rx="8" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="690" y="187" fill="#93c5fd" font-size="20" font-weight="700" text-anchor="middle" font-family="JetBrains Mono, monospace">H</text>
+
+        <!-- Column 8: Measure -->
+        <rect x="775" y="65" width="50" height="50" rx="8" fill="#831843" stroke="#f472b6" stroke-width="1.5"/>
+        <path d="M 785 100 A 12 12 0 0 1 815 100" stroke="#f9a8d4" stroke-width="2" fill="none"/>
+        <line x1="800" y1="100" x2="810" y2="82" stroke="#f9a8d4" stroke-width="2"/>
+        <rect x="775" y="155" width="50" height="50" rx="8" fill="#831843" stroke="#f472b6" stroke-width="1.5"/>
+        <path d="M 785 190 A 12 12 0 0 1 815 190" stroke="#f9a8d4" stroke-width="2" fill="none"/>
+        <line x1="800" y1="190" x2="810" y2="172" stroke="#f9a8d4" stroke-width="2"/>
+
+        <!-- Bracket over diffusion block -->
+        <path d="M 320 35 L 320 25 L 720 25 L 720 35" stroke="#64748b" stroke-width="1.5" fill="none"/>
+        <text x="520" y="18" fill="#94a3b8" font-size="13" text-anchor="middle">Diffusion operator U_s (H → X → CZ → X → H)</text>
+      </svg>
+    </div>
+
+    <p class="text-gray-500 text-xs mt-4">
+      Reading left to right: superposition → oracle (phase-flips |11⟩) → diffusion (turns that phase flip into a probability boost) → measure.
+    </p>
+  </section>
+
+  <!-- Key Features -->
+  <section class="glass-card p-8 rounded-2xl mb-8">
+    <h2 class="text-white font-semibold text-2xl mb-4 flex items-center gap-2">
+      <i data-lucide="star" class="w-5 h-5 text-yellow-400"></i> Key Features
+    </h2>
+    <ul class="text-gray-300 list-disc pl-5 space-y-2">
+      <li><strong class="text-white">Quadratic speedup:</strong> ~√N oracle calls instead of N/2 — provably optimal for unstructured search.</li>
+      <li><strong class="text-white">Provably optimal, not exponential:</strong> unlike Shor's algorithm, Grover's speedup is quadratic — useful, but it doesn't break well-designed symmetric cryptography outright (it does roughly halve effective key length, which is why AES-256 is recommended over AES-128 for long-term post-quantum security).</li>
+      <li><strong class="text-white">Iteration count matters:</strong> too few iterations under-rotates toward the answer; too many overshoots past it — the optimal count is \(\frac{\pi}{4}\sqrt{N}\).</li>
+      <li><strong class="text-white">Oracle is problem-specific:</strong> the algorithm's structure is generic, but \(U_f\) has to be built per search problem — it's the part that "knows" what a correct answer looks like.</li>
+    </ul>
+  </section>
+
+  <!-- Example -->
+  <section class="glass-card p-8 rounded-2xl mb-12">
+    <h2 class="text-white font-semibold text-2xl mb-4 flex items-center gap-2">
+      <i data-lucide="book-open" class="w-5 h-5 text-green-400"></i> Example Walkthrough
+    </h2>
+    <p class="text-gray-300 mb-4">Searching a 2-qubit space (N = 4) for the marked state <span class="font-mono text-purple-300">|11⟩</span>:</p>
+    <pre class="bg-black/30 p-4 rounded-xl text-blue-200 text-xs md:text-sm font-mono leading-relaxed overflow-x-auto">
+Start:        |00⟩                                    (amplitude 1 on |00⟩)
+After H⊗H:    ½(|00⟩ + |01⟩ + |10⟩ + |11⟩)             (equal superposition)
+After Oracle: ½(|00⟩ + |01⟩ + |10⟩ − |11⟩)             (|11⟩ phase-flipped)
+After Diffusion: amplitude of |11⟩ → 1, all others → 0  (one iteration is exact for N = 4)
+Measure:      |11⟩ with ~100% probability
+    </pre>
+    <p class="text-gray-400 text-sm mt-4">
+      For larger N, one iteration won't fully converge — you'd run \(\approx\frac{\pi}{4}\sqrt{N}\) oracle+diffusion rounds
+      before measuring for the best odds of reading out the marked item.
+    </p>
+  </section>
+
+  <div class="flex flex-col sm:flex-row gap-4 justify-center items-center border-t border-white/10 pt-10">
+    <a href="index.html#simulator" class="px-8 py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-lg shadow-blue-600/30 transition-all hover:-translate-y-1 flex items-center gap-2">
+      <i data-lucide="play-circle" class="w-5 h-5"></i> Build it yourself in the Simulator
+    </a>
+    <a href="circuit-zoo.html" class="px-8 py-4 rounded-xl bg-white/5 border border-white/10 text-white font-semibold backdrop-blur-md hover:bg-white/10 transition-all hover:-translate-y-1 flex items-center gap-2">
+      <i data-lucide="arrow-left" class="w-5 h-5"></i> Back to Circuit Zoo
+    </a>
+  </div>
+
+</main>
+
+<footer class="border-t border-white/5 bg-black/20 py-6 mt-8 text-center text-gray-500 text-xs">
+  © 2025 IITGN QuantumLab — Quantum Machine Learning for Cyber Security
+</footer>
+
+<script>
+  lucide.createIcons();
+</script>
+
+</body>
+</html>
